@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+    <Button
+        android:onClick="start"
+        android:id="@+id/btn_start"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="start 方式"
+        tools:ignore="MissingConstraints" />
+
+    <Button
+        android:id="@+id/btn_stop"
+        android:onClick="stop"
+        app:layout_constraintTop_toBottomOf="@id/btn_start"
+        android:layout_width="match_parent"
+        android:text="stop service"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/btn_bind"
+        android:onClick="bind"
+        android:layout_width="match_parent"
+        android:text="bind 启动"
+        app:layout_constraintTop_toBottomOf="@id/btn_stop"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/btn_sum"
+        android:onClick="sum"
+        app:layout_constraintTop_toBottomOf="@id/btn_bind"
+        android:layout_width="match_parent"
+        android:text="模拟和service通讯"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/btn_push"
+        android:onClick="getPush"
+        app:layout_constraintTop_toBottomOf="@id/btn_sum"
+        android:layout_width="match_parent"
+        android:text="模拟和service 获取推送信息"
+        android:layout_height="wrap_content" />
+    <Button
+        android:onClick="startIntentService"
+        android:layout_width="match_parent"
+        android:text="启动intent service"
+        app:layout_constraintTop_toBottomOf="@id/btn_push"
+        android:layout_height="wrap_content" />
+
+
+</android.support.constraint.ConstraintLayout>

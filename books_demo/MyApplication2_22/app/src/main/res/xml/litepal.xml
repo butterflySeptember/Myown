@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<litepal>
+
+    <dbname value="数据库名称"></dbname>
+
+    <version value="数据库版本号"></version>
+
+    <list>
+
+
+
+    </list>
+
+</litepal>
