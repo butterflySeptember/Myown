@@ -10,11 +10,11 @@ public class levelclass {
         this.image = image;
     }
 
-    public String getnamelevel() {
+    public static String getnamelevel() {
         return name;
     }
 
-    public int getImage(){
+    public static int getImage(){
         return image;
     }
 }

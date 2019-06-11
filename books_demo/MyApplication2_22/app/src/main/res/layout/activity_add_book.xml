@@ -88,7 +88,7 @@
         android:layout_height="55dp">
         <TextView
             android:layout_width="70dp"
-            android:text="作者"
+            android:text="价格"
             android:gravity="center"
             android:textSize="15sp"
             android:textColor="@color/lights_black"
