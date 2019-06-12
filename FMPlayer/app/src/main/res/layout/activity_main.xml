@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <android.support.v4.view.ViewPager
+        android:id="@+id/Viewpager_main_activity"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+    <RadioGroup
+        android:id="@+id/tab_group"
+        android:clipChildren="false"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true"
+        android:background="#0e001101"
+        android:orientation="horizontal"
+        tools:ignore="DuplicateIds">
+        <RadioButton
+            android:background="@drawable/select_main_view_tab_index"
+            android:id="@+id/tab_index"
+            style="@style/MainViewStyle"
+            android:text="首页"/>
+        <RadioButton
+            android:background="@drawable/select_main_view_tab_discovery"
+            android:id="@+id/tab_discovery"
+            style="@style/MainViewStyle"
+            android:text="发现"/>
+        <Button
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginBottom="10dp"
+            android:gravity="bottom"
+            android:background="@mipmap/host_theme_global_play_pause" />
+        <RadioButton
+            android:background="@drawable/select_main_view_tab_login"
+            android:id="@+id/tab_mylinster"
+            style="@style/MainViewStyle"
+            android:text="播放"/>
+        <RadioButton
+            android:background="@drawable/select_main_view_tab_mine"
+            android:id="@+id/tab_mine"
+            style="@style/MainViewStyle"
+            android:text="我的"/>
+
+    </RadioGroup>
+
+</RelativeLayout>
