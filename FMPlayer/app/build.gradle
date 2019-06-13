@@ -16,6 +16,18 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    /*sourceSets {
+        main{
+            iniLibs.srcDir(["libs"])
+        }
+    }*/
+   /* productFlavors{
+        arm{
+            ndk{
+                abiFilters  "armeabi" ,"armeabi-v7a"
+            }
+        }
+    }*/
 }
 
 dependencies {

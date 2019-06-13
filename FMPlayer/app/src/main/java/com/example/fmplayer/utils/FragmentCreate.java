@@ -14,27 +14,28 @@ public class FragmentCreate {
 
     public static Map<Integer, BaseFragment> scashe = new HashMap<>();
 
-    public static BaseFragment getFragmentByTabID(int tabId) {
-        BaseFragment baseFragment = scashe.get(tabId);
+    public static BaseFragment getFragmentByPosition(int position) {
+        BaseFragment baseFragment = scashe.get(position);
         if (baseFragment != null) {
             return baseFragment;
         }
 
-        switch (tabId) {
-            case R.id.tab_index:
+        switch (position) {
+            case Constants.PAGE_MAIN:
                 baseFragment = new MainFragment();
                 break;
-            case R.id.tab_discovery:
+            case Constants.PAGE_MY_LISTENER:
                 baseFragment = new DistoryFragment();
                 break;
-            case R.id.tab_mylinster:
+            case Constants.PAGE_DISTORY:
                 baseFragment = new MyListenerFagment();
                 break;
-            case R.id.tab_mine:
+            case Constants.PAGE_MINE:
                 baseFragment = new MineFagment();
                 break;
 
         }
+        scashe.put(position,baseFragment);
         return baseFragment;
     }
 }

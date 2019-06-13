@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android">
-    <android.support.v4.view.ViewPager
+    <NoSrollViewPager
         android:id="@+id/Viewpager_main_activity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
