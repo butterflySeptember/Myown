@@ -15,23 +15,29 @@ public class MainActivity extends AppCompatActivity {
 
 	private ViewPager mViewPager;
 	private LoopPagerAdapter mLoopPagerAdapter;
-	private static List<Integer> sColors = new ArrayList<>();
+	//private static List<Integer> sColors = new ArrayList<>();
+	private static List<Integer> sPic = new ArrayList<>();
+
+	static {
+		sPic.add(R.mipmap.pic1);
+		sPic.add(R.mipmap.pic2);
+		sPic.add(R.mipmap.pic3);
+
+	}
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initView();
-
-		Random random = new Random();
+		/*Random random = new Random();
 		//设置颜色数据
 		for (int i = 0; i < 5 ; i++){
 			sColors.add(Color.argb( random.nextInt(255),random.nextInt(255),random.nextInt(255),random.nextInt(255)));
 		}
-
 		//向适配器中添加数据
 		mLoopPagerAdapter.setData(sColors);
 		//后设置数据
-		mLoopPagerAdapter.notifyDataSetChanged();
+		mLoopPagerAdapter.notifyDataSetChanged();*/
 
     }
 
@@ -40,6 +46,9 @@ public class MainActivity extends AppCompatActivity {
 		mViewPager = (ViewPager)this.findViewById(R.id.loop_pager);
 		//设置适配器
 		mLoopPagerAdapter = new LoopPagerAdapter();
+		mLoopPagerAdapter.setData(sPic);
 		mViewPager.setAdapter(mLoopPagerAdapter);
+		//设置初始轮播位置
+		mViewPager.setCurrentItem(mLoopPagerAdapter.getDataViewSize()*100,false);
     }
 }
