@@ -29,6 +29,8 @@ public class LoopPagerAdapter extends PagerAdapter {
 		ImageView imageView = new ImageView(container.getContext());
 		//设置颜色
 		//imageView.setBackgroundColor(mColors.get(position));
+		//设置图片铺满屏幕
+		imageView.setScaleType(ImageView.ScaleType.FIT_XY);
 		//设置图片
 		imageView.setImageResource(sPics.get(viewPosition));
 		//添加view

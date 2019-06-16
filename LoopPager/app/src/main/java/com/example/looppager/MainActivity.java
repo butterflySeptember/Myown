@@ -92,6 +92,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 	private void insertPoint() {
 		for ( int i = 0;i<sPic.size();i++){
 			View point = new View(this);
+			//绘制点的位置
 			LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(40,40);
 			point.setBackground(getResources().getDrawable(R.drawable.shap_point_nomal,null));
 			layoutParams.leftMargin = 20;
