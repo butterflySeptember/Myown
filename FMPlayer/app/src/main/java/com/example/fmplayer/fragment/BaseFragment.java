@@ -1,8 +1,8 @@
 package com.example.fmplayer.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,14 +14,19 @@ import android.view.ViewGroup;
  */
 public abstract class BaseFragment extends Fragment {
 
-
+	private final static String TAG = "BaseFragment";
     private View rootView = null;
 
+    public BaseFragment(){
+
+	}
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-         rootView = (View) getSubView(inflater,container,false);
+    public View onCreateView(LayoutInflater inflater,ViewGroup container,Bundle savedInstanceState) {
+         rootView = getSubView(inflater,container,false);
          //设置监听
         setSubListener();
+		Log.i(TAG, "onCreateView: ");
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 

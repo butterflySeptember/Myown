@@ -3,8 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android">
-    <NoSrollViewPager
-        android:id="@+id/Viewpager_main_activity"
+    <com.example.fmplayer.Views.NoSrollViewPager
+        android:id="@+id/content_pager"
+        android:overScrollMode="never"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
     <RadioGroup
@@ -17,28 +18,28 @@
         android:orientation="horizontal"
         tools:ignore="DuplicateIds">
         <RadioButton
-            android:background="@drawable/select_main_view_tab_index"
+            android:drawableTop="@drawable/select_main_view_tab_index"
             android:id="@+id/tab_index"
             style="@style/MainViewStyle"
             android:text="首页"/>
         <RadioButton
-            android:background="@drawable/select_main_view_tab_discovery"
+            android:drawableTop="@drawable/select_main_view_tab_discovery"
             android:id="@+id/tab_discovery"
             style="@style/MainViewStyle"
             android:text="发现"/>
-        <Button
+        <View
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginBottom="10dp"
             android:gravity="bottom"
             android:background="@mipmap/host_theme_global_play_pause" />
         <RadioButton
-            android:background="@drawable/select_main_view_tab_login"
+            android:drawableTop="@drawable/select_main_view_tab_login"
             android:id="@+id/tab_mylinster"
             style="@style/MainViewStyle"
             android:text="播放"/>
         <RadioButton
-            android:background="@drawable/select_main_view_tab_mine"
+            android:drawableTop="@drawable/select_main_view_tab_mine"
             android:id="@+id/tab_mine"
             style="@style/MainViewStyle"
             android:text="我的"/>

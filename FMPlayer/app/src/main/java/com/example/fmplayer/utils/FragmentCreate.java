@@ -1,5 +1,7 @@
 package com.example.fmplayer.utils;
 
+import android.util.Log;
+
 import com.example.fmplayer.R;
 import com.example.fmplayer.fragment.BaseFragment;
 import com.example.fmplayer.fragment.DistoryFragment;
@@ -13,6 +15,7 @@ import java.util.Map;
 public class FragmentCreate {
 
     public static Map<Integer, BaseFragment> scashe = new HashMap<>();
+    private final static String TAG = "FragmentCreate";
 
     public static BaseFragment getFragmentByPosition(int position) {
         BaseFragment baseFragment = scashe.get(position);
@@ -36,6 +39,7 @@ public class FragmentCreate {
 
         }
         scashe.put(position,baseFragment);
+		Log.i(TAG, "getFragmentByPosition: ..");
         return baseFragment;
     }
 }

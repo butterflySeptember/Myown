@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
@@ -15,6 +16,7 @@ import com.example.fmplayer.utils.Constants;
 
      private RadioGroup mTabGroup;
      private ViewPager mviwePager;
+     private static final String TAG = "MainActivity";
 
      @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,33 +24,28 @@ import com.example.fmplayer.utils.Constants;
         setContentView(R.layout.activity_main);
         initview();
         initlistener();
-
     }
 
-     private void initlistener() {
-         mviwePager.addOnPageChangeListener(this);
-     }
+	 private void initlistener() {
+     	mviwePager.addOnPageChangeListener(this);
+	 }
 
-     private void initview() {
+	 private void initview() {
         FragmentManager supportFragmentManger =  this.getSupportFragmentManager();
          //创建适配器
         MainContentPagerAdpter fragmentAdapter = new MainContentPagerAdpter(supportFragmentManger);
-        mviwePager = (ViewPager)this.findViewById(R.id.Viewpager_main_activity);
+        mviwePager = (ViewPager)this.findViewById(R.id.content_pager);
         mviwePager.setAdapter(fragmentAdapter);
+
         //注册类型
         mTabGroup = (RadioGroup)this.findViewById(R.id.tab_group);
-
         mTabGroup.setOnCheckedChangeListener(this);
-        //默认选中第一个
-        mTabGroup.check(R.id.tab_index);
 
+        //默认选中第一个
+        //①mTabGroup.check(R.id.tab_index);
         //默认选项
-        /**
-         *  mTabGroup.check(R.id.tab_index);
-         *    第二种实现
-         */
-        //RadioButton indexTab = (RadioButton)this.findViewById(R.id.tab_index);
-        //indexTab.setChecked(true);
+        RadioButton indexTab = (RadioButton)this.findViewById(R.id.tab_index);
+        indexTab.setChecked(true);
 
     }
 
@@ -71,7 +68,7 @@ import com.example.fmplayer.utils.Constants;
                  break;
 
          }
-         mviwePager.setCurrentItem(index,false);
+         mviwePager.setCurrentItem(index);
      }
 
      @Override
