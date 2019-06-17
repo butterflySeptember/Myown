@@ -2,6 +2,7 @@ package com.example.new_fmredioplayer.base;
 
 import android.app.Application;
 
+import com.example.new_fmredioplayer.utils.LogUtils;
 import com.ximalaya.ting.android.opensdk.constants.DTransferConstants;
 import com.ximalaya.ting.android.opensdk.datatrasfer.CommonRequest;
 
@@ -26,6 +27,8 @@ public class baseApplication extends Application {
 			mXimalaya.setPackid("com.ximalaya.qunfeng");
 			mXimalaya.init(this ,mAppSecret);
 		}
+
+		LogUtils.init(this.getPackageName(),false);
 
 	}
 }

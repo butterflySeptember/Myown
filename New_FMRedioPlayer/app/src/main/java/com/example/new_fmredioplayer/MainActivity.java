@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.example.new_fmredioplayer.utils.LogUtils;
 import com.ximalaya.ting.android.opensdk.datatrasfer.CommonRequest;
 import com.ximalaya.ting.android.opensdk.datatrasfer.IDataCallBack;
 import com.ximalaya.ting.android.opensdk.model.category.Category;
@@ -31,7 +32,8 @@ public class MainActivity extends AppCompatActivity {
 					int size = categories.size();
 					Log.d(TAG, "categorises size --- < " + size);
 					for (Category category : categories) {
-						Log.d(TAG, "category ---<" + category.getCategoryName());
+						//Log.d(TAG, "category ---<" + category.getCategoryName());
+						LogUtils.d(TAG, "category ---<" + category.getCategoryName());
 					}
 				}
 
@@ -39,7 +41,8 @@ public class MainActivity extends AppCompatActivity {
 
 			@Override
 			public void onError(int i, String s) {
-				Log.e(TAG, "Error code --"+ i + "error msg --" + s);
+				//Log.e(TAG, "Error code --"+ i + "error msg --" + s);
+				LogUtils.e(TAG, "Error code --"+ i + "error msg --" + s);
 			}
 		});
 
