@@ -1,11 +1,15 @@
 package com.example.new_fmredioplayer.fragments;
 
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.example.new_fmredioplayer.R;
+import com.example.new_fmredioplayer.adapters.RecommendListAdapter;
 import com.example.new_fmredioplayer.base.BaseFragment;
 import com.example.new_fmredioplayer.utils.Constants;
 import com.example.new_fmredioplayer.utils.LogUtils;
@@ -22,15 +26,29 @@ import java.util.Map;
 public class RecommendFragment extends BaseFragment {
 
 	private final static String TAG = "RecommendFragment";
+	private View mRootView;
+	private RecyclerView mRecommendBy;
+	private RecommendListAdapter mRecommendListAdapter;
 
 	public View onSubViewLoaded(LayoutInflater layoutInflater, ViewGroup container){
-		View rootView = layoutInflater.inflate(R.layout.fragment_recommend,container,false);
+		mRootView = layoutInflater.inflate(R.layout.fragment_recommend,container,false);
+
+		//初始化
+		//1，找到对应的控件
+		mRecommendBy = (RecyclerView) mRootView.findViewById(R.id.recommend_list);
+		//2，设置布局管理器
+		LinearLayoutManager linearLayoutManager =	new LinearLayoutManager(getContext());
+		linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+		mRecommendBy.setLayoutManager(linearLayoutManager);
+		//3，设置适配器
+		mRecommendListAdapter = new RecommendListAdapter();
+		mRecommendBy.setAdapter(mRecommendListAdapter);
 
 		//数据获取
 		getRecommendData();
 
 		//返回View
-		return rootView;
+		return mRootView;
 	}
 
 	/**
@@ -50,6 +68,8 @@ public class RecommendFragment extends BaseFragment {
 					if (albumList != null) {
 						LogUtils.d(TAG,"size -->" + albumList.size());
 					}
+					//更新UI
+					upRecommendUI(albumList);
 
 				}
 			}
@@ -61,5 +81,10 @@ public class RecommendFragment extends BaseFragment {
 				LogUtils.d(TAG," errorMsg -->" + s);
 			}
 		});
+	}
+
+	private void upRecommendUI(List<Album> albumList){
+		//把数据设置给adapter
+		mRecommendListAdapter.setData(albumList);
 	}
 }
