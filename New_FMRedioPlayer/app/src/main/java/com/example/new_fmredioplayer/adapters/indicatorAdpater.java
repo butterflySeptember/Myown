@@ -17,6 +17,7 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.Simple
 public class indicatorAdpater extends CommonNavigatorAdapter {
 
 	private final String[] mTitles;
+	private onIndicatorTapClickListener mOnTabClickListener;
 
 	public indicatorAdpater (Context context){
 		mTitles = context.getResources().getStringArray(R.array.indicator_title);
@@ -41,6 +42,9 @@ public class indicatorAdpater extends CommonNavigatorAdapter {
 			@Override
 			public void onClick(View v) {
 				//mViewPager.setCurrentItem(index);
+				if (mOnTabClickListener != null) {
+					mOnTabClickListener.onTabClick(index);
+				}
 			}
 		});
 		return simplePagerTitleView;
@@ -53,5 +57,13 @@ public class indicatorAdpater extends CommonNavigatorAdapter {
 		indicator.setYOffset(UIUtil.dip2px(context, 3));
 		indicator.setColors(Color.parseColor("#ffffff"));
 		return indicator;
+	}
+
+	public void setOnIndicatorTapClickListener(onIndicatorTapClickListener listener){
+		this.mOnTabClickListener = listener;
+	}
+
+	public interface onIndicatorTapClickListener{
+		void onTabClick(int index);
 	}
 }
