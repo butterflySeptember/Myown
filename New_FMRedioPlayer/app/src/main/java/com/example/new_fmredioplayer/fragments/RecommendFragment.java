@@ -1,5 +1,7 @@
 package com.example.new_fmredioplayer.fragments;
 
+import android.graphics.Rect;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,6 +20,8 @@ import com.ximalaya.ting.android.opensdk.datatrasfer.CommonRequest;
 import com.ximalaya.ting.android.opensdk.datatrasfer.IDataCallBack;
 import com.ximalaya.ting.android.opensdk.model.album.Album;
 import com.ximalaya.ting.android.opensdk.model.album.GussLikeAlbumList;
+
+import net.lucode.hackware.magicindicator.buildins.UIUtil;
 
 import java.util.HashMap;
 import java.util.List;
@@ -43,6 +47,15 @@ public class RecommendFragment extends BaseFragment {
 		//3，设置适配器
 		mRecommendListAdapter = new RecommendListAdapter();
 		mRecommendBy.setAdapter(mRecommendListAdapter);
+		mRecommendBy.addItemDecoration(new RecyclerView.ItemDecoration() {
+			@Override
+			public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
+				//使用工具类 dp和px相互转换
+				outRect.left = UIUtil.dip2px(view.getContext(),5);
+				outRect.top = UIUtil.dip2px(view.getContext(),5);
+				outRect.bottom = UIUtil.dip2px(view.getContext(),5);
+			}
+		});
 
 		//数据获取
 		getRecommendData();

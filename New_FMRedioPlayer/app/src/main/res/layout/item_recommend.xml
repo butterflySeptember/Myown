@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout android:layout_width="match_parent"
     android:layout_height="75dp"
+    android:background="@drawable/shape_aitem_bg"
     xmlns:android="http://schemas.android.com/apk/res/android">
-    <ImageView
+    <com.example.new_fmredioplayer.views.RoundRectImageView
         android:id="@+id/album_cover"
         android:layout_width="68dp"
         android:layout_centerVertical="true"
         android:layout_marginLeft="5dp"
-        android:background="#00f5f5"
+        android:scaleType="fitXY"
         android:layout_height="65dp" />
     <LinearLayout
         android:layout_width="wrap_content"
