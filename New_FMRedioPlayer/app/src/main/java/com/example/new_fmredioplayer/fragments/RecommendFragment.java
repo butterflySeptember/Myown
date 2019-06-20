@@ -62,6 +62,7 @@ public class RecommendFragment extends BaseFragment {
 		CommonRequest.getGuessLikeAlbum(map, new IDataCallBack<GussLikeAlbumList>() {
 			@Override
 			public void onSuccess(@Nullable GussLikeAlbumList gussLikeAlbumList) {
+				LogUtils.d(TAG,"thread name -->" + Thread.currentThread().getName());
 				//数据获取成功
 				if (gussLikeAlbumList != null) {
 					List<Album> albumList = gussLikeAlbumList.getAlbumList();
