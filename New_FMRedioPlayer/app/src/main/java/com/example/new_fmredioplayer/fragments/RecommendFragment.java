@@ -17,6 +17,7 @@ import com.example.new_fmredioplayer.interfaces.IRecommendViewCallback;
 import com.example.new_fmredioplayer.presenters.RecommendPresenter;
 import com.example.new_fmredioplayer.utils.Constants;
 import com.example.new_fmredioplayer.utils.LogUtils;
+import com.example.new_fmredioplayer.views.UILoader;
 import com.ximalaya.ting.android.opensdk.constants.DTransferConstants;
 import com.ximalaya.ting.android.opensdk.datatrasfer.CommonRequest;
 import com.ximalaya.ting.android.opensdk.datatrasfer.IDataCallBack;
@@ -36,8 +37,34 @@ public class RecommendFragment extends BaseFragment implements IRecommendViewCal
 	private RecyclerView mRecommendBy;
 	private RecommendListAdapter mRecommendListAdapter;
 	private RecommendPresenter mRecommendPresenter;
+	private UILoader mUiLoader;
 
-	public View onSubViewLoaded(LayoutInflater layoutInflater, ViewGroup container){
+	public View onSubViewLoaded(final LayoutInflater layoutInflater, ViewGroup container){
+
+		mUiLoader = new UILoader(getContext()) {
+			@Override
+			protected View getSuccessView(ViewGroup container) {
+				return createSuccessView(layoutInflater,container);
+			}
+		};
+
+
+		//获取到逻辑上的对象
+		mRecommendPresenter = RecommendPresenter.getInstance();
+		//首先设置接口注册通知
+		mRecommendPresenter.registerViewCallback(this);
+		//获取推荐列表
+		mRecommendPresenter.getRecommendList();
+
+		if (mUiLoader.getParent() instanceof ViewGroup) {
+			((ViewGroup) mUiLoader.getParent()).removeView(mUiLoader);
+		}
+
+		//返回View
+		return mRootView;
+	}
+
+	private View createSuccessView(LayoutInflater layoutInflater,ViewGroup container) {
 		mRootView = layoutInflater.inflate(R.layout.fragment_recommend,container,false);
 		//初始化
 		//1，找到对应的控件
@@ -59,36 +86,36 @@ public class RecommendFragment extends BaseFragment implements IRecommendViewCal
 			}
 		});
 
-		//获取到逻辑上的对象
-		mRecommendPresenter = RecommendPresenter.getInstance();
-		//首先设置接口注册通知
-		mRecommendPresenter.registerViewCallback(this);
-		//获取推荐列表
-		mRecommendPresenter.getRecommendList();
 
-		//返回View
 		return mRootView;
 	}
 
 
-
-
-
 	@Override
 	public void onRecommendListloaded(List<Album> result) {
+		LogUtils.d(TAG,"onRecommendListloaded...");
 		//获取到推荐内容，方法被调用（成功）
 		//获取到数据，更新UI
 		mRecommendListAdapter.setData(result);
+		mUiLoader.updateStatus(UILoader.UIStatus.SUCCESS);
 	}
 
 	@Override
-	public void onLoaderMore(List<Album> result) {
-
+	public void onNetworkError() {
+		LogUtils.d(TAG,"onNetworkError...");
+		mUiLoader.updateStatus(UILoader.UIStatus.NETWORK_ERROR);
 	}
 
 	@Override
-	public void onRefreshMore(List<Album> result) {
+	public void onEmpty() {
+		LogUtils.d(TAG,"onEmpty...");
+		mUiLoader.updateStatus(UILoader.UIStatus.EMPTY);
+	}
 
+	@Override
+	public void onLoading() {
+		LogUtils.d(TAG,"onLoading...");
+		mUiLoader.updateStatus(UILoader.UIStatus.LOADING);
 	}
 
 	@Override

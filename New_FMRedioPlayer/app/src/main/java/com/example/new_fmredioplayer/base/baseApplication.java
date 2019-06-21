@@ -1,17 +1,22 @@
 package com.example.new_fmredioplayer.base;
 
 import android.app.Application;
+import android.os.Handler;
 
 import com.example.new_fmredioplayer.utils.LogUtils;
 import com.ximalaya.ting.android.opensdk.constants.DTransferConstants;
 import com.ximalaya.ting.android.opensdk.datatrasfer.CommonRequest;
 
+
 public class baseApplication extends Application {
+
+	private static Handler sHandler = null;
 
 	@Override
 	public void onCreate() {
 		super.onCreate();
 		initkey();
+		sHandler = new Handler();
 	}
 
 	private void initkey() {
@@ -29,6 +34,9 @@ public class baseApplication extends Application {
 		}
 
 		LogUtils.init(this.getPackageName(),false);
+	}
 
+	public  static Handler getHandler(){
+		return sHandler;
 	}
 }
