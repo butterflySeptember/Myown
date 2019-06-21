@@ -1,10 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="#4f4f4f"
     android:layout_width="match_parent" android:layout_height="match_parent">
-    <TextView
+    <LinearLayout
+        android:id="@+id/network_error_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="网络错误"
-        android:textSize="30sp"/>
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:layout_centerInParent="true">
+        <ImageView
+            android:src="@mipmap/main_dubbing_network_error"
+            android:layout_width="75dp"
+            android:layout_height="75dp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="网络不佳，请点击重试"
+            android:layout_marginTop="9dp"
+            android:textSize="30sp"/>
+    </LinearLayout>
+
 </RelativeLayout>

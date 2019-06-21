@@ -30,7 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class RecommendFragment extends BaseFragment implements IRecommendViewCallback {
+public class RecommendFragment extends BaseFragment implements IRecommendViewCallback, UILoader.OnRetryClickListener {
 
 	private final static String TAG = "RecommendFragment";
 	private View mRootView;
@@ -59,6 +59,7 @@ public class RecommendFragment extends BaseFragment implements IRecommendViewCal
 		if (mUiLoader.getParent() instanceof ViewGroup) {
 			((ViewGroup) mUiLoader.getParent()).removeView(mUiLoader);
 		}
+		mUiLoader.setOnRetryClickListener(this);
 
 		//返回View
 		return mRootView;
@@ -122,6 +123,14 @@ public class RecommendFragment extends BaseFragment implements IRecommendViewCal
 	public void onDestroyView() {
 		super.onDestroyView();
 		//取消接口注册，避免内存泄露
+		if (mRecommendPresenter != null) {
+			mRecommendPresenter.unregisterViewCallback(this);
+		}
+	}
+
+	@Override
+	public void OnRetryClick() {
+		//表示网络不佳时，用户点击重试
 		if (mRecommendPresenter != null) {
 			mRecommendPresenter.unregisterViewCallback(this);
 		}
