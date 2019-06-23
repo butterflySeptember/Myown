@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#4f55">
+    android:background="@drawable/shape_aitem_bg">
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="150dp"
@@ -104,8 +104,10 @@
             />
     </LinearLayout>
     <android.support.v7.widget.RecyclerView
+        android:id="@+id/album_detail_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#ff4f4f4f"
         android:layout_below="@id/player_control_container"
         />
 
