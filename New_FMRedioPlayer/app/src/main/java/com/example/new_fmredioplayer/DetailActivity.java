@@ -2,6 +2,7 @@ package com.example.new_fmredioplayer;
 
 
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.view.View;
@@ -13,6 +14,9 @@ import com.example.new_fmredioplayer.base.BaseActivity;
 import com.example.new_fmredioplayer.interfaces.IAlbumDetailViewCallBack;
 import com.example.new_fmredioplayer.interfaces.IAlbumDetialPresenter;
 import com.example.new_fmredioplayer.presenters.AlbumDetialPresenter;
+import com.example.new_fmredioplayer.utils.ImageBlur;
+import com.example.new_fmredioplayer.utils.LogUtils;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.ximalaya.ting.android.opensdk.model.album.Album;
 import com.ximalaya.ting.android.opensdk.model.track.Track;
@@ -26,6 +30,8 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
 	private TextView mAlbumTitle;
 	private TextView mAlbumAuthor;
 	private AlbumDetialPresenter mAlbumDetialPresenter;
+
+	private static final String TAG = "DetailActivity";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -66,8 +72,22 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
 			mAlbumAuthor.setText(album.getAnnouncer().getNickname());
 		}
 
+		//添加毛玻璃效果
 		if (mLargeCover != null) {
-			Picasso.with(this).load(album.getCoverUrlLarge()).into(mLargeCover);
+			Picasso.with(this).load(album.getCoverUrlLarge()).into(mLargeCover, new Callback() {
+				@Override
+				public void onSuccess() {
+					Drawable drawable = mLargeCover.getDrawable();
+					if (drawable != null) {
+						ImageBlur.makeBlur(mLargeCover, DetailActivity.this);
+					}
+				}
+
+				@Override
+				public void onError() {
+					LogUtils.d(TAG,"onAlbunLoaded onError...");
+				}
+			});
 		}
 
 		if (mSmallCover != null) {
