@@ -9,7 +9,65 @@
         android:id="@+id/iv_large_cover"
         android:scaleType="fitXY"
         android:background="@color/colorPrimaryDark"/>
+    <RelativeLayout
+        android:id="@+id/subscription_container"
+        android:layout_width="match_parent"
+        android:background="#ffffff"
+        android:layout_below="@id/iv_large_cover"
+        android:layout_height="50dp">
+        <TextView
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:text="订阅"
+            android:textColor="@color/white"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:gravity="center"
+            android:background="@drawable/shape_subscription_bg"
+            android:layout_marginRight="15dp"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:id="@+id/player_control_container"
+        android:layout_below="@id/subscription_container"
+        android:background="#e8e8e8">
+        <ImageView
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:src="@mipmap/play_icon"
+            android:id="@+id/detail_play_control"
+            android:layout_width="19dp"
+            android:layout_height="19dp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="继续播放"
+            android:textSize="14sp"
+            android:layout_toRightOf="@id/detail_play_control"
+            android:layout_marginLeft="5dp"/>
 
+
+        <ImageView
+            android:id="@+id/detail_arrow_icon"
+            android:layout_width="19dp"
+            android:layout_height="19dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="18dp"
+            android:src="@mipmap/arrow_icon"
+            android:layout_centerVertical="true"
+            />
+        <TextView
+            android:layout_toLeftOf="@id/detail_arrow_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="选集"
+            android:layout_marginRight="5dp"
+            android:layout_centerVertical="true"
+            />
+    </RelativeLayout>
     <com.example.new_fmredioplayer.views.RoundRectImageView
         android:layout_width="75dp"
         android:layout_height="75dp"
@@ -30,7 +88,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:text="这是标题"
-            android:textColor="#ffffff"
+            android:textColor="@color/white"
             android:textSize="18sp"
             android:id="@+id/tv_album_title"
             android:layout_height="wrap_content"
@@ -40,9 +98,15 @@
             android:textSize="18sp"
             android:id="@+id/tv_album_author"
             android:layout_marginTop="5dp"
-            android:textColor="#ffffff"
+            android:textColor="@color/sub_text_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             />
     </LinearLayout>
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/player_control_container"
+        />
+
 </RelativeLayout>
