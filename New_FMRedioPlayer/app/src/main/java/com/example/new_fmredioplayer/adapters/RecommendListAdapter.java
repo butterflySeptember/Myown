@@ -90,7 +90,6 @@ public class RecommendListAdapter extends RecyclerView.Adapter<RecommendListAdap
 			desrcDesrcTv.setText(album.getAlbumIntro());
 			albumPlayCountTv.setText(album.getPlayCount() + " ");
 			albumContentCountTv.setText(album.getIncludeTrackCount() +" ");
-
 			Picasso.with(itemView.getContext()).load(album.getCoverUrlLarge()).into(albumcover);
 		}
 	}
