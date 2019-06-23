@@ -1,5 +1,6 @@
 package com.example.new_fmredioplayer.fragments;
 
+import android.content.Intent;
 import android.graphics.Rect;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,10 +11,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.example.new_fmredioplayer.DetailActivity;
 import com.example.new_fmredioplayer.R;
 import com.example.new_fmredioplayer.adapters.RecommendListAdapter;
 import com.example.new_fmredioplayer.base.BaseFragment;
 import com.example.new_fmredioplayer.interfaces.IRecommendViewCallback;
+import com.example.new_fmredioplayer.presenters.AlbumDetialPresenter;
 import com.example.new_fmredioplayer.presenters.RecommendPresenter;
 import com.example.new_fmredioplayer.utils.Constants;
 import com.example.new_fmredioplayer.utils.LogUtils;
@@ -30,7 +33,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class RecommendFragment extends BaseFragment implements IRecommendViewCallback, UILoader.OnRetryClickListener {
+public class RecommendFragment extends BaseFragment implements IRecommendViewCallback, UILoader.OnRetryClickListener, RecommendListAdapter.onRecommendItemClickListener {
 
 	private final static String TAG = "RecommendFragment";
 	private View mRootView;
@@ -74,9 +77,6 @@ public class RecommendFragment extends BaseFragment implements IRecommendViewCal
 		LinearLayoutManager linearLayoutManager =	new LinearLayoutManager(getContext());
 		linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 		mRecommendBy.setLayoutManager(linearLayoutManager);
-		//3，设置适配器
-		mRecommendListAdapter = new RecommendListAdapter();
-		mRecommendBy.setAdapter(mRecommendListAdapter);
 		mRecommendBy.addItemDecoration(new RecyclerView.ItemDecoration() {
 			@Override
 			public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
@@ -86,8 +86,10 @@ public class RecommendFragment extends BaseFragment implements IRecommendViewCal
 				outRect.bottom = UIUtil.dip2px(view.getContext(),5);
 			}
 		});
-
-
+		//3，设置适配器
+		mRecommendListAdapter = new RecommendListAdapter();
+		mRecommendBy.setAdapter(mRecommendListAdapter);
+		mRecommendListAdapter.setOnRecommendItemClickListener(this);
 		return mRootView;
 	}
 
@@ -134,5 +136,14 @@ public class RecommendFragment extends BaseFragment implements IRecommendViewCal
 		if (mRecommendPresenter != null) {
 			mRecommendPresenter.unregisterViewCallback(this);
 		}
+	}
+
+	@Override
+	public void onItemClick(int position, Album album) {
+		//获取被点击的位置
+		AlbumDetialPresenter.getInstance().setTargetAlbum(album);
+		//item被点击,跳转到详情界面
+		Intent intent = new Intent(getContext(), DetailActivity.class);
+		startActivity(intent);
 	}
 }
