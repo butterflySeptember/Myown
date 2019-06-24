@@ -17,6 +17,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.security.auth.callback.Callback;
+
 public class AlbumDetialPresenter implements IAlbumDetialPresenter {
 
 	private Album sTargetAlbum = null;
@@ -75,9 +77,21 @@ public class AlbumDetialPresenter implements IAlbumDetialPresenter {
 			public void onError(int errorCode, String errorMsg) {
 				LogUtils.d(TAG,"errorCode -->" + errorCode);
 				LogUtils.d(TAG,"errorMsg -->" + errorMsg);
+				handlerError(errorCode,errorMsg);
 			}
 		});
 
+	}
+
+	/**
+	 * 如果发生错误，就通知ui
+	 * @param errorCode
+	 * @param errorMsg
+	 */
+	private void handlerError(int errorCode, String errorMsg) {
+		for (IAlbumDetailViewCallBack callBack : mCallBacks) {
+			callBack.onNetworkError(errorCode,errorMsg);
+		}
 	}
 
 	private void handlerAlbumDetailResult(List<Track> tracks) {

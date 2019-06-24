@@ -19,4 +19,11 @@ public interface IAlbumDetailViewCallBack {
 	 */
 	void onAlbunLoaded(Album album);
 
+	/**
+	 * 网络错误
+	 * @param errorCode
+	 * @param errorMsg
+	 */
+	void onNetworkError(int errorCode, String errorMsg);
+
 }

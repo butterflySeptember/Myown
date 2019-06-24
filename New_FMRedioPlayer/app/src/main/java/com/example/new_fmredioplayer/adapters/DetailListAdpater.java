@@ -5,17 +5,25 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.new_fmredioplayer.R;
 
 import com.ximalaya.ting.android.opensdk.model.track.Track;
 
+import org.w3c.dom.Text;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 public class DetailListAdpater extends RecyclerView.Adapter<DetailListAdpater.InnerHolder> {
 
 	private List<Track> mDetailData = new ArrayList<>();
+	//格式化时间
+	private SimpleDateFormat mSimpleDateFormat = new SimpleDateFormat("yyyy_MM_dd");
+	private ItemClickListener mItemClickListener = null;
 
 	@NonNull
 	@Override
@@ -25,8 +33,39 @@ public class DetailListAdpater extends RecyclerView.Adapter<DetailListAdpater.In
 	}
 
 	@Override
-	public void onBindViewHolder(@NonNull DetailListAdpater.InnerHolder innerHolder, int i) {
+	public void onBindViewHolder(@NonNull InnerHolder holder, final int position) {
+		//找到控件，设置数据
+		View itemView = holder.itemView;
+		//顺序ID
+		TextView orderTv = itemView.findViewById(R.id.order_text);
+		//标题
+		TextView titleTv = itemView.findViewById(R.id.detail_item_title);
+		//播放次数
+		TextView playCountTv = itemView.findViewById(R.id.album_play_count);
+		//时长
+		TextView durationTv = itemView.findViewById(R.id.detail_item_duration);
+		//更新日期
+		TextView updateDateTv = itemView.findViewById(R.id.detail_item_update_time);
 
+		//设置数据
+		Track track = mDetailData.get(position);
+		orderTv.setText(position +"");
+		titleTv.setText(track.getTrackTitle());
+		playCountTv.setText(track.getPlayCount()+ "");
+		durationTv.setText(track.getSampleDuration()+"");
+		String updateTimeText = (String) mSimpleDateFormat.format(track.getUpdatedAt());
+		updateDateTv.setText(updateTimeText);
+
+		//设置item的点击事件
+		itemView.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Toast.makeText(v.getContext(),"you click " + position +" item ",Toast.LENGTH_SHORT).show();
+				if (mItemClickListener != null) {
+					mItemClickListener.onItemClick();
+				}
+			}
+		});
 	}
 
 	@Override
@@ -47,5 +86,13 @@ public class DetailListAdpater extends RecyclerView.Adapter<DetailListAdpater.In
 		public InnerHolder(@NonNull View itemView) {
 			super(itemView);
 		}
+	}
+
+	public void setItemClickListener (ItemClickListener listener){
+		this.mItemClickListener = listener;
+	}
+
+	public interface ItemClickListener{
+		void onItemClick();
 	}
 }
