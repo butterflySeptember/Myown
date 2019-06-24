@@ -1,6 +1,8 @@
 package com.example.new_fmredioplayer.interfaces;
 
-public interface IAlbumDetialPresenter {
+import com.example.new_fmredioplayer.base.BasePresenter;
+
+public interface IAlbumDetialPresenter extends BasePresenter {
 
 	/**
 	 *下拉刷新内容
@@ -17,15 +19,4 @@ public interface IAlbumDetialPresenter {
 	 */
 	void getAlbumDetial(int albumId,int page);
 
-	/**
-	 *注册UI通知的接口
-	 * @param detialPresenter
-	 */
-	void registerViewCallback(IAlbumDetailViewCallBack detailViewCallBack);
-
-	/**
-	 * 取消注册UI通知的接口
-	 * @param detialPresenter
-	 */
-	void unRegisterViewCallback(IAlbumDetailViewCallBack detailViewCallBack);
 }

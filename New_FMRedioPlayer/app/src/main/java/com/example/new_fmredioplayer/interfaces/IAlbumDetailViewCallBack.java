@@ -1,11 +1,12 @@
 package com.example.new_fmredioplayer.interfaces;
 
+import com.example.new_fmredioplayer.base.BasePresenter;
 import com.ximalaya.ting.android.opensdk.model.album.Album;
 import com.ximalaya.ting.android.opensdk.model.track.Track;
 
 import java.util.List;
 
-public interface IAlbumDetailViewCallBack {
+public interface IAlbumDetailViewCallBack extends BasePresenter {
 
 	/**
 	 * 专辑内容的加载

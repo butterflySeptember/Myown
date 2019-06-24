@@ -2,7 +2,9 @@ package com.example.new_fmredioplayer.interfaces;
 
 import android.view.View;
 
-public interface IRecommendPresenter {
+import com.example.new_fmredioplayer.base.BasePresenter;
+
+public interface IRecommendPresenter extends BasePresenter {
 
 	/**
 	 * 获取推荐内容
@@ -19,14 +21,4 @@ public interface IRecommendPresenter {
 	 */
 	void loadMore();
 
-	/**
-	 *这个方法用于注册UI的回调
-	 */
-	void registerViewCallback(IRecommendViewCallback callback);
-
-	/**
-	 * 取消UI的回调注册
-	 * @param callback
-	 */
-	void unregisterViewCallback(IRecommendViewCallback callback);
 }

@@ -1,10 +1,11 @@
 package com.example.new_fmredioplayer.interfaces;
 
+import com.example.new_fmredioplayer.base.BasePresenter;
 import com.ximalaya.ting.android.opensdk.model.album.Album;
 
 import java.util.List;
 
-public interface IRecommendViewCallback {
+public interface IRecommendViewCallback extends BasePresenter {
 
 	/**
 	 * 获取推荐内容的结果
