@@ -62,7 +62,8 @@ public class DetailListAdpater extends RecyclerView.Adapter<DetailListAdpater.In
 			public void onClick(View v) {
 				Toast.makeText(v.getContext(),"you click " + position +" item ",Toast.LENGTH_SHORT).show();
 				if (mItemClickListener != null) {
-					mItemClickListener.onItemClick();
+					//添加参数：列表位置
+					mItemClickListener.onItemClick(mDetailData,position);
 				}
 			}
 		});
@@ -93,6 +94,6 @@ public class DetailListAdpater extends RecyclerView.Adapter<DetailListAdpater.In
 	}
 
 	public interface ItemClickListener{
-		void onItemClick();
+		void onItemClick(List<Track> detailData, int position);
 	}
 }

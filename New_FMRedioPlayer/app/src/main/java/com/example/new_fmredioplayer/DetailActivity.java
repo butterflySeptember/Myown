@@ -23,6 +23,7 @@ import com.example.new_fmredioplayer.base.BaseActivity;
 import com.example.new_fmredioplayer.interfaces.IAlbumDetailViewCallBack;
 import com.example.new_fmredioplayer.interfaces.IAlbumDetialPresenter;
 import com.example.new_fmredioplayer.presenters.AlbumDetialPresenter;
+import com.example.new_fmredioplayer.presenters.PlayPresenter;
 import com.example.new_fmredioplayer.utils.ImageBlur;
 import com.example.new_fmredioplayer.utils.LogUtils;
 import com.example.new_fmredioplayer.views.UILoader;
@@ -195,10 +196,26 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
 		}
 	}
 
+
 	@Override
-	public void onItemClick() {
+	public void onItemClick(List<Track> detailData, int position) {
+		//设置播放器的数据
+		PlayPresenter playPresenter = PlayPresenter.getPlayPresenter();
+		playPresenter.setPlayList(detailData,position);
 		//跳转到播放器界面
 		Intent intent = new Intent(this,PlayerActivity.class);
 		startActivity(intent);
+
+	}
+
+
+	@Override
+	public void registerViewCallback(Object o) {
+
+	}
+
+	@Override
+	public void unRegisterViewCallback(Object o) {
+
 	}
 }

@@ -1,16 +1,20 @@
 package com.example.new_fmredioplayer.base;
 
 import android.app.Application;
+import android.content.Context;
 import android.os.Handler;
 
 import com.example.new_fmredioplayer.utils.LogUtils;
 import com.ximalaya.ting.android.opensdk.constants.DTransferConstants;
 import com.ximalaya.ting.android.opensdk.datatrasfer.CommonRequest;
+import com.ximalaya.ting.android.opensdk.player.XmPlayerManager;
 
 
 public class baseApplication extends Application {
 
 	private static Handler sHandler = null;
+
+	private static Context sContext = null;
 
 	@Override
 	public void onCreate() {
@@ -33,7 +37,18 @@ public class baseApplication extends Application {
 			mXimalaya.init(this ,mAppSecret);
 		}
 
+		//初始化播放器
+		XmPlayerManager.getInstance(this).init();
+
 		LogUtils.init(this.getPackageName(),false);
+
+		sHandler = new Handler();
+
+		sContext = getBaseContext();
+	}
+
+	public static Context getAppContext(){
+		return sContext;
 	}
 
 	public  static Handler getHandler(){
