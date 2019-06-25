@@ -17,9 +17,12 @@ import com.ximalaya.ting.android.opensdk.player.service.IXmPlayerStatusListener;
 import com.ximalaya.ting.android.opensdk.player.service.XmPlayListControl;
 import com.ximalaya.ting.android.opensdk.player.service.XmPlayerException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PlayPresenter implements IPlayerPresenter, IXmAdsStatusListener, IXmPlayerStatusListener {
+
+	private List<IPlayerCallback> mIPlayerCallbacks = new ArrayList<>();
 
 	private final XmPlayerManager mPlayerManager;
 	private final static String TAG = "PlayPresenter";
@@ -102,13 +105,21 @@ public class PlayPresenter implements IPlayerPresenter, IXmAdsStatusListener, IX
 	}
 
 	@Override
-	public void registerViewCallback(IPlayerCallback iPlayerCallback) {
+	public boolean isPlay() {
+		//返回当前是否正在播放
+		return mPlayerManager.isPlaying();
+	}
 
+	@Override
+	public void registerViewCallback(IPlayerCallback iPlayerCallback) {
+		if (mIPlayerCallbacks.contains(iPlayerCallback)) {
+			mIPlayerCallbacks.add(iPlayerCallback);
+		}
 	}
 
 	@Override
 	public void unRegisterViewCallback(IPlayerCallback iPlayerCallback) {
-
+		mIPlayerCallbacks.remove(iPlayerCallback);
 	}
 
 	//==========================广告相关的数据接口  start========================
@@ -152,16 +163,25 @@ public class PlayPresenter implements IPlayerPresenter, IXmAdsStatusListener, IX
 	@Override
 	public void onPlayStart() {
 		LogUtils.d(TAG,"onPlayStart ...");
+		for (IPlayerCallback iPlayerCallback : mIPlayerCallbacks) {
+			iPlayerCallback.onPlayStart();
+		}
 	}
 
 	@Override
 	public void onPlayPause() {
 		LogUtils.d(TAG,"onPlayPause ...");
+		for (IPlayerCallback iPlayerCallback : mIPlayerCallbacks) {
+			iPlayerCallback.onPlayPause();
+		}
 	}
 
 	@Override
 	public void onPlayStop() {
 		LogUtils.d(TAG,"onPlayStop ...");
+		for (IPlayerCallback iPlayerCallback : mIPlayerCallbacks) {
+			iPlayerCallback.onPlayStop();
+		}
 	}
 
 	@Override
