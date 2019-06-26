@@ -58,7 +58,7 @@ public interface IPlayerCallback extends BasePresenter {
 	 * @param current
 	 * @param total
 	 */
-	void onProgramsChange(long current,long total);
+	void onProgramsChange(int current,int total);
 
 	/**
 	 * 广告加载完成
@@ -69,4 +69,10 @@ public interface IPlayerCallback extends BasePresenter {
 	 * 广告结束
 	 */
 	void onAdFinished();
+
+	/**
+	 * 更新当前节目标题
+	 * @param title
+	 */
+	void onTrackTitleUpdate(String title);
 }

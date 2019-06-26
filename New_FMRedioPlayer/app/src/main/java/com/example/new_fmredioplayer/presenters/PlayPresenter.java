@@ -26,6 +26,7 @@ public class PlayPresenter implements IPlayerPresenter, IXmAdsStatusListener, IX
 
 	private final XmPlayerManager mPlayerManager;
 	private final static String TAG = "PlayPresenter";
+	private String mTrackTitle;
 
 	private  PlayPresenter(){
 		mPlayerManager = XmPlayerManager.getInstance(baseApplication.getAppContext());
@@ -54,6 +55,8 @@ public class PlayPresenter implements IPlayerPresenter, IXmAdsStatusListener, IX
 		if (mPlayerManager != null) {
 			mPlayerManager.setPlayList(list,playIndex);
 			isPlayListSet = true;
+			Track track = list.get(playIndex);
+			mTrackTitle = track.getTrackTitle();
 		}else{
 			LogUtils.d(TAG,"play list is null ...");
 		}
@@ -61,12 +64,16 @@ public class PlayPresenter implements IPlayerPresenter, IXmAdsStatusListener, IX
 
 	@Override
 	public void play() {
-
+		if (isPlayListSet) {
+			mPlayerManager.play();
+		}
 	}
 
 	@Override
 	public void pause() {
-
+		if (mPlayerManager != null) {
+			mPlayerManager.stop();
+		}
 	}
 
 	@Override
@@ -76,12 +83,18 @@ public class PlayPresenter implements IPlayerPresenter, IXmAdsStatusListener, IX
 
 	@Override
 	public void playPre() {
-
+		//播放上一首
+		if (mPlayerManager != null) {
+			mPlayerManager.playPre();
+		}
 	}
 
 	@Override
 	public void playNext() {
-
+		//播放下一首
+		if (mPlayerManager != null) {
+			mPlayerManager.playNext();
+		}
 	}
 
 	@Override
@@ -101,7 +114,8 @@ public class PlayPresenter implements IPlayerPresenter, IXmAdsStatusListener, IX
 
 	@Override
 	public void seekTo(int progress) {
-
+		//更新进度条的进度
+		mPlayerManager.seekTo(progress);
 	}
 
 	@Override
@@ -112,6 +126,7 @@ public class PlayPresenter implements IPlayerPresenter, IXmAdsStatusListener, IX
 
 	@Override
 	public void registerViewCallback(IPlayerCallback iPlayerCallback) {
+		iPlayerCallback.onTrackTitleUpdate(mTrackTitle);
 		if (mIPlayerCallbacks.contains(iPlayerCallback)) {
 			mIPlayerCallbacks.add(iPlayerCallback);
 		}
@@ -195,8 +210,20 @@ public class PlayPresenter implements IPlayerPresenter, IXmAdsStatusListener, IX
 	}
 
 	@Override
-	public void onSoundSwitch(PlayableModel playableModel, PlayableModel playableModel1) {
+	public void onSoundSwitch(PlayableModel lastMode, PlayableModel curMode) {
 		LogUtils.d(TAG,"onSoundSwitch ...");
+		LogUtils.d(TAG,"lastMode -- > " + lastMode.getKind());
+		//curMode为当前播放的内容
+		//通过getKind（）方法获得为track类型
+		if (curMode instanceof Track) {
+			Track currentTrack = (Track) curMode ;
+			mTrackTitle = currentTrack.getTrackTitle();
+			//LogUtils.d(TAG,"title -- > " + ((Track) curMode).getTrackTitle());
+			for (IPlayerCallback iPlayerCallback : mIPlayerCallbacks) {
+				iPlayerCallback.onTrackTitleUpdate(mTrackTitle);
+			}
+		}
+
 	}
 
 	@Override
@@ -215,8 +242,12 @@ public class PlayPresenter implements IPlayerPresenter, IXmAdsStatusListener, IX
 	}
 
 	@Override
-	public void onPlayProgress(int current, int duration) {
-		LogUtils.d(TAG,"当前播放进度 -- >" + current + "总时长 -- > " + duration);
+	public void onPlayProgress(int currPos, int duration) {
+		//单位是毫秒
+		for (IPlayerCallback iPlayerCallback : mIPlayerCallbacks) {
+			iPlayerCallback.onProgramsChange(currPos,duration);
+		}
+		LogUtils.d(TAG,"当前播放进度 -- >" + currPos + "总时长 -- > " + duration);
 	}
 
 	@Override

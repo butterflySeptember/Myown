@@ -36,10 +36,12 @@
                 android:id="@+id/current_position"
                 android:text="00:00"/>
             <SeekBar
+                android:id="@+id/track_seek_bar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_marginLeft="50dp"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                 android:layout_marginRight="50dp" />
             <TextView
                 android:layout_width="50dp"
@@ -64,6 +66,7 @@
             <ImageView
                 android:layout_width="0dp"
                 android:layout_weight="1"
+                android:id="@+id/play_pre"
                 android:src="@mipmap/left_play_icon"
                 android:layout_height="30dp" />
             <ImageView
@@ -75,6 +78,7 @@
             <ImageView
                 android:layout_width="0dp"
                 android:layout_weight="1"
+                android:id="@+id/play_next"
                 android:src="@mipmap/right_play_icon"
                 android:layout_height="30dp" />
             <ImageView
