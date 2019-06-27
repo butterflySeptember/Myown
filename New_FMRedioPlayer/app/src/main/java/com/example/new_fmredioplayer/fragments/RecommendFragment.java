@@ -146,4 +146,14 @@ public class RecommendFragment extends BaseFragment implements IRecommendViewCal
 		Intent intent = new Intent(getContext(), DetailActivity.class);
 		startActivity(intent);
 	}
+
+	@Override
+	public void registerViewCallback(Object o) {
+
+	}
+
+	@Override
+	public void unRegisterViewCallback(Object o) {
+
+	}
 }

@@ -2,6 +2,7 @@ package com.example.new_fmredioplayer;
 
 import android.nfc.Tag;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
@@ -9,6 +10,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 
+import com.example.new_fmredioplayer.adapters.PlayerTrackPagerAdapter;
 import com.example.new_fmredioplayer.base.BaseActivity;
 import com.example.new_fmredioplayer.interfaces.IPlayerCallback;
 import com.example.new_fmredioplayer.presenters.PlayPresenter;
@@ -35,6 +37,8 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
 	private ImageView mPlayPreBtn;
 	private TextView mTrackTitle;
 	private String mTrackTitleText;
+	private ViewPager mTrackPagerView;
+	private PlayerTrackPagerAdapter mTrackPagerAdapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +49,8 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
 		//接口注册
 		mPlayPresenter.registerViewCallback(this);
 		initView();
+		//界面初始化后获取数据
+		mPlayPresenter.getPlayList();
 		initEvent();
 		startPlay();
 	}
@@ -137,6 +143,11 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
 		if (!TextUtils.isEmpty(mTrackTitleText)) {
 			mTrackTitle.setText(mTrackTitleText);
 		}
+		mTrackPagerView = this.findViewById(R.id.track_pager_view);
+		//创建适配器
+		mTrackPagerAdapter = new PlayerTrackPagerAdapter();
+		//设置适配器
+		mTrackPagerView.setAdapter(mTrackPagerAdapter);
 	}
 
 	@Override
@@ -179,7 +190,10 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
 
 	@Override
 	public void onListLoaded(List<Track> list) {
-
+		//把数据设置入适配器
+		if (mTrackPagerAdapter != null) {
+			mTrackPagerAdapter.setData(list);
+		}
 	}
 
 	@Override
@@ -227,13 +241,15 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
 	}
 
 	@Override
-	public void onTrackTitleUpdate(String title) {
+	public void onTrackUpdate(Track track) {
+		//更新标题
+		this.mTrackTitleText = track.getTrackTitle();
 		if (mTrackTitle != null) {
-			this.mTrackTitleText = title;
-			//设置当前节目标题
-			mTrackTitle.setText(title);
+			mTrackTitle.setText(mTrackTitleText);
 		}
+		//TODO:内容改变时，获取当前的位置
 	}
+
 
 	@Override
 	public void registerViewCallback(Object o) {

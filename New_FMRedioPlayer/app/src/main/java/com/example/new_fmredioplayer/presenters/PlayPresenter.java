@@ -26,7 +26,7 @@ public class PlayPresenter implements IPlayerPresenter, IXmAdsStatusListener, IX
 
 	private final XmPlayerManager mPlayerManager;
 	private final static String TAG = "PlayPresenter";
-	private String mTrackTitle;
+	private Track mCurrentTrack;
 
 	private  PlayPresenter(){
 		mPlayerManager = XmPlayerManager.getInstance(baseApplication.getAppContext());
@@ -55,8 +55,7 @@ public class PlayPresenter implements IPlayerPresenter, IXmAdsStatusListener, IX
 		if (mPlayerManager != null) {
 			mPlayerManager.setPlayList(list,playIndex);
 			isPlayListSet = true;
-			Track track = list.get(playIndex);
-			mTrackTitle = track.getTrackTitle();
+			mCurrentTrack = list.get(playIndex);
 		}else{
 			LogUtils.d(TAG,"play list is null ...");
 		}
@@ -104,7 +103,12 @@ public class PlayPresenter implements IPlayerPresenter, IXmAdsStatusListener, IX
 
 	@Override
 	public void getPlayList() {
-
+		if (mPlayerManager != null) {
+			List<Track> playList = mPlayerManager.getPlayList();
+			for (IPlayerCallback iPlayerCallback : mIPlayerCallbacks) {
+				iPlayerCallback.onListLoaded(playList);
+			}
+		}
 	}
 
 	@Override
@@ -126,7 +130,7 @@ public class PlayPresenter implements IPlayerPresenter, IXmAdsStatusListener, IX
 
 	@Override
 	public void registerViewCallback(IPlayerCallback iPlayerCallback) {
-		iPlayerCallback.onTrackTitleUpdate(mTrackTitle);
+		iPlayerCallback.onTrackUpdate(mCurrentTrack);
 		if (mIPlayerCallbacks.contains(iPlayerCallback)) {
 			mIPlayerCallbacks.add(iPlayerCallback);
 		}
@@ -217,10 +221,10 @@ public class PlayPresenter implements IPlayerPresenter, IXmAdsStatusListener, IX
 		//通过getKind（）方法获得为track类型
 		if (curMode instanceof Track) {
 			Track currentTrack = (Track) curMode ;
-			mTrackTitle = currentTrack.getTrackTitle();
+			mCurrentTrack = currentTrack;
 			//LogUtils.d(TAG,"title -- > " + ((Track) curMode).getTrackTitle());
 			for (IPlayerCallback iPlayerCallback : mIPlayerCallbacks) {
-				iPlayerCallback.onTrackTitleUpdate(mTrackTitle);
+				iPlayerCallback.onTrackUpdate(mCurrentTrack);
 			}
 		}
 
