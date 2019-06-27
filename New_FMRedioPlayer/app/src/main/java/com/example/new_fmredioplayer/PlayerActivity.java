@@ -1,9 +1,11 @@
 package com.example.new_fmredioplayer;
 
+import android.annotation.SuppressLint;
 import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -21,7 +23,7 @@ import com.ximalaya.ting.android.opensdk.player.service.XmPlayListControl;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-public class PlayerActivity extends BaseActivity implements IPlayerCallback {
+public class PlayerActivity extends BaseActivity implements IPlayerCallback, ViewPager.OnPageChangeListener {
 
 	private ImageView mControlBtn;
 	private PlayPresenter mPlayPresenter;
@@ -39,6 +41,7 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
 	private String mTrackTitleText;
 	private ViewPager mTrackPagerView;
 	private PlayerTrackPagerAdapter mTrackPagerAdapter;
+	private boolean mIsUserSlidePage = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +75,7 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
 	/**
 	 * 设置相关的事件
 	 */
+	@SuppressLint("ClickableViewAccessibility")
 	private void initEvent() {
 		mControlBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -124,6 +128,22 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
 				if (mPlayPresenter != null) {
 					mPlayPresenter.playPre();
 				}
+			}
+		});
+
+		mTrackPagerView.addOnPageChangeListener(this);
+
+		mTrackPagerView.setOnTouchListener(new View.OnTouchListener() {
+			@Override
+			//判断是否为用户触摸
+			public boolean onTouch(View view, MotionEvent motionEvent) {
+				int action = motionEvent.getAction();
+				switch (action){
+					case  MotionEvent.ACTION_DOWN:
+						mIsUserSlidePage = true;
+						break;
+				}
+				return false;
 			}
 		});
 
@@ -241,15 +261,18 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
 	}
 
 	@Override
-	public void onTrackUpdate(Track track) {
+	public void onTrackUpdate(Track track, int playIndex) {
 		//更新标题
 		this.mTrackTitleText = track.getTrackTitle();
 		if (mTrackTitle != null) {
 			mTrackTitle.setText(mTrackTitleText);
 		}
-		//TODO:内容改变时，获取当前的位置
+		//内容改变时，获取当前的位置
+		//修改当前节目改变后的图片
+		if (mTrackPagerView != null) {
+			mTrackPagerView.setCurrentItem(playIndex,true);
+		}
 	}
-
 
 	@Override
 	public void registerViewCallback(Object o) {
@@ -258,6 +281,26 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback {
 
 	@Override
 	public void unRegisterViewCallback(Object o) {
+
+	}
+
+	@Override
+	public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+	}
+
+	@Override
+	public void onPageSelected(int position) {
+		LogUtils.d(TAG,"position -- > " + position);
+		//当页面选中的时候，切换播放的内容
+		if (mPlayPresenter != null && mIsUserSlidePage == true) {
+			mPlayPresenter.playByIndex(position);
+		}
+		mIsUserSlidePage = false;
+	}
+
+	@Override
+	public void onPageScrollStateChanged(int state) {
 
 	}
 }

@@ -27,6 +27,7 @@ public class PlayPresenter implements IPlayerPresenter, IXmAdsStatusListener, IX
 	private final XmPlayerManager mPlayerManager;
 	private final static String TAG = "PlayPresenter";
 	private Track mCurrentTrack;
+	private int mCurrentIndex = 0;
 
 	private  PlayPresenter(){
 		mPlayerManager = XmPlayerManager.getInstance(baseApplication.getAppContext());
@@ -56,6 +57,7 @@ public class PlayPresenter implements IPlayerPresenter, IXmAdsStatusListener, IX
 			mPlayerManager.setPlayList(list,playIndex);
 			isPlayListSet = true;
 			mCurrentTrack = list.get(playIndex);
+			mCurrentIndex = playIndex;
 		}else{
 			LogUtils.d(TAG,"play list is null ...");
 		}
@@ -113,7 +115,10 @@ public class PlayPresenter implements IPlayerPresenter, IXmAdsStatusListener, IX
 
 	@Override
 	public void playByIndex(int index) {
-
+		//切换播放器到index位置
+		if (mPlayerManager != null) {
+			mPlayerManager.play(index);
+		}
 	}
 
 	@Override
@@ -130,7 +135,7 @@ public class PlayPresenter implements IPlayerPresenter, IXmAdsStatusListener, IX
 
 	@Override
 	public void registerViewCallback(IPlayerCallback iPlayerCallback) {
-		iPlayerCallback.onTrackUpdate(mCurrentTrack);
+		iPlayerCallback.onTrackUpdate(mCurrentTrack , mCurrentIndex);
 		if (mIPlayerCallbacks.contains(iPlayerCallback)) {
 			mIPlayerCallbacks.add(iPlayerCallback);
 		}
@@ -217,6 +222,7 @@ public class PlayPresenter implements IPlayerPresenter, IXmAdsStatusListener, IX
 	public void onSoundSwitch(PlayableModel lastMode, PlayableModel curMode) {
 		LogUtils.d(TAG,"onSoundSwitch ...");
 		LogUtils.d(TAG,"lastMode -- > " + lastMode.getKind());
+		mCurrentIndex = mPlayerManager.getCurrentIndex();
 		//curMode为当前播放的内容
 		//通过getKind（）方法获得为track类型
 		if (curMode instanceof Track) {
@@ -224,10 +230,9 @@ public class PlayPresenter implements IPlayerPresenter, IXmAdsStatusListener, IX
 			mCurrentTrack = currentTrack;
 			//LogUtils.d(TAG,"title -- > " + ((Track) curMode).getTrackTitle());
 			for (IPlayerCallback iPlayerCallback : mIPlayerCallbacks) {
-				iPlayerCallback.onTrackUpdate(mCurrentTrack);
+				iPlayerCallback.onTrackUpdate(mCurrentTrack , mCurrentIndex);
 			}
 		}
-
 	}
 
 	@Override
