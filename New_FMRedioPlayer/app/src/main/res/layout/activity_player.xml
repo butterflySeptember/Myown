@@ -67,19 +67,19 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:id="@+id/play_pre"
-                android:src="@mipmap/left_play_icon"
+                android:src="@drawable/select_player_left"
                 android:layout_height="30dp" />
             <ImageView
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:src="@mipmap/play_icon"
+                android:src="@drawable/select_player_play_or_not"
                 android:layout_height="30dp"
                 android:id="@+id/play_or_stop_btn"/>
             <ImageView
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:id="@+id/play_next"
-                android:src="@mipmap/right_play_icon"
+                android:src="@drawable/select_player_right"
                 android:layout_height="30dp" />
             <ImageView
                 android:layout_width="0dp"
