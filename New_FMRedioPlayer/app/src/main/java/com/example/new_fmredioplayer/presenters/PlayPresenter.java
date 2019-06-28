@@ -24,7 +24,6 @@ import java.util.List;
 public class PlayPresenter implements IPlayerPresenter, IXmAdsStatusListener, IXmPlayerStatusListener {
 
 	private List<IPlayerCallback> mIPlayerCallbacks = new ArrayList<>();
-
 	private final XmPlayerManager mPlayerManager;
 	private final static String TAG = "PlayPresenter";
 	private Track mCurrentTrack;
@@ -104,7 +103,9 @@ public class PlayPresenter implements IPlayerPresenter, IXmAdsStatusListener, IX
 
 	@Override
 	public void switchPlayMode(XmPlayListControl.PlayMode mode) {
-
+		if (mPlayerManager != null) {
+			mPlayerManager.setPlayMode(mode);
+		}
 	}
 
 	@Override

@@ -61,7 +61,8 @@
             <ImageView
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:src="@mipmap/left_second_play_icon"
+                android:id="@+id/player_mode_switch_btn"
+                android:src="@drawable/select_play_mode_list_order"
                 android:layout_height="30dp" />
             <ImageView
                 android:layout_width="0dp"
