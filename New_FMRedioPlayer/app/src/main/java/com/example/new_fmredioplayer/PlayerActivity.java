@@ -171,8 +171,6 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback, Vie
 				//处理播放模式的切换
 				if (mPlayPresenter != null) {
 					mPlayPresenter.switchPlayMode(mCurrentMode);
-					mCurrentMode = playMode;
-					updatePlayModeBtnImage();
 				}
 			}
 		});
@@ -271,6 +269,9 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback, Vie
 
 	@Override
 	public void onPlayModeChange(XmPlayListControl.PlayMode playMode) {
+		//更新播放模式，修改UI
+		mCurrentMode = playMode;
+		updatePlayModeBtnImage();
 
 	}
 
