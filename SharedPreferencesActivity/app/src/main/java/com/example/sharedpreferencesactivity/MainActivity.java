@@ -10,9 +10,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -70,15 +74,29 @@ public class MainActivity extends AppCompatActivity {
 	 * @param accountNumberText
 	 * @param passwordText
 	 */
+	/**
+	 * 保存数据存储路径 :
+	 * cache dir == /data/data/com.example.sharedpreferencesactivity/cache
+	 * 缓存路径，这个路径下面的文件会由系统根据内存进行清理
+	 * file dir == /data/data/com.example.sharedpreferencesactivity/file
+	 * 这个路径下面的文件可以用代码进行清理或者手动清理
+	 * @param accountNumberText
+	 * @param passwordText
+	 */
 	//使用文件保存数据
 	private void saveUserInfo(String accountNumberText, String passwordText) {
 		Log.d(TAG, "保存用户信息 ...");
+		//获得文件保存的路径
+		File filesDir = this.getFilesDir();
+		//创建文件
+		File saveFile = new File(filesDir,"info.text");
+		Log.d(TAG, "file dir == " + filesDir.toString());
 		try {
-			File file = new File("/data/data/com.example.sharedpreferencesactivity/info.text");
-			if (!file.exists()) {
-				file.createNewFile();
+			if (!saveFile.exists()) {
+				saveFile.createNewFile();
 			}
-			FileOutputStream fos = new FileOutputStream(file);
+			FileOutputStream fos = new FileOutputStream(saveFile);
+			//以特定的格式来存储数据
 			fos.write((accountNumberText + "***" + passwordText).getBytes());
 			fos.close();
 			Toast.makeText(this,"数据保存成功",Toast.LENGTH_SHORT).show();
@@ -87,6 +105,27 @@ public class MainActivity extends AppCompatActivity {
 		}
 
 
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		try {
+			//打开目标文件
+			FileInputStream fileInputStream = this.openFileInput("info.text");
+			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(fileInputStream));
+			//读取目标数据
+			String info = bufferedReader.readLine();
+			//转换字符串为目标格式
+			String[] splits = info.split("\\*\\*\\*");
+			String account = splits[0];
+			String password = splits[1];
+			//设置字符串
+			mAccountNumber.setText(account);
+			mPassword.setText(password);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	//初始化
