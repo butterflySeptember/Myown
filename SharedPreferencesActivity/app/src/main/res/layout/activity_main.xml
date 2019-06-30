@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@mipmap/rabbit"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:layout_marginTop="130dp"
+            android:layout_marginLeft="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="50sp"
+            android:drawableLeft="@mipmap/ic_launcher"
+            android:text="QQ"/>
+        <EditText
+            android:id="@+id/account_number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="30dp"
+            android:textSize="30sp"
+            android:hint="请输入账号"
+            />
+        <EditText
+            android:id="@+id/password"
+            android:autoSizeTextType="uniform"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="30dp"
+            android:textSize="30sp"
+            android:hint="请输入密码"
+            />
+        <Button
+            android:id="@+id/login_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="登陆"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:textSize="25sp"
+            android:background="@drawable/login_button_bg"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:text="忘记密码"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="找回密码"
+                android:layout_alignParentRight="true"/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:text="登陆即表示同意条款"/>
+
+</RelativeLayout>
