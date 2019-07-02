@@ -1,13 +1,18 @@
 package com.example.new_fmredioplayer;
 
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -17,6 +22,7 @@ import com.example.new_fmredioplayer.base.BaseActivity;
 import com.example.new_fmredioplayer.interfaces.IPlayerCallback;
 import com.example.new_fmredioplayer.presenters.PlayPresenter;
 import com.example.new_fmredioplayer.utils.LogUtils;
+import com.example.new_fmredioplayer.views.SubPopWindow;
 import com.ximalaya.ting.android.opensdk.model.track.Track;
 import com.ximalaya.ting.android.opensdk.player.service.XmPlayListControl;
 
@@ -64,6 +70,12 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback, Vie
 		splayModeRule.put(PLAY_MODEL_SINGLE_LOOP,PLAY_MODEL_LIST);
 	}
 
+	private ImageView mPlayerListBtn;
+	private SubPopWindow mSubPopWindow;
+	private ValueAnimator mEnterBgAnimator;
+	private ValueAnimator mOutBgAnimator;
+	private final int BG_ANIMATION_DURATION = 300;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -77,6 +89,32 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback, Vie
 		mPlayPresenter.getPlayList();
 		initEvent();
 		//startPlay();
+		initBgAnimation();
+	}
+
+	private void initBgAnimation() {
+		//popWindow弹出时的动画
+		mEnterBgAnimator = ValueAnimator.ofFloat(1.0f,0.8f);
+		mEnterBgAnimator.setDuration(BG_ANIMATION_DURATION);
+		mEnterBgAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+			@Override
+			public void onAnimationUpdate(ValueAnimator animation) {
+				float value = (float)animation.getAnimatedValue();
+				LogUtils.d(TAG,"value -- > " + value);
+				//更改透明度
+				updateBgAlpha(value);
+			}
+		});
+		//popWindow消失时的动画
+		mOutBgAnimator = ValueAnimator.ofFloat(0.8f, 1.0f);
+		mOutBgAnimator.setDuration(BG_ANIMATION_DURATION);
+		mOutBgAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+			@Override
+			public void onAnimationUpdate(ValueAnimator animation) {
+				float value = (float)animation.getAnimatedValue();
+				updateBgAlpha(value);
+			}
+		});
 	}
 
 	@Override
@@ -175,6 +213,30 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback, Vie
 			}
 		});
 
+		mPlayerListBtn.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				//展示播放列表
+				mSubPopWindow.showAtLocation(v, Gravity.BOTTOM,0,0);
+				//设置背景透明度
+				updateBgAlpha(0.8f);
+				//改变背景透明度改为渐变过程
+			}
+		});
+		mSubPopWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+			@Override
+			public void onDismiss() {
+				//弹窗消失后，恢复正常透明度
+				//updateBgAlpha(1.0f);
+			}
+		});
+	}
+
+	private void updateBgAlpha(float alpha) {
+		Window window = getWindow();
+		WindowManager.LayoutParams attributes = window.getAttributes();
+		attributes.alpha = alpha;
+		window.setAttributes(attributes);
 	}
 
 	/**
@@ -219,6 +281,10 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback, Vie
 		//设置适配器
 		mTrackPagerView.setAdapter(mTrackPagerAdapter);
 		mPlayModeSwitchBtn = this.findViewById(R.id.player_mode_switch_btn);
+		//播放列表按钮
+		mPlayerListBtn = this.findViewById(R.id.player_list_btn);
+		//创建popWindow
+		mSubPopWindow = new SubPopWindow();
 	}
 
 	@Override
