@@ -7,12 +7,16 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 
 import com.example.new_fmredioplayer.R;
 import com.example.new_fmredioplayer.adapters.PlayListAdpater;
 import com.example.new_fmredioplayer.base.baseApplication;
 import com.ximalaya.ting.android.opensdk.model.track.Track;
+import com.ximalaya.ting.android.opensdk.player.service.XmPlayListControl;
 
 import java.util.List;
 
@@ -22,6 +26,10 @@ public class SubPopWindow extends PopupWindow {
 	private View mCloseBtn;
 	private RecyclerView mTrackList;
 	private PlayListAdpater mPlayListAdpater;
+	private TextView mPlayModeTv;
+	private ImageView mPlayModeIv;
+	private View mPlayModeContainer;
+	private PlayListPlayModeClickListener mPlayModeClickListener = null;
 
 	public SubPopWindow(){
 		//设置宽高
@@ -49,6 +57,17 @@ public class SubPopWindow extends PopupWindow {
 				SubPopWindow.this.dismiss();
 			}
 		});
+
+		mPlayModeContainer.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				//切换播放模式
+				if (mPlayModeClickListener != null) {
+					mPlayModeClickListener.onPlayModeClick();
+				}
+			}
+		});
+
 	}
 
 	private void initView() {
@@ -60,6 +79,11 @@ public class SubPopWindow extends PopupWindow {
 		//设置适配器
 		mPlayListAdpater = new PlayListAdpater();
 		mTrackList.setAdapter(mPlayListAdpater);
+
+		//播放模式相关
+		mPlayModeContainer = mPopView.findViewById(R.id.play_list_play_container);
+		mPlayModeTv = mPopView.findViewById(R.id.play_list_play_mode_tv);
+		mPlayModeIv = mPopView.findViewById(R.id.play_list_play_mode_iv);
 	}
 
 	/**
@@ -70,5 +94,64 @@ public class SubPopWindow extends PopupWindow {
 		if (mPlayListAdpater != null) {
 			mPlayListAdpater.setData(data);
 		}
+	}
+
+	public void setCurrentPlayPosition(int position){
+		if (mPlayListAdpater != null) {
+			mPlayListAdpater.setCurrentPlayPosition(position);
+			mTrackList.scrollToPosition(position);
+		}
+	}
+
+	public void setPlayListItemClickListener(PlayListItemClickListener listener){
+		mPlayListAdpater.setOnItemClickListener(listener);
+	}
+
+	/**
+	 * 更新播放列表的播放模式
+	 * @param currentMode
+	 */
+	public void updatePlayMode(XmPlayListControl.PlayMode currentMode) {
+		updatePlayModeBtnImage(currentMode);
+	}
+
+	/**
+	 * 根据当前的播放模式更新播放图标
+	 */
+	private void updatePlayModeBtnImage(XmPlayListControl.PlayMode playMode) {
+		int resId = R.drawable.select_play_mode_list_order;
+		int textId = R.string.play_mode_order_text;
+		switch (playMode){
+			case PLAY_MODEL_LIST:
+				resId = R.drawable.select_play_mode_list_order;
+				textId = R.string.play_mode_order_text;
+				break;
+			case PLAY_MODEL_LIST_LOOP:
+				resId = R.drawable.select_play_mode_loop;
+				textId = R.string.play_mode_list_play_text;
+				break;
+			case PLAY_MODEL_RANDOM:
+				resId = R.drawable.select_play_mode_random;
+				textId = R.string.play_mode_random_text;
+				break;
+			case PLAY_MODEL_SINGLE_LOOP:
+				resId = R.drawable.select_play_mode_single_loop;
+				textId = R.string.play_mode_single_play_text;
+				break;
+		}
+		mPlayModeIv.setImageResource(resId);
+		mPlayModeTv.setText(textId);
+	}
+
+	public interface PlayListItemClickListener{
+		void onItemClick(int position);
+	}
+
+	public void setPlayListPlayModeClickListener(PlayListPlayModeClickListener playModeListener){
+		mPlayModeClickListener = playModeListener;
+	}
+
+	public interface PlayListPlayModeClickListener{
+		void onPlayModeClick();
 	}
 }

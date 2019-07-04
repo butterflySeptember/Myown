@@ -32,7 +32,7 @@
         android:layout_height="20dp"
         android:layout_alignParentRight="true"/>
     </LinearLayout>
-    <VideoView
+    <View
         android:layout_width="match_parent"
         android:background="@color/sub_text_sub_line"
         android:layout_marginTop="8dp"

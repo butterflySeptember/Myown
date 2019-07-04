@@ -49,7 +49,7 @@ public class DetailListAdpater extends RecyclerView.Adapter<DetailListAdpater.In
 
 		//设置数据
 		Track track = mDetailData.get(position);
-		orderTv.setText(position +"");
+		orderTv.setText((position + 1) +"");
 		titleTv.setText(track.getTrackTitle());
 		playCountTv.setText(track.getPlayCount()+ "");
 		durationTv.setText(track.getSampleDuration()+"");

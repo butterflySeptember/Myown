@@ -7,9 +7,30 @@
     android:layout_height="match_parent">
     <LinearLayout
         android:layout_width="match_parent"
-        android:id="@+id/play_list_controller_container"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
+        android:id="@+id/play_list_controller_container"
         android:layout_height="50dp">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:id="@+id/play_list_play_container"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_alignParentLeft="true"
+                android:id="@+id/play_list_play_mode_iv"
+                android:src="@drawable/select_play_mode_list_order"
+                android:layout_height="25dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:textSize="18sp"
+                android:id="@+id/play_list_play_mode_tv"
+                android:text="顺序播放"/>
+        </LinearLayout>
 
 
 

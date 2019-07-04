@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.example.new_fmredioplayer.R;
 import com.example.new_fmredioplayer.base.baseApplication;
 
+import com.example.new_fmredioplayer.views.SubPopWindow;
 import com.ximalaya.ting.android.opensdk.model.track.Track;
 
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ public class PlayListAdpater extends RecyclerView.Adapter<PlayListAdpater.InnerH
 	private TextView mTrackTitleTv;
 	private View mPlayingIconView;
 	private int playingIndex = 0;
+	private SubPopWindow.PlayListItemClickListener mItemClickListener = null;
 
 	@Override
 	public PlayListAdpater.InnerHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -30,7 +32,16 @@ public class PlayListAdpater extends RecyclerView.Adapter<PlayListAdpater.InnerH
 	}
 
 	@Override
-	public void onBindViewHolder(@NonNull PlayListAdpater.InnerHolder holder, int position) {
+	public void onBindViewHolder(@NonNull PlayListAdpater.InnerHolder holder, final int position) {
+
+		holder.itemView.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if (mItemClickListener != null) {
+					mItemClickListener.onItemClick(position);
+				}
+			}
+		});
 		//设置数据
 		Track track = mData.get(position);
 		//设置title内容
@@ -55,6 +66,15 @@ public class PlayListAdpater extends RecyclerView.Adapter<PlayListAdpater.InnerH
 		mData.clear();
 		mData.addAll(list);
 		notifyDataSetChanged();
+	}
+
+	public void setCurrentPlayPosition(int position) {
+		playingIndex = position;
+		notifyDataSetChanged();
+	}
+
+	public void setOnItemClickListener(SubPopWindow.PlayListItemClickListener listener) {
+		this.mItemClickListener = listener;
 	}
 
 	public class InnerHolder extends RecyclerView.ViewHolder{

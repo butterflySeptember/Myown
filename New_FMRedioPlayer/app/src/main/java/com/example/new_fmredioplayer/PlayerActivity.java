@@ -204,12 +204,7 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback, Vie
 		mPlayModeSwitchBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				//根据当前的Mode获取到下一个Mode
-				XmPlayListControl.PlayMode playMode = splayModeRule.get(mCurrentMode);
-				//处理播放模式的切换
-				if (mPlayPresenter != null) {
-					mPlayPresenter.switchPlayMode(mCurrentMode);
-				}
+				SwitchPlayMode();
 			}
 		});
 
@@ -223,6 +218,7 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback, Vie
 				//改变背景透明度改为渐变过程
 			}
 		});
+
 		mSubPopWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
 			@Override
 			public void onDismiss() {
@@ -230,6 +226,33 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback, Vie
 				//updateBgAlpha(1.0f);
 			}
 		});
+
+		mSubPopWindow.setPlayListItemClickListener(new SubPopWindow.PlayListItemClickListener() {
+			@Override
+			public void onItemClick(int position) {
+				//说明播放列表的Item被点击
+				if (mPlayPresenter != null) {
+					mPlayPresenter.playByIndex(position);
+				}
+			}
+		});
+
+		mSubPopWindow.setPlayListPlayModeClickListener(new SubPopWindow.PlayListPlayModeClickListener() {
+			@Override
+			public void onPlayModeClick() {
+				//切换播放模式
+				SwitchPlayMode();
+			}
+		});
+	}
+
+	private void SwitchPlayMode() {
+		//根据当前的Mode获取到下一个Mode
+		XmPlayListControl.PlayMode playMode = splayModeRule.get(mCurrentMode);
+		//处理播放模式的切换
+		if (mPlayPresenter != null) {
+			mPlayPresenter.switchPlayMode(mCurrentMode);
+		}
 	}
 
 	private void updateBgAlpha(float alpha) {
@@ -341,6 +364,8 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback, Vie
 	public void onPlayModeChange(XmPlayListControl.PlayMode playMode) {
 		//更新播放模式，修改UI
 		mCurrentMode = playMode;
+		//更新POPWindow里面的播放模式
+		mSubPopWindow.updatePlayMode(mCurrentMode);
 		updatePlayModeBtnImage();
 
 	}
@@ -395,6 +420,11 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback, Vie
 		//修改当前节目改变后的图片
 		if (mTrackPagerView != null) {
 			mTrackPagerView.setCurrentItem(playIndex,true);
+		}
+
+		//修改播放列表的位置
+		if (mSubPopWindow != null) {
+			mSubPopWindow.setCurrentPlayPosition(playIndex);
 		}
 	}
 
