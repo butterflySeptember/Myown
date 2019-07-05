@@ -26,6 +26,7 @@ public class AlbumDetialPresenter implements IAlbumDetialPresenter {
 	private final static String TAG = "AlbumDetialPresenter";
 
 	private List<IAlbumDetailViewCallBack> mCallBacks = null;
+	private Album mTargetAlbum;
 
 	private AlbumDetialPresenter(){
 	}
@@ -100,7 +101,6 @@ public class AlbumDetialPresenter implements IAlbumDetialPresenter {
 		}
 	}
 
-	@Override
 	public void registerViewCallback(IAlbumDetailViewCallBack detailViewCallBack) {
 		if (mCallBacks.contains(detailViewCallBack)) {
 			mCallBacks.add(detailViewCallBack);
@@ -110,13 +110,30 @@ public class AlbumDetialPresenter implements IAlbumDetialPresenter {
 		}
 	}
 
+//	public void unRegisterViewCallback(IAlbumDetailViewCallBack detailViewCallBack) {
+//		mCallBacks.remove(detailViewCallBack);
+//	}
+//
+//	public void setTargetAlbum(Album targetAlbum){
+//
+//		this.sTargetAlbum = targetAlbum;
+//	}
+
 	@Override
-	public void unRegisterViewCallback(IAlbumDetailViewCallBack detailViewCallBack) {
-		mCallBacks.remove(detailViewCallBack);
+	public void registerViewCallback(Object o) {
+
 	}
 
-	public void setTargetAlbum(Album targetAlbum){
+	@Override
+	public void unRegisterViewCallback(Object o) {
 
-		this.sTargetAlbum = targetAlbum;
+	}
+
+	public void setTargetAlbum(Album targetAlbum) {
+		mTargetAlbum = targetAlbum;
+	}
+
+	public Album getTargetAlbum() {
+		return mTargetAlbum;
 	}
 }

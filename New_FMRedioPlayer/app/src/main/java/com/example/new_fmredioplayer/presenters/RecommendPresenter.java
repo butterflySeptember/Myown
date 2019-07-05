@@ -2,6 +2,7 @@ package com.example.new_fmredioplayer.presenters;
 
 import android.support.annotation.Nullable;
 
+import com.example.new_fmredioplayer.fragments.RecommendFragment;
 import com.example.new_fmredioplayer.interfaces.IRecommendPresenter;
 import com.example.new_fmredioplayer.interfaces.IRecommendViewCallback;
 import com.example.new_fmredioplayer.utils.Constants;
@@ -118,17 +119,31 @@ public class RecommendPresenter implements IRecommendPresenter {
 
 	}
 
-	@Override
-	public void registerViewCallback(IRecommendViewCallback callback) {
-		if (mCallBack.contains(callback)) {
-			mCallBack.add(callback);
-		}
+//	public void registerViewCallback(IRecommendViewCallback callback) {
+//		if (mCallBack.contains(callback)) {
+//			mCallBack.add(callback);
+//		}
+//	}
+//
+//	public void unregisterViewCallback(IRecommendViewCallback callback) {
+//		if (mCallBack.contains(callback)) {
+//			mCallBack.remove(mCallBack);
+//		}
+//	}
+
+
+	public void registerViewCallback(Object o) {
+
 	}
 
 	@Override
-	public void unregisterViewCallback(IRecommendViewCallback callback) {
-		if (mCallBack.contains(callback)) {
-			mCallBack.remove(mCallBack);
+	public void unRegisterViewCallback(Object o) {
+
+	}
+
+	public void unregisterViewCallback(RecommendFragment recommendFragment) {
+		if (mCallBack.contains(recommendFragment)) {
+			mCallBack.add(recommendFragment);
 		}
 	}
 }

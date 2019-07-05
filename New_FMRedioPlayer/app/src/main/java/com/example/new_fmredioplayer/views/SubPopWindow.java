@@ -30,6 +30,9 @@ public class SubPopWindow extends PopupWindow {
 	private ImageView mPlayModeIv;
 	private View mPlayModeContainer;
 	private PlayListPlayModeClickListener mPlayModeClickListener = null;
+	private View mOrderBtnContainer;
+	private ImageView mOrderIcon;
+	private TextView mOrderText;
 
 	public SubPopWindow(){
 		//设置宽高
@@ -68,6 +71,14 @@ public class SubPopWindow extends PopupWindow {
 			}
 		});
 
+		mOrderBtnContainer.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				//切换播放顺序为正序或者逆序
+				mPlayModeClickListener.onPlayModeClick();
+			}
+		});
+
 	}
 
 	private void initView() {
@@ -84,6 +95,10 @@ public class SubPopWindow extends PopupWindow {
 		mPlayModeContainer = mPopView.findViewById(R.id.play_list_play_container);
 		mPlayModeTv = mPopView.findViewById(R.id.play_list_play_mode_tv);
 		mPlayModeIv = mPopView.findViewById(R.id.play_list_play_mode_iv);
+
+		mOrderBtnContainer = mPopView.findViewById(R.id.play_list_order_container);
+		mOrderIcon = mPopView.findViewById(R.id.play_list_order_iv);
+		mOrderText = mPopView.findViewById(R.id.play_list_order_tv);
 	}
 
 	/**
@@ -113,6 +128,15 @@ public class SubPopWindow extends PopupWindow {
 	 */
 	public void updatePlayMode(XmPlayListControl.PlayMode currentMode) {
 		updatePlayModeBtnImage(currentMode);
+	}
+
+	/**
+	 * 更新播放顺序的同时更新图标和文字显示
+	 * @param isOrder
+	 */
+	public void updateOrderIcon(boolean isOrder) {
+		mOrderIcon.setImageResource(isOrder ? R.mipmap.sort_alpha_asc : R.mipmap.sort_alpha_up);
+		mOrderText.setText(isOrder ? R.string.play_order_text_order : R.string.play_order_text_up);
 	}
 
 	/**
@@ -153,5 +177,14 @@ public class SubPopWindow extends PopupWindow {
 
 	public interface PlayListPlayModeClickListener{
 		void onPlayModeClick();
+	}
+
+	public interface PlayListActionListener{
+
+		//播放模式被电击
+		void onPlayModeClick();
+
+		//播放模式切换：顺序或者逆序
+		void onOrderClick();
 	}
 }

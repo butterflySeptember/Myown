@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.example.new_fmredioplayer.adapters.PlayerTrackPagerAdapter;
@@ -243,8 +244,17 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback, Vie
 				//切换播放模式
 				SwitchPlayMode();
 			}
+
+			public void onOrderClick(){
+				//点击了切换顺序和逆序
+				Toast.makeText(PlayerActivity.this,"点击了切换播放模式",Toast.LENGTH_SHORT).show();
+				mSubPopWindow.updateOrderIcon(textOrder);
+				textOrder = ! textOrder;
+			}
 		});
 	}
+
+	private boolean textOrder = false;
 
 	private void SwitchPlayMode() {
 		//根据当前的Mode获取到下一个Mode

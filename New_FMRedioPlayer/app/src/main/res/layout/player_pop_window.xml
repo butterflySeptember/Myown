@@ -5,10 +5,9 @@
     android:orientation="vertical"
     android:background="@drawable/shape_play_list_bg"
     android:layout_height="match_parent">
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:gravity="center_vertical"
-        android:orientation="horizontal"
         android:id="@+id/play_list_controller_container"
         android:layout_height="50dp">
         <LinearLayout
@@ -31,10 +30,31 @@
                 android:id="@+id/play_list_play_mode_tv"
                 android:text="顺序播放"/>
         </LinearLayout>
+        <LinearLayout
+            android:layout_marginRight="10dp"
+            android:id="@+id/play_list_order_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_alignParentLeft="true"
+                android:id="@+id/play_list_order_iv"
+                android:src="@drawable/select_play_mode_list_order"
+                android:layout_height="25dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:textSize="18sp"
+                android:id="@+id/play_list_order_tv"
+                android:text="顺序"/>
+        </LinearLayout>
 
 
-
-    </LinearLayout>
+    </RelativeLayout>
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:id="@+id/play_list_rv"
