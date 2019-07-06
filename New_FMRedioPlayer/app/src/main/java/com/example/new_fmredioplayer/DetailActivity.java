@@ -57,6 +57,8 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
 	private ImageView mPlayControlBtn;
 	private TextView mPlayControlTips;
 	private PlayPresenter mPlayPresenter;
+	private List<Track> mCurrentTrack = null;
+	private final static int DEFAULT_PLAY_INDEX = 0;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -73,22 +75,45 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
 		//播放控制列表的Presenter
 		mPlayPresenter = PlayPresenter.getPlayPresenter();
 		mPlayPresenter.registerViewCallback(this);
+		updatePlayState(mPlayPresenter.isPlay());
 		initEvent();
 	}
+
+
 
 	private void initEvent() {
 		mPlayControlBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				//控制播放器的状态
-				if (mPlayPresenter.isPlay()) {
-					mPlayPresenter.pause();
-				}else{
-					mPlayPresenter.play();
+				if (mPlayPresenter != null) {
+					//判断播放器是否有播放列表
+					//todo:
+					boolean hasPlayList = mPlayPresenter.hasPlayList();
+					if (hasPlayList) {
+						handlePlayControl();
+					}else {
+						handleNoPlayListControl();
+					}
 				}
-
 			}
 		});
+	}
+
+	/**
+	 * 播放器没有播放内容时，默认播放第一个
+	 */
+	private void handleNoPlayListControl() {
+		mPlayPresenter.setPlayList(mCurrentTrack,DEFAULT_PLAY_INDEX);
+		//mPlayPresenter.play();
+	}
+
+	private void handlePlayControl() {
+		//控制播放器的状态
+		if (mPlayPresenter.isPlay()) {
+			mPlayPresenter.pause();
+		}else{
+			mPlayPresenter.play();
+		}
 	}
 
 	/**
@@ -145,6 +170,7 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
 
 	@Override
 	public void onDetailListLoaded(List<Track> tracks) {
+		mCurrentTrack = tracks;
 		//判断数据结果，根据结果显示ui控制
 		if (tracks == null ||tracks.size() == 0) {
 			if (mUiLoader != null) {
@@ -245,35 +271,33 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
 
 	}
 
+	/**
+	 * 根据播放状态修改文字和图标
+	 * @param isPlaying
+	 */
+	private void updatePlayState(boolean isPlaying) {
+		if (mPlayControlBtn != null) {
+			mPlayControlBtn.setImageResource(isPlaying ? R.drawable.select_pause_black_bg : R.drawable.select_play_black_bg);
+		}
+		if (mPlayControlTips != null) {
+			mPlayControlTips.setText(isPlaying ? "正在播放" : "已暂停");
+		}
+	}
+
 	@Override
 	public void onPlayStart() {
 		//修改图标为暂停的状态，文字修改为正在播放
-		if (mPlayControlBtn != null) {
-			mPlayControlBtn.setImageResource(R.drawable.select_pause_black_bg);
-		}
-		if (mPlayControlTips != null) {
-			mPlayControlTips.setText("正在播放");
-		}
+		updatePlayState(true);
 	}
 
 	@Override
 	public void onPlayPause() {
-		if (mPlayControlBtn != null) {
-			mPlayControlBtn.setImageResource(R.drawable.select_play_black_bg);
-		}
-		if (mPlayControlTips != null) {
-			mPlayControlTips.setText("已暂停");
-		}
+		updatePlayState(false);
 	}
 
 	@Override
 	public void onPlayStop() {
-		if (mPlayControlBtn != null) {
-			mPlayControlBtn.setImageResource(R.drawable.select_play_black_bg);
-		}
-		if (mPlayControlTips != null) {
-			mPlayControlTips.setText("已暂停");
-		}
+		updatePlayState(false);
 	}
 
 	@Override
