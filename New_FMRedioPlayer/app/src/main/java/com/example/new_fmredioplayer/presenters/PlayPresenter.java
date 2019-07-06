@@ -1,9 +1,7 @@
 package com.example.new_fmredioplayer.presenters;
 
-import android.app.job.JobInfo;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import com.example.new_fmredioplayer.base.baseApplication;
 import com.example.new_fmredioplayer.interfaces.IPlayerCallback;
@@ -21,6 +19,7 @@ import com.ximalaya.ting.android.opensdk.player.service.XmPlayListControl;
 import com.ximalaya.ting.android.opensdk.player.service.XmPlayerException;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static com.ximalaya.ting.android.opensdk.player.service.XmPlayListControl.PlayMode.PLAY_MODEL_LIST;
@@ -49,6 +48,9 @@ public class PlayPresenter implements IPlayerPresenter, IXmAdsStatusListener, IX
 	//sp * s key and name
 	public static final String PLAY_MODE_SP_NAME = "PlayMode";
 	public static final String PLAY_MODE_SP_KEY = "CurrentPlayMode";
+
+	private boolean mIsReverse = false;
+
 
 	private  PlayPresenter(){
 		mPlayerManager = XmPlayerManager.getInstance(baseApplication.getAppContext());
@@ -195,6 +197,24 @@ public class PlayPresenter implements IPlayerPresenter, IXmAdsStatusListener, IX
 	public boolean isPlay() {
 		//返回当前是否正在播放
 		return mPlayerManager.isPlaying();
+	}
+
+	@Override
+	public void reversePlayList() {
+		//反转播放器列表
+		List<Track> playList = mPlayerManager.getPlayList();
+		Collections.reverse(playList);
+		mIsReverse = !mIsReverse;
+		//第一个参数为播放列表，第二个为播放列表位置
+		mCurrentIndex = playList.size() - 1 -mCurrentIndex;
+		mPlayerManager.setPlayList(playList,mCurrentIndex);
+		//更新UI
+		mCurrentTrack = (Track) mPlayerManager.getCurrSound();
+		for (IPlayerCallback iPlayerCallback : mIPlayerCallbacks) {
+			iPlayerCallback.onListLoaded(playList);
+			iPlayerCallback.onTrackUpdate(mCurrentTrack,mCurrentIndex);
+			iPlayerCallback.updateListOrder(isPlayListSet);
+		}
 	}
 
 	@Override

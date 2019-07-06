@@ -41,6 +41,7 @@
             android:layout_height="19dp"
             />
         <TextView
+            android:id="@+id/play_control_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"

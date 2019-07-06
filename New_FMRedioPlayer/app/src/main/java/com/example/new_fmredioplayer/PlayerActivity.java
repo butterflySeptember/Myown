@@ -247,9 +247,10 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback, Vie
 
 			public void onOrderClick(){
 				//点击了切换顺序和逆序
-				Toast.makeText(PlayerActivity.this,"点击了切换播放模式",Toast.LENGTH_SHORT).show();
-				mSubPopWindow.updateOrderIcon(textOrder);
-				textOrder = ! textOrder;
+				if (mPlayPresenter != null) {
+					mPlayPresenter.reversePlayList();
+				}
+				//Toast.makeText(PlayerActivity.this,"点击了切换播放模式",Toast.LENGTH_SHORT).show();
 			}
 		});
 	}
@@ -436,6 +437,12 @@ public class PlayerActivity extends BaseActivity implements IPlayerCallback, Vie
 		if (mSubPopWindow != null) {
 			mSubPopWindow.setCurrentPlayPosition(playIndex);
 		}
+	}
+
+	@Override
+	public void updateListOrder(boolean isReverse) {
+		//更新UI
+		mSubPopWindow.updateOrderIcon(isReverse);
 	}
 
 	@Override

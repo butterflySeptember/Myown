@@ -75,4 +75,11 @@ public interface IPlayerCallback extends BasePresenter {
 	 * @param track 节目
 	 */
 	void onTrackUpdate(Track track,int playIndex);
+
+
+	/**
+	 * 通知ui该更新播放列表的顺序
+	 * @param isReverse
+	 */
+	void updateListOrder(boolean isReverse);
 }

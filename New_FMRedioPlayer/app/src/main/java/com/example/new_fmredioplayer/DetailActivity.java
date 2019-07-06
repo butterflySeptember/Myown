@@ -22,6 +22,7 @@ import com.example.new_fmredioplayer.adapters.DetailListAdpater;
 import com.example.new_fmredioplayer.base.BaseActivity;
 import com.example.new_fmredioplayer.interfaces.IAlbumDetailViewCallBack;
 import com.example.new_fmredioplayer.interfaces.IAlbumDetialPresenter;
+import com.example.new_fmredioplayer.interfaces.IPlayerCallback;
 import com.example.new_fmredioplayer.presenters.AlbumDetialPresenter;
 import com.example.new_fmredioplayer.presenters.PlayPresenter;
 import com.example.new_fmredioplayer.utils.ImageBlur;
@@ -31,12 +32,13 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.ximalaya.ting.android.opensdk.model.album.Album;
 import com.ximalaya.ting.android.opensdk.model.track.Track;
+import com.ximalaya.ting.android.opensdk.player.service.XmPlayListControl;
 
 import net.lucode.hackware.magicindicator.buildins.UIUtil;
 
 import java.util.List;
 
-public class DetailActivity extends BaseActivity implements IAlbumDetailViewCallBack, UILoader.OnRetryClickListener, DetailListAdpater.ItemClickListener {
+public class DetailActivity extends BaseActivity implements IAlbumDetailViewCallBack, UILoader.OnRetryClickListener, DetailListAdpater.ItemClickListener, IPlayerCallback {
 
 	private ImageView mLargeCover;
 	private ImageView mSmallCover;
@@ -52,6 +54,9 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
 	private UILoader mUiLoader;
 
 	private long mCurrentId = -1;
+	private ImageView mPlayControlBtn;
+	private TextView mPlayControlTips;
+	private PlayPresenter mPlayPresenter;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -62,10 +67,28 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
 		getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
 		
 		initView();
-
+		//播放详情列表的Presenter
 		mAlbumDetialPresenter = AlbumDetialPresenter.getInstance();
 		mAlbumDetialPresenter.registerViewCallback(this);
+		//播放控制列表的Presenter
+		mPlayPresenter = PlayPresenter.getPlayPresenter();
+		mPlayPresenter.registerViewCallback(this);
+		initEvent();
+	}
 
+	private void initEvent() {
+		mPlayControlBtn.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				//控制播放器的状态
+				if (mPlayPresenter.isPlay()) {
+					mPlayPresenter.pause();
+				}else{
+					mPlayPresenter.play();
+				}
+
+			}
+		});
 	}
 
 	/**
@@ -90,6 +113,9 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
 		mSmallCover = this.findViewById(R.id.viv_small_color);
 		mAlbumTitle = this.findViewById(R.id.tv_album_title);
 		mAlbumAuthor = this.findViewById(R.id.tv_album_author);
+		//播放控制图标
+		mPlayControlBtn = this.findViewById(R.id.detail_play_control);
+		mPlayControlTips = this.findViewById(R.id.play_control_tv);
 
 	}
 
@@ -216,6 +242,87 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
 
 	@Override
 	public void unRegisterViewCallback(Object o) {
+
+	}
+
+	@Override
+	public void onPlayStart() {
+		//修改图标为暂停的状态，文字修改为正在播放
+		if (mPlayControlBtn != null) {
+			mPlayControlBtn.setImageResource(R.drawable.select_pause_black_bg);
+		}
+		if (mPlayControlTips != null) {
+			mPlayControlTips.setText("正在播放");
+		}
+	}
+
+	@Override
+	public void onPlayPause() {
+		if (mPlayControlBtn != null) {
+			mPlayControlBtn.setImageResource(R.drawable.select_play_black_bg);
+		}
+		if (mPlayControlTips != null) {
+			mPlayControlTips.setText("已暂停");
+		}
+	}
+
+	@Override
+	public void onPlayStop() {
+		if (mPlayControlBtn != null) {
+			mPlayControlBtn.setImageResource(R.drawable.select_play_black_bg);
+		}
+		if (mPlayControlTips != null) {
+			mPlayControlTips.setText("已暂停");
+		}
+	}
+
+	@Override
+	public void onPlayerError() {
+
+	}
+
+	@Override
+	public void nextPlay(Track track) {
+
+	}
+
+	@Override
+	public void onPrePlayer(Track track) {
+
+	}
+
+	@Override
+	public void onListLoaded(List<Track> list) {
+
+	}
+
+	@Override
+	public void onPlayModeChange(XmPlayListControl.PlayMode playMode) {
+
+	}
+
+	@Override
+	public void onProgramsChange(int current, int total) {
+
+	}
+
+	@Override
+	public void onAdLoading() {
+
+	}
+
+	@Override
+	public void onAdFinished() {
+
+	}
+
+	@Override
+	public void onTrackUpdate(Track track, int playIndex) {
+
+	}
+
+	@Override
+	public void updateListOrder(boolean isReverse) {
 
 	}
 }
