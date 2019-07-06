@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,14 +15,12 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.new_fmredioplayer.adapters.DetailListAdpater;
 import com.example.new_fmredioplayer.base.BaseActivity;
 import com.example.new_fmredioplayer.base.baseApplication;
 import com.example.new_fmredioplayer.interfaces.IAlbumDetailViewCallBack;
-import com.example.new_fmredioplayer.interfaces.IAlbumDetialPresenter;
 import com.example.new_fmredioplayer.interfaces.IPlayerCallback;
 import com.example.new_fmredioplayer.presenters.AlbumDetialPresenter;
 import com.example.new_fmredioplayer.presenters.PlayPresenter;
@@ -65,6 +62,7 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
 	private List<Track> mCurrentTrack = null;
 	private final static int DEFAULT_PLAY_INDEX = 0;
 	private TwinklingRefreshLayout mRefreshLayout;
+	private boolean mIsLoaderMore = false;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -172,11 +170,12 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
 				outRect.bottom = UIUtil.dip2px(view.getContext(),5);
 			}
 		});
+		mDetailListAdpater.setItemClickListener(this);
 
+		//设置刷新效果
 		BezierLayout headerView = new BezierLayout(this);
 		mRefreshLayout.setHeaderView(headerView);
 		mRefreshLayout.setHeaderHeight(140);
-		mDetailListAdpater.setItemClickListener(this);
 		mRefreshLayout.setOnRefreshListener(new RefreshListenerAdapter() {
 			@Override
 			public void onRefresh(TwinklingRefreshLayout refreshLayout) {
@@ -186,7 +185,7 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
 					@Override
 					public void run() {
 						Toast.makeText(DetailActivity.this,"下拉刷新成功 ...",Toast.LENGTH_SHORT).show();
-						mRefreshLayout.onFinishRefresh();
+						mRefreshLayout.finishRefreshing();
 					}
 				},2000);
 			}
@@ -194,13 +193,11 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
 			@Override
 			public void onLoadMore(TwinklingRefreshLayout refreshLayout) {
 				super.onLoadMore(refreshLayout);
-				baseApplication.getHandler().postDelayed(new Runnable() {
-					@Override
-					public void run() {
-						Toast.makeText(DetailActivity.this,"下拉加载更多",Toast.LENGTH_SHORT).show();
-						mRefreshLayout.onFinishLoadMore();
-					}
-				},2000);
+				//加载更多内容
+				if (mAlbumDetialPresenter != null) {
+					mAlbumDetialPresenter.loadMore();
+					mIsLoaderMore = true;
+				}
 			}
 		});
 		return detailListView;
@@ -208,6 +205,11 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
 
 	@Override
 	public void onDetailListLoaded(List<Track> tracks) {
+		if (mIsLoaderMore && mRefreshLayout != null) {
+			mRefreshLayout.finishLoadmore();
+			mIsLoaderMore = false;
+		}
+
 		mCurrentTrack = tracks;
 		//判断数据结果，根据结果显示ui控制
 		if (tracks == null ||tracks.size() == 0) {

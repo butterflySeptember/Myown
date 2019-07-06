@@ -13,6 +13,7 @@ import com.ximalaya.ting.android.opensdk.model.album.Album;
 import com.ximalaya.ting.android.opensdk.model.track.Track;
 import com.ximalaya.ting.android.opensdk.model.track.TrackList;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +27,13 @@ public class AlbumDetialPresenter implements IAlbumDetialPresenter {
 	private final static String TAG = "AlbumDetialPresenter";
 
 	private List<IAlbumDetailViewCallBack> mCallBacks = null;
+	private List<Track> mTracks = new ArrayList<>();
+
 	private Album mTargetAlbum;
+	//当前的专辑ID
+	private int mCurrentAlbumId = 1;
+	//当前页码
+	private int mCurrentPageIndex = 0;
 
 	private AlbumDetialPresenter(){
 	}
@@ -51,16 +58,21 @@ public class AlbumDetialPresenter implements IAlbumDetialPresenter {
 
 	@Override
 	public void loadMore() {
-
+		//加载更多内容
+		mCurrentPageIndex ++;
+		//结果加载在内容后方
+		doLoaded(true);
 	}
 
-	@Override
-	public void getAlbumDetial(int albumId, int page) {
-		//根据页码和id来实现内容
-		Map<String,String> map = new HashMap<String, String>();
-		map.put(DTransferConstants.ALBUM_ID,albumId + "");
+	/**
+	 * 加载页面内容
+	 * @param isLoaderMore
+	 */
+	private void doLoaded(final boolean isLoaderMore){
+		Map<String,String> map = new HashMap<>();
+		map.put(DTransferConstants.ALBUM_ID,mCurrentAlbumId + "");
 		map.put(DTransferConstants.SORT,"asc");
-		map.put(DTransferConstants.PAGE,page + "");
+		map.put(DTransferConstants.PAGE,mCurrentPageIndex + "");
 		map.put(DTransferConstants.PAGE_SIZE, Constants.COUNT_DEFAULT +"");
 		CommonRequest.getTracks(map, new IDataCallBack<TrackList>() {
 			@Override
@@ -70,18 +82,35 @@ public class AlbumDetialPresenter implements IAlbumDetialPresenter {
 				if (trackList != null) {
 					List<Track> tracks = trackList.getTracks();
 					LogUtils.d(TAG,"tracks -->" + tracks);
-					handlerAlbumDetailResult(tracks);
+					if (isLoaderMore) {
+						//上拉加载，结果添加在后面
+						mTracks.addAll(mTracks.size() - 1,tracks);
+					}else {
+						//下拉加载，结果在头部更新
+						mTracks.addAll(0 , tracks);
+					}
+					handlerAlbumDetailResult(mTracks);
 				}
 			}
 
 			@Override
 			public void onError(int errorCode, String errorMsg) {
+				if (isLoaderMore) {
+					mCurrentPageIndex -- ;
+				}
 				LogUtils.d(TAG,"errorCode -->" + errorCode);
 				LogUtils.d(TAG,"errorMsg -->" + errorMsg);
 				handlerError(errorCode,errorMsg);
 			}
 		});
+	}
 
+	@Override
+	public void getAlbumDetial(int albumId, int page) {
+		mTracks.clear();
+		this.mCurrentAlbumId = albumId;
+		this.mCurrentPageIndex = page;
+		doLoaded(false);
 	}
 
 	/**
