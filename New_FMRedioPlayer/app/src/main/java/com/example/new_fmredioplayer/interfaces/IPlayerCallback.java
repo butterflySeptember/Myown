@@ -82,4 +82,5 @@ public interface IPlayerCallback extends BasePresenter {
 	 * @param isReverse
 	 */
 	void updateListOrder(boolean isReverse);
+
 }

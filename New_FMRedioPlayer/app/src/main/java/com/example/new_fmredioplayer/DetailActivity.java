@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,6 +64,7 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
 	private final static int DEFAULT_PLAY_INDEX = 0;
 	private TwinklingRefreshLayout mRefreshLayout;
 	private boolean mIsLoaderMore = false;
+	private String mTrackTitle;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -145,6 +147,7 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
 		//播放控制图标
 		mPlayControlBtn = this.findViewById(R.id.detail_play_control);
 		mPlayControlTips = this.findViewById(R.id.play_control_tv);
+		mPlayControlTips.setSelected(true);
 
 	}
 
@@ -281,6 +284,20 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
 	}
 
 	@Override
+	public void onLoaderMoreFinished(int size) {
+		if (size > 0) {
+			Toast.makeText(this,"成功加载" + size + "条数据",Toast.LENGTH_SHORT).show();
+		}else {
+			Toast.makeText(this,"没有更多节目",Toast.LENGTH_SHORT).show();
+		}
+	}
+
+	@Override
+	public void onRefreshFinished(int size) {
+
+	}
+
+	@Override
 	public void OnRetryClick() {
 		//表示网络不佳的时候，点击了重新加载
 		if (mAlbumDetialPresenter != null) {
@@ -319,8 +336,8 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
 		if (mPlayControlBtn != null) {
 			mPlayControlBtn.setImageResource(isPlaying ? R.drawable.select_pause_black_bg : R.drawable.select_play_black_bg);
 		}
-		if (mPlayControlTips != null) {
-			mPlayControlTips.setText(isPlaying ? "正在播放" : "已暂停");
+		if (mPlayControlTips != null && TextUtils.isEmpty(mTrackTitle)) {
+			mPlayControlTips.setText(isPlaying ? mTrackTitle : "已暂停");
 		}
 	}
 
@@ -382,7 +399,12 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
 
 	@Override
 	public void onTrackUpdate(Track track, int playIndex) {
-
+		if (track != null) {
+			mTrackTitle = track.getTrackTitle();
+			if (TextUtils.isEmpty(mTrackTitle) && mPlayControlTips != null) {
+				mPlayControlTips.setText(mTrackTitle);
+			}
+		}
 	}
 
 	@Override

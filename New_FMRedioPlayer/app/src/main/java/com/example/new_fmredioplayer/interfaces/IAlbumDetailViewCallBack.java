@@ -27,4 +27,17 @@ public interface IAlbumDetailViewCallBack extends BasePresenter {
 	 */
 	void onNetworkError(int errorCode, String errorMsg);
 
+	/**
+	 * 加载更多的结果
+	 * true表示加载成功
+	 * false表示无更多内容
+	 * @param size
+	 */
+	void onLoaderMoreFinished(int size);
+
+	/**
+	 * 下拉加载更多的结果
+	 * @param size
+	 */
+	void onRefreshFinished(int size);
 }
