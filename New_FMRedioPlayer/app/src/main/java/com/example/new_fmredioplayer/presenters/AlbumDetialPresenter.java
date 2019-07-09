@@ -2,6 +2,7 @@ package com.example.new_fmredioplayer.presenters;
 
 import android.support.annotation.Nullable;
 
+import com.example.new_fmredioplayer.api.XimalayaFMApi;
 import com.example.new_fmredioplayer.interfaces.IAlbumDetailViewCallBack;
 import com.example.new_fmredioplayer.interfaces.IAlbumDetialPresenter;
 import com.example.new_fmredioplayer.utils.Constants;
@@ -69,12 +70,10 @@ public class AlbumDetialPresenter implements IAlbumDetialPresenter {
 	 * @param isLoaderMore
 	 */
 	private void doLoaded(final boolean isLoaderMore){
-		Map<String,String> map = new HashMap<>();
-		map.put(DTransferConstants.ALBUM_ID,mCurrentAlbumId + "");
-		map.put(DTransferConstants.SORT,"asc");
-		map.put(DTransferConstants.PAGE,mCurrentPageIndex + "");
-		map.put(DTransferConstants.PAGE_SIZE, Constants.COUNT_DEFAULT +"");
-		CommonRequest.getTracks(map, new IDataCallBack<TrackList>() {
+
+		XimalayaFMApi ximalayaFMApi = XimalayaFMApi.getXimalayaFMApi();
+
+		ximalayaFMApi.getAlbumDetail(new IDataCallBack<TrackList>() {
 			@Override
 			public void onSuccess(@Nullable TrackList trackList) {
 				//是否在主线程，判断是否可以更新UI
@@ -104,7 +103,7 @@ public class AlbumDetialPresenter implements IAlbumDetialPresenter {
 				LogUtils.d(TAG,"errorMsg -->" + errorMsg);
 				handlerError(errorCode,errorMsg);
 			}
-		});
+		},mCurrentAlbumId,mCurrentPageIndex);
 	}
 
 	/**

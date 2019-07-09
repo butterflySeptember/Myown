@@ -1,12 +1,11 @@
 package com.example.new_fmredioplayer;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -15,10 +14,11 @@ import com.example.new_fmredioplayer.adapters.MainContentAdpater;
 import com.example.new_fmredioplayer.adapters.indicatorAdpater;
 import com.example.new_fmredioplayer.interfaces.IPlayerCallback;
 import com.example.new_fmredioplayer.presenters.PlayPresenter;
+import com.example.new_fmredioplayer.presenters.RecommendPresenter;
 import com.example.new_fmredioplayer.utils.LogUtils;
 import com.example.new_fmredioplayer.views.RoundRectImageView;
 import com.squareup.picasso.Picasso;
-import com.ximalaya.ting.android.opensdk.model.album.Announcer;
+import com.ximalaya.ting.android.opensdk.model.album.Album;
 import com.ximalaya.ting.android.opensdk.model.track.Track;
 import com.ximalaya.ting.android.opensdk.player.service.XmPlayListControl;
 
@@ -42,6 +42,7 @@ public class MainActivity extends FragmentActivity implements IPlayerCallback {
 	private String mTrackTitle;
 	private String mAnnouncer;
 	private String mCoverUrlSmall;
+	private View mMainPlayControl;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -72,14 +73,41 @@ public class MainActivity extends FragmentActivity implements IPlayerCallback {
 			public void onClick(View view) {
 				//控制播放状态
 				if (mPlayPresenter != null) {
-					if (mPlayPresenter.isPlay()) {
-						mPlayPresenter.pause();
+					boolean hasPlayList = mPlayPresenter.hasPlayList();
+					if ( ! hasPlayList) {
+						//没有播放列表，播放第一个推荐专辑
+						playFirstRecommend();
 					}else {
-						mPlayPresenter.play();
+						if (mPlayPresenter.isPlay()) {
+							mPlayPresenter.pause();
+						}else {
+							mPlayPresenter.play();
+						}
 					}
 				}
 			}
 		});
+
+		mMainPlayControl.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				boolean hasPlayList = mPlayPresenter.hasPlayList();
+				if (hasPlayList) {
+					playFirstRecommend();
+				}
+				//跳转到播放界面
+				startActivity(new Intent(MainActivity.this,PlayerActivity.class));
+			}
+		});
+	}
+
+	private void playFirstRecommend() {
+		List<Album> currentRecommend = RecommendPresenter.getInstance().getCurrentRecommend();
+		if (currentRecommend != null && currentRecommend.size() > 0) {
+			Album album = currentRecommend.get(0);
+			long albumId = album.getId();
+			mPlayPresenter.playByAlbumId(albumId);
+		}
 	}
 
 	@SuppressLint("NewApi")
@@ -113,6 +141,7 @@ public class MainActivity extends FragmentActivity implements IPlayerCallback {
 		mSubTitle = this.findViewById(R.id.main_sub_title);
 		mPlayControl = this.findViewById(R.id.main_play_control);
 
+		mMainPlayControl = this.findViewById(R.id.main_play_control);
 	}
 
 	@Override

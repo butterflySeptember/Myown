@@ -2,15 +2,20 @@ package com.example.new_fmredioplayer.presenters;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.annotation.Nullable;
+import android.widget.Toast;
 
+import com.example.new_fmredioplayer.api.XimalayaFMApi;
 import com.example.new_fmredioplayer.base.baseApplication;
 import com.example.new_fmredioplayer.interfaces.IPlayerCallback;
 import com.example.new_fmredioplayer.interfaces.IPlayerPresenter;
 import com.example.new_fmredioplayer.utils.LogUtils;
+import com.ximalaya.ting.android.opensdk.datatrasfer.IDataCallBack;
 import com.ximalaya.ting.android.opensdk.model.PlayableModel;
 import com.ximalaya.ting.android.opensdk.model.advertis.Advertis;
 import com.ximalaya.ting.android.opensdk.model.advertis.AdvertisList;
 import com.ximalaya.ting.android.opensdk.model.track.Track;
+import com.ximalaya.ting.android.opensdk.model.track.TrackList;
 import com.ximalaya.ting.android.opensdk.player.XmPlayerManager;
 import com.ximalaya.ting.android.opensdk.player.advertis.IXmAdsStatusListener;
 import com.ximalaya.ting.android.opensdk.player.constants.PlayerConstants;
@@ -33,8 +38,9 @@ public class PlayPresenter implements IPlayerPresenter, IXmAdsStatusListener, IX
 	private final XmPlayerManager mPlayerManager;
 	private final static String TAG = "PlayPresenter";
 	private Track mCurrentTrack;
-	private int mCurrentIndex = 0;
+	private int mCurrentIndex = DEFECT_PLAY_INDEX;
 	private final SharedPreferences mPlayModeSp;
+	private static final int DEFECT_PLAY_INDEX = 0;
 	/**
 	 * PLAY_MODEL_LIST
 	 * PLAY_MODEL_LIST_LOOP
@@ -50,6 +56,8 @@ public class PlayPresenter implements IPlayerPresenter, IXmAdsStatusListener, IX
 	public static final String PLAY_MODE_SP_KEY = "CurrentPlayMode";
 
 	private boolean mIsReverse = false;
+	private int mCurrentProgressPosition = 0;
+	private int mProgressDuration = 0;
 
 
 	private  PlayPresenter(){
@@ -226,13 +234,54 @@ public class PlayPresenter implements IPlayerPresenter, IXmAdsStatusListener, IX
 	}
 
 	@Override
+	public void playByAlbumId(final long id) {
+		//获取专辑的内容
+		XimalayaFMApi ximalayaFMApi = XimalayaFMApi.getXimalayaFMApi();
+		ximalayaFMApi.getAlbumDetail(new IDataCallBack<TrackList>() {
+			@Override
+			public void onSuccess(@Nullable TrackList trackList) {
+				//把专辑内容传入播放器
+				List<Track> track = trackList.getTracks();
+				if (trackList != null && track.size() > 0) {
+					mPlayerManager.setPlayList(track,0);
+					isPlayListSet = true;
+					mCurrentTrack = track.get(DEFECT_PLAY_INDEX);
+					mCurrentIndex = DEFECT_PLAY_INDEX;
+				}
+			}
+
+			@Override
+			public void onError(int errorCode, String errorMsg) {
+				LogUtils.d(TAG,"playByAlbumId fail : errorCode -- > " + errorCode + "errorMsg -- > " + errorMsg);
+				Toast.makeText(baseApplication.getAppContext(),"播放列表获取失败",Toast.LENGTH_SHORT).show();
+			}
+		},(int) id,mCurrentIndex);
+		//设置给播放器
+		//开始播放
+	}
+
+	@Override
 	public void registerViewCallback(IPlayerCallback iPlayerCallback) {
+		//通知当前的节目
 		iPlayerCallback.onTrackUpdate(mCurrentTrack , mCurrentIndex);
+		iPlayerCallback.onProgramsChange(mCurrentProgressPosition,mProgressDuration);
+		//更新状态
+		handlerPlayState(iPlayerCallback);
 		//从SP中获得播放状态
 		int modeIndex = mPlayModeSp.getInt(PLAY_MODE_SP_KEY, PLAY_MODEL_LIST_INT);
 		iPlayerCallback.onPlayModeChange(getModeIntByPlay(modeIndex));
 		if (mIPlayerCallbacks.contains(iPlayerCallback)) {
 			mIPlayerCallbacks.add(iPlayerCallback);
+		}
+	}
+
+	private void handlerPlayState(IPlayerCallback iPlayerCallback) {
+		int playerStatus = mPlayerManager.getPlayerStatus();
+		//根据状态调用接口方法
+		if (PlayerConstants.STATE_COMPLETED == playerStatus) {
+			iPlayerCallback.onPlayStart();
+		}else {
+			iPlayerCallback.onPlayPause();
 		}
 	}
 
@@ -351,6 +400,8 @@ public class PlayPresenter implements IPlayerPresenter, IXmAdsStatusListener, IX
 
 	@Override
 	public void onPlayProgress(int currPos, int duration) {
+		this.mCurrentProgressPosition = currPos;
+		this.mProgressDuration = duration;
 		//单位是毫秒
 		for (IPlayerCallback iPlayerCallback : mIPlayerCallbacks) {
 			iPlayerCallback.onProgramsChange(currPos,duration);

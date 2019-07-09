@@ -43,6 +43,7 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:orientation="horizontal"
+        android:id="@+id/play_list_controller"
         android:layout_alignParentBottom="true"
         android:gravity="center_vertical"
         android:background="@color/main_color">
@@ -63,7 +64,7 @@
             <TextView
                 android:layout_width="300dp"
                 android:layout_height="match_parent"
-                android:text="我是大标题"
+                android:text="随便听听"
                 android:id="@+id/main_head_title"
                 android:singleLine="true"
                 android:ellipsize="marquee"
@@ -72,7 +73,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="我是作者"
+                android:text="喜马拉雅"
                 android:id="@+id/main_sub_title"
                 android:textColor="@color/play_list_text_color"
                 android:textSize="14sp"/>
