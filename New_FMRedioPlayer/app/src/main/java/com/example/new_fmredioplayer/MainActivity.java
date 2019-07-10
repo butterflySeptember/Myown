@@ -43,6 +43,7 @@ public class MainActivity extends FragmentActivity implements IPlayerCallback {
 	private String mAnnouncer;
 	private String mCoverUrlSmall;
 	private View mMainPlayControl;
+	private View mSearchBtn;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +100,14 @@ public class MainActivity extends FragmentActivity implements IPlayerCallback {
 				startActivity(new Intent(MainActivity.this,PlayerActivity.class));
 			}
 		});
+
+		//跳转到搜索界面
+		mSearchBtn.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				startActivity(new Intent(MainActivity.this,SearchActivity.class));
+			}
+		});
 	}
 
 	private void playFirstRecommend() {
@@ -142,6 +151,8 @@ public class MainActivity extends FragmentActivity implements IPlayerCallback {
 		mPlayControl = this.findViewById(R.id.main_play_control);
 
 		mMainPlayControl = this.findViewById(R.id.main_play_control);
+		//搜索相关
+		mSearchBtn = this.findViewById(R.id.search_btn);
 	}
 
 	@Override

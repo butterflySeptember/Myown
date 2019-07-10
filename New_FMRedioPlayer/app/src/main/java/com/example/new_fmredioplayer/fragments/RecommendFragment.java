@@ -21,6 +21,7 @@ import com.example.new_fmredioplayer.presenters.RecommendPresenter;
 import com.example.new_fmredioplayer.utils.Constants;
 import com.example.new_fmredioplayer.utils.LogUtils;
 import com.example.new_fmredioplayer.views.UILoader;
+import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
 import com.ximalaya.ting.android.opensdk.constants.DTransferConstants;
 import com.ximalaya.ting.android.opensdk.datatrasfer.CommonRequest;
 import com.ximalaya.ting.android.opensdk.datatrasfer.IDataCallBack;
@@ -41,6 +42,7 @@ public class RecommendFragment extends BaseFragment implements IRecommendViewCal
 	private RecommendListAdapter mRecommendListAdapter;
 	private RecommendPresenter mRecommendPresenter;
 	private UILoader mUiLoader;
+	private TwinklingRefreshLayout mTwinklingRefreshLayout;
 
 	public View onSubViewLoaded(final LayoutInflater layoutInflater, ViewGroup container){
 
@@ -73,6 +75,9 @@ public class RecommendFragment extends BaseFragment implements IRecommendViewCal
 		//初始化
 		//1，找到对应的控件
 		mRecommendBy = (RecyclerView) mRootView.findViewById(R.id.recommend_list);
+		//设置下拉回弹效果
+		mTwinklingRefreshLayout = mRootView.findViewById(R.id.over_scroll_view);
+		mTwinklingRefreshLayout.setPureScrollModeOn();
 		//2，设置布局管理器
 		LinearLayoutManager linearLayoutManager =	new LinearLayoutManager(getContext());
 		linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
