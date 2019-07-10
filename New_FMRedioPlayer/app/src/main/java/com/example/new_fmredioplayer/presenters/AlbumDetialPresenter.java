@@ -150,6 +150,11 @@ public class AlbumDetialPresenter implements IAlbumDetialPresenter {
 		}
 	}
 
+	@Override
+	public void unRegisterViewCallback(IAlbumDetailViewCallBack iCallback) {
+
+	}
+
 //	public void unRegisterViewCallback(IAlbumDetailViewCallBack detailViewCallBack) {
 //		mCallBacks.remove(detailViewCallBack);
 //	}
@@ -159,15 +164,7 @@ public class AlbumDetialPresenter implements IAlbumDetialPresenter {
 //		this.sTargetAlbum = targetAlbum;
 //	}
 
-	@Override
-	public void registerViewCallback(Object o) {
 
-	}
-
-	@Override
-	public void unRegisterViewCallback(Object o) {
-
-	}
 
 	public void setTargetAlbum(Album targetAlbum) {
 		mTargetAlbum = targetAlbum;

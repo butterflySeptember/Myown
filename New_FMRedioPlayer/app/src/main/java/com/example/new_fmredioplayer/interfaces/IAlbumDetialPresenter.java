@@ -2,7 +2,7 @@ package com.example.new_fmredioplayer.interfaces;
 
 import com.example.new_fmredioplayer.base.BasePresenter;
 
-public interface IAlbumDetialPresenter extends BasePresenter {
+public interface IAlbumDetialPresenter extends BasePresenter<IAlbumDetailViewCallBack> {
 
 	/**
 	 *下拉刷新内容

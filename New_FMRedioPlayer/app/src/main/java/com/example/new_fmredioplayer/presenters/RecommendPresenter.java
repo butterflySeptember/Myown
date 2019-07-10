@@ -6,6 +6,7 @@ import com.example.new_fmredioplayer.api.XimalayaFMApi;
 import com.example.new_fmredioplayer.fragments.RecommendFragment;
 import com.example.new_fmredioplayer.interfaces.IRecommendPresenter;
 import com.example.new_fmredioplayer.interfaces.IRecommendViewCallback;
+import com.example.new_fmredioplayer.interfaces.ISearchCallback;
 import com.example.new_fmredioplayer.utils.Constants;
 import com.example.new_fmredioplayer.utils.LogUtils;
 import com.ximalaya.ting.android.opensdk.constants.DTransferConstants;
@@ -144,18 +145,18 @@ public class RecommendPresenter implements IRecommendPresenter {
 //	}
 
 
-	public void registerViewCallback(Object o) {
+
+
+
+	@Override
+	public void registerViewCallback(IRecommendViewCallback iCallback) {
 
 	}
 
 	@Override
-	public void unRegisterViewCallback(Object o) {
-
-	}
-
-	public void unregisterViewCallback(RecommendFragment recommendFragment) {
-		if (mCallBack.contains(recommendFragment)) {
-			mCallBack.add(recommendFragment);
-		}
+	public void unRegisterViewCallback(IRecommendViewCallback iCallback) {
+//		if (mCallBack.contains(iCallback)) {
+//			mCallBack.add(iCallback);
+//		}
 	}
 }

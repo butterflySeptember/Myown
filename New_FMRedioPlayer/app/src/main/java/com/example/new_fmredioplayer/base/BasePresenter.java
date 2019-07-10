@@ -1,19 +1,20 @@
 package com.example.new_fmredioplayer.base;
 
 import com.example.new_fmredioplayer.interfaces.IAlbumDetailViewCallBack;
+import com.example.new_fmredioplayer.interfaces.ISearchCallback;
 
 public interface BasePresenter<T> {
 
 	/**
 	 * 接口注册
-	 * @param t
+	 * @param iCallback
 	 */
-	void registerViewCallback(T t);
+	void registerViewCallback(T iCallback);
 
 	/**
 	 *取消接口注册
-	 * @param m
+	 * @param iCallback
 	 */
-	void unRegisterViewCallback(T t);
+	void unRegisterViewCallback(T iCallback);
 }
 

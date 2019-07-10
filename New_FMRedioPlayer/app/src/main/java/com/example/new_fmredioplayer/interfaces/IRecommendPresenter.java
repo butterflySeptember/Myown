@@ -4,7 +4,7 @@ import android.view.View;
 
 import com.example.new_fmredioplayer.base.BasePresenter;
 
-public interface IRecommendPresenter extends BasePresenter {
+public interface IRecommendPresenter extends BasePresenter<IRecommendViewCallback> {
 
 	/**
 	 * 获取推荐内容

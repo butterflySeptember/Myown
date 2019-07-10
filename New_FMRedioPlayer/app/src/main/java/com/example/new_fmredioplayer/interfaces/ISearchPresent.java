@@ -2,7 +2,7 @@ package com.example.new_fmredioplayer.interfaces;
 
 import com.example.new_fmredioplayer.base.BasePresenter;
 
-public interface ISearchPresent extends BasePresenter{
+public interface ISearchPresent extends BasePresenter<ISearchCallback>{
 
 	/**
 	 * 进行搜索

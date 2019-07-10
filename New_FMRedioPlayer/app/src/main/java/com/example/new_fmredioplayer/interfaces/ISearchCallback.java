@@ -32,8 +32,7 @@ public interface ISearchCallback extends BasePresenter {
 	void onLoadMoreResult (List<Album> result ,boolean isOkay);
 
 	/**
-	 * 获取推荐热词关键字的回调方法
-	 *
+	 * 获取热词列表
 	 * @param keywordList
 	 */
 	void onRecommendLoaded(List<QueryResult> keywordList);
