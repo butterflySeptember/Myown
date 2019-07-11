@@ -11,6 +11,7 @@ import com.example.new_fmredioplayer.base.BaseActivity;
 import com.example.new_fmredioplayer.interfaces.ISearchCallback;
 import com.example.new_fmredioplayer.presenters.SearchPresenter;
 import com.example.new_fmredioplayer.utils.LogUtils;
+import com.example.new_fmredioplayer.views.FlowTextLayout;
 import com.ximalaya.ting.android.opensdk.model.album.Album;
 import com.ximalaya.ting.android.opensdk.model.word.HotWord;
 import com.ximalaya.ting.android.opensdk.model.word.QueryResult;
@@ -26,6 +27,7 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
 	private View mSearchBtn;
 	private FrameLayout mResultContainer;
 	private SearchPresenter mSearchPresenter;
+	private FlowTextLayout mFlowTextLayout;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -49,6 +51,7 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
 		mInputBox = this.findViewById(R.id.search_input);
 		mSearchBtn = this.findViewById(R.id.search_btn);
 		mResultContainer = this.findViewById(R.id.search_container);
+		mFlowTextLayout = this.findViewById(R.id.flow_text_layout);
 	}
 
 	private void initEvent() {
@@ -106,12 +109,14 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
 	@Override
 	public void onHotWordLoad(List<HotWord> hotWordList) {
 		LogUtils.d(TAG,"hotWord size -- > " + hotWordList.size());
-		List<String> hotwords = new ArrayList<>();
+		List<String> hotWords = new ArrayList<>();
+		hotWords.clear();
 		for (HotWord hotWord : hotWordList) {
 			String searchWord = hotWord.getSearchword();
-			hotwords.add(searchWord);
+			hotWords.add(searchWord);
 		}
 		//更新UI
+		mFlowTextLayout.setTextContents(hotWords);
 	}
 
 	@Override
