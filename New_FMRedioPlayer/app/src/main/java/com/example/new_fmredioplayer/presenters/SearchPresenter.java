@@ -9,6 +9,10 @@ import com.example.new_fmredioplayer.utils.LogUtils;
 import com.ximalaya.ting.android.opensdk.datatrasfer.IDataCallBack;
 import com.ximalaya.ting.android.opensdk.model.album.Album;
 import com.ximalaya.ting.android.opensdk.model.album.SearchAlbumList;
+import com.ximalaya.ting.android.opensdk.model.word.HotWord;
+import com.ximalaya.ting.android.opensdk.model.word.HotWordList;
+import com.ximalaya.ting.android.opensdk.model.word.QueryResult;
+import com.ximalaya.ting.android.opensdk.model.word.SuggestWords;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +47,10 @@ public class SearchPresenter implements ISearchPresent {
 	public void doSearch(String keyword) {
 		//用于网络状态不佳时点击重新搜索
 		this.mCurrentKeyword = keyword ;
+		search(keyword);
+	}
+
+	private void search(String keyword) {
 		mXimalayaFMApi.searchByKeyword(keyword, mCurrentPage, new IDataCallBack<SearchAlbumList>() {
 			@Override
 			public void onSuccess(@Nullable SearchAlbumList searchAlbumList) {
@@ -56,15 +64,16 @@ public class SearchPresenter implements ISearchPresent {
 
 			@Override
 			public void onError(int errorCode, String errorMsg) {
-				LogUtils.d(TAG,"errorCode -- >" + errorCode);
-				LogUtils.d(TAG,"errorMsg -- > " + errorMsg);
+				LogUtils.d(TAG,"search errorCode -- >" + errorCode);
+				LogUtils.d(TAG,"search errorMsg -- > " + errorMsg);
 			}
 		});
 	}
 
 	@Override
 	public void reSearch() {
-
+		//重新搜索
+		search(mCurrentKeyword);
 	}
 
 	@Override
@@ -74,12 +83,43 @@ public class SearchPresenter implements ISearchPresent {
 
 	@Override
 	public void getHotWord() {
+		mXimalayaFMApi.getHotWord(new IDataCallBack<HotWordList>() {
+			@Override
+			public void onSuccess(HotWordList hotWordList) {
+				if (hotWordList != null) {
+					List<HotWord> hotWord = hotWordList.getHotWordList();
+					LogUtils.d(TAG,"hotWord size -- >" + hotWord.size());
+					for (ISearchCallback callback : mCallbacks) {
+						callback.onHotWordLoad(hotWord);
+					}
+				}
+			}
 
+			@Override
+			public void onError(int errorCode, String errorMsg) {
+				LogUtils.d(TAG,"getHotWord errorCode -- > " + errorCode);
+				LogUtils.d(TAG,"getHotWord errorMsg -- > " +errorMsg);
+			}
+		});
 	}
 
 	@Override
-	public void getRecommendMore(String keyword) {
+	public void getRecommendWord(String keyword) {
+		mXimalayaFMApi.getSuggestWord(keyword, new IDataCallBack<SuggestWords>() {
+			@Override
+			public void onSuccess(@Nullable SuggestWords suggestWords) {
+				if (suggestWords != null) {
+					List<QueryResult> keyWordList = suggestWords.getKeyWordList();
+					LogUtils.d(TAG,"suggestWords keyWord size -- >" + keyWordList.size());
+				}
+			}
 
+			@Override
+			public void onError(int errorCode, String errorMsg) {
+				LogUtils.d(TAG,"getRecommendWord errorCode -- > " + errorCode);
+				LogUtils.d(TAG,"getRecommendWord errorMsg -- > " +errorMsg);
+			}
+		});
 	}
 
 	@Override
