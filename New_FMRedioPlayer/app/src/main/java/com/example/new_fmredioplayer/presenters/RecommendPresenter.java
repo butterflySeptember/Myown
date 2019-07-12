@@ -132,21 +132,6 @@ public class RecommendPresenter implements IRecommendPresenter {
 
 	}
 
-//	public void registerViewCallback(IRecommendViewCallback callback) {
-//		if (mCallBack.contains(callback)) {
-//			mCallBack.add(callback);
-//		}
-//	}
-//
-//	public void unregisterViewCallback(IRecommendViewCallback callback) {
-//		if (mCallBack.contains(callback)) {
-//			mCallBack.remove(mCallBack);
-//		}
-//	}
-
-
-
-
 
 	@Override
 	public void registerViewCallback(IRecommendViewCallback iCallback) {
@@ -155,8 +140,8 @@ public class RecommendPresenter implements IRecommendPresenter {
 
 	@Override
 	public void unRegisterViewCallback(IRecommendViewCallback iCallback) {
-//		if (mCallBack.contains(iCallback)) {
-//			mCallBack.add(iCallback);
-//		}
+		if (mCallBack.contains(iCallback)) {
+			mCallBack.add(iCallback);
+		}
 	}
 }

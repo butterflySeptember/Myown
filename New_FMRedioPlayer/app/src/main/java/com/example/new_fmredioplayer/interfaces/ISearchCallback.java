@@ -37,4 +37,10 @@ public interface ISearchCallback extends BasePresenter {
 	 */
 	void onRecommendLoaded(List<QueryResult> keywordList);
 
+	/**
+	 * 错误通知
+	 * @param errorCode
+	 * @param errorMsg
+	 */
+	void onError(int errorCode,String errorMsg);
 }

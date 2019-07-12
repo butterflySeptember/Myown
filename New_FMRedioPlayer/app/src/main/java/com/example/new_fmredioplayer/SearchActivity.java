@@ -1,22 +1,28 @@
 package com.example.new_fmredioplayer;
 
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 
+import com.example.new_fmredioplayer.adapters.AlbumListAdapter;
 import com.example.new_fmredioplayer.base.BaseActivity;
 import com.example.new_fmredioplayer.interfaces.ISearchCallback;
 import com.example.new_fmredioplayer.presenters.SearchPresenter;
 import com.example.new_fmredioplayer.utils.LogUtils;
-import com.example.new_fmredioplayer.views.FlowTextLayout;
+import com.example.new_fmredioplayer.views.UILoader;
 import com.ximalaya.ting.android.opensdk.model.album.Album;
 import com.ximalaya.ting.android.opensdk.model.word.HotWord;
 import com.ximalaya.ting.android.opensdk.model.word.QueryResult;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class SearchActivity extends BaseActivity implements ISearchCallback {
@@ -27,7 +33,10 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
 	private View mSearchBtn;
 	private FrameLayout mResultContainer;
 	private SearchPresenter mSearchPresenter;
-	private FlowTextLayout mFlowTextLayout;
+	private UILoader mUILoader;
+	private RecyclerView mResultListView;
+	private AlbumListAdapter mAlbumListAdapter;
+	//	private FlowTextLayout mFlowTextLayout;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -51,7 +60,36 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
 		mInputBox = this.findViewById(R.id.search_input);
 		mSearchBtn = this.findViewById(R.id.search_btn);
 		mResultContainer = this.findViewById(R.id.search_container);
-		mFlowTextLayout = this.findViewById(R.id.flow_text_layout);
+//		mFlowTextLayout = this.findViewById(R.id.flow_text_layout);
+		if (mUILoader == null) {
+			mUILoader = new UILoader(this) {
+				@Override
+				protected View getSuccessView(ViewGroup container) {
+					return createSuccessView();
+				}
+			};
+			if (mUILoader.getParent() instanceof ViewGroup) {
+				((ViewGroup) mUILoader.getParent()).removeView(mUILoader);
+			}
+			mResultContainer.addView(mUILoader);
+
+		}
+	}
+
+	/**
+	 *创建网络请求成功的view
+	 * @return
+	 */
+	private View createSuccessView() {
+		View resultView = LayoutInflater.from(this).inflate(R.layout.search_result_layout, null);
+		mResultListView = resultView.findViewById(R.id.result_list_view);
+		//设置布局管理器
+		LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+		mResultListView.setLayoutManager(layoutManager);
+		//设置适配器
+		mAlbumListAdapter = new AlbumListAdapter();
+		mResultListView.setAdapter(mAlbumListAdapter);
+		return resultView;
 	}
 
 	private void initEvent() {
@@ -65,8 +103,12 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
 		mSearchBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				//todo：执行搜索操作
-
+				//执行搜索操作
+				String keyword = mInputBox.getText().toString().trim();
+				if (mSearchPresenter != null) {
+					mSearchPresenter.doSearch(keyword);
+					mUILoader.updateStatus(UILoader.UIStatus.LOADING);
+				}
 			}
 		});
 
@@ -90,6 +132,16 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
 
 			}
 		});
+
+		mUILoader.setOnRetryClickListener(new UILoader.OnRetryClickListener() {
+			@Override
+			public void OnRetryClick() {
+				if (mSearchPresenter != null) {
+					mSearchPresenter.reSearch();
+					mUILoader.updateStatus(UILoader.UIStatus.LOADING);
+				}
+			}
+		});
 	}
 
 	@Override
@@ -103,7 +155,18 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
 
 	@Override
 	public void onSearchResultLoad(List<Album> result) {
-
+		if (result != null) {
+			if (result.size() == 0) {
+				//数据为空
+				if (mUILoader != null) {
+					mUILoader.updateStatus(UILoader.UIStatus.EMPTY);
+				}else{
+					//如果数据不为空则设置数据
+					mAlbumListAdapter.setData(result);
+					mUILoader.updateStatus(UILoader.UIStatus.SUCCESS);
+				}
+			}
+		}
 	}
 
 	@Override
@@ -115,8 +178,9 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
 			String searchWord = hotWord.getSearchword();
 			hotWords.add(searchWord);
 		}
+		Collections.sort(hotWords);
 		//更新UI
-		mFlowTextLayout.setTextContents(hotWords);
+//		mFlowTextLayout.setTextContents(hotWords);
 	}
 
 	@Override
@@ -127,6 +191,13 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
 	@Override
 	public void onRecommendLoaded(List<QueryResult> keywordList) {
 
+	}
+
+	@Override
+	public void onError(int errorCode, String errorMsg) {
+		if (mUILoader != null) {
+			mUILoader.updateStatus(UILoader.UIStatus.NETWORK_ERROR);
+		}
 	}
 
 	@Override

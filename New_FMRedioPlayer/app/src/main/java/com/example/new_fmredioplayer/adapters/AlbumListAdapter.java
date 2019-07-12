@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class RecommendListAdapter extends RecyclerView.Adapter<RecommendListAdapter.InnerHolder> {
+public class AlbumListAdapter extends RecyclerView.Adapter<RecommendListAdapter.InnerHolder> {
 
 	private List<Album> mData = new ArrayList<>();
 	private final static String TAG = "RecommendListAdapter";

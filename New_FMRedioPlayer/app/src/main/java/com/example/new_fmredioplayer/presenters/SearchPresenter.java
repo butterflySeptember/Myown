@@ -57,15 +57,22 @@ public class SearchPresenter implements ISearchPresent {
 				List<Album> albums = searchAlbumList.getAlbums();
 				if (albums != null) {
 					LogUtils.d(TAG,"album size :" + albums.size());
+					for (ISearchCallback callback : mCallbacks) {
+						callback.onSearchResultLoad(albums);
+					}
 				}else {
 					LogUtils.d(TAG,"album is null ....");
 				}
+
 			}
 
 			@Override
 			public void onError(int errorCode, String errorMsg) {
 				LogUtils.d(TAG,"search errorCode -- >" + errorCode);
 				LogUtils.d(TAG,"search errorMsg -- > " + errorMsg);
+				for (ISearchCallback callback : mCallbacks) {
+					callback.onError(errorCode,errorMsg);
+				}
 			}
 		});
 	}
@@ -99,6 +106,9 @@ public class SearchPresenter implements ISearchPresent {
 			public void onError(int errorCode, String errorMsg) {
 				LogUtils.d(TAG,"getHotWord errorCode -- > " + errorCode);
 				LogUtils.d(TAG,"getHotWord errorMsg -- > " +errorMsg);
+//				for (ISearchCallback callback : mCallbacks) {
+//					callback.onError(errorCode,errorMsg);
+//				}
 			}
 		});
 	}
