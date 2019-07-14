@@ -3,10 +3,19 @@
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
+
     <android.support.v7.widget.RecyclerView
+        android:overScrollMode="never"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:id="@+id/result_list_view"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"/>
 
-    </android.support.v7.widget.RecyclerView>
+    <com.example.new_fmredioplayer.views.FlowTextLayout
+        android:layout_width="match_parent"
+        android:visibility="visible"
+        android:layout_margin="5dp"
+        android:id="@+id/recommend_hot_word_list"
+        android:layout_height="match_parent"/>
 </FrameLayout>

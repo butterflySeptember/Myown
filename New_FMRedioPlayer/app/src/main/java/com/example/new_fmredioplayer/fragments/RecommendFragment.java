@@ -13,7 +13,7 @@ import android.widget.LinearLayout;
 
 import com.example.new_fmredioplayer.DetailActivity;
 import com.example.new_fmredioplayer.R;
-import com.example.new_fmredioplayer.adapters.RecommendListAdapter;
+import com.example.new_fmredioplayer.adapters.AlbumListAdapter;
 import com.example.new_fmredioplayer.base.BaseFragment;
 import com.example.new_fmredioplayer.interfaces.IRecommendViewCallback;
 import com.example.new_fmredioplayer.presenters.AlbumDetialPresenter;
@@ -34,12 +34,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class RecommendFragment extends BaseFragment implements IRecommendViewCallback, UILoader.OnRetryClickListener, RecommendListAdapter.onRecommendItemClickListener {
+public class RecommendFragment extends BaseFragment implements IRecommendViewCallback, UILoader.OnRetryClickListener, AlbumListAdapter.onRecommendItemClickListener {
 
 	private final static String TAG = "RecommendFragment";
 	private View mRootView;
 	private RecyclerView mRecommendBy;
-	private RecommendListAdapter mRecommendListAdapter;
+	private AlbumListAdapter mRecommendListAdapter;
 	private RecommendPresenter mRecommendPresenter;
 	private UILoader mUiLoader;
 	private TwinklingRefreshLayout mTwinklingRefreshLayout;
@@ -92,7 +92,7 @@ public class RecommendFragment extends BaseFragment implements IRecommendViewCal
 			}
 		});
 		//3，设置适配器
-		mRecommendListAdapter = new RecommendListAdapter();
+		mRecommendListAdapter = new AlbumListAdapter ();
 		mRecommendBy.setAdapter(mRecommendListAdapter);
 		mRecommendListAdapter.setOnRecommendItemClickListener(this);
 		return mRootView;
@@ -131,7 +131,7 @@ public class RecommendFragment extends BaseFragment implements IRecommendViewCal
 		super.onDestroyView();
 		//取消接口注册，避免内存泄露
 		if (mRecommendPresenter != null) {
-			mRecommendPresenter.unregisterViewCallback(this);
+			mRecommendPresenter.unRegisterViewCallback(this);
 		}
 	}
 
@@ -139,7 +139,7 @@ public class RecommendFragment extends BaseFragment implements IRecommendViewCal
 	public void OnRetryClick() {
 		//表示网络不佳时，用户点击重试
 		if (mRecommendPresenter != null) {
-			mRecommendPresenter.unregisterViewCallback(this);
+			mRecommendPresenter.unRegisterViewCallback(this);
 		}
 	}
 

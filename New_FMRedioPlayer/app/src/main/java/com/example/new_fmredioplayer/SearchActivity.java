@@ -1,6 +1,9 @@
 package com.example.new_fmredioplayer;
 
+import android.content.Context;
+import android.graphics.Rect;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -8,18 +11,23 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.example.new_fmredioplayer.adapters.AlbumListAdapter;
 import com.example.new_fmredioplayer.base.BaseActivity;
 import com.example.new_fmredioplayer.interfaces.ISearchCallback;
 import com.example.new_fmredioplayer.presenters.SearchPresenter;
 import com.example.new_fmredioplayer.utils.LogUtils;
+import com.example.new_fmredioplayer.views.FlowTextLayout;
 import com.example.new_fmredioplayer.views.UILoader;
 import com.ximalaya.ting.android.opensdk.model.album.Album;
 import com.ximalaya.ting.android.opensdk.model.word.HotWord;
 import com.ximalaya.ting.android.opensdk.model.word.QueryResult;
+
+import net.lucode.hackware.magicindicator.buildins.UIUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -36,6 +44,7 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
 	private UILoader mUILoader;
 	private RecyclerView mResultListView;
 	private AlbumListAdapter mAlbumListAdapter;
+	private FlowTextLayout mFlowTextLayout;
 	//	private FlowTextLayout mFlowTextLayout;
 
 	@Override
@@ -72,7 +81,6 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
 				((ViewGroup) mUILoader.getParent()).removeView(mUILoader);
 			}
 			mResultContainer.addView(mUILoader);
-
 		}
 	}
 
@@ -82,6 +90,9 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
 	 */
 	private View createSuccessView() {
 		View resultView = LayoutInflater.from(this).inflate(R.layout.search_result_layout, null);
+		//热词显示
+		mFlowTextLayout = resultView.findViewById(R.id.recommend_hot_word_list);
+
 		mResultListView = resultView.findViewById(R.id.result_list_view);
 		//设置布局管理器
 		LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -89,6 +100,15 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
 		//设置适配器
 		mAlbumListAdapter = new AlbumListAdapter();
 		mResultListView.setAdapter(mAlbumListAdapter);
+		mResultListView.addItemDecoration(new RecyclerView.ItemDecoration() {
+			@Override
+			public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
+				//使用工具类 dp和px相互转换
+				outRect.left = UIUtil.dip2px(view.getContext(),5);
+				outRect.top = UIUtil.dip2px(view.getContext(),5);
+				outRect.bottom = UIUtil.dip2px(view.getContext(),5);
+			}
+		});
 		return resultView;
 	}
 
@@ -142,6 +162,13 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
 				}
 			}
 		});
+
+		mFlowTextLayout.setClickListener(new FlowTextLayout.ItemClickListener() {
+			@Override
+			public void onItemClick(String text) {
+				Toast.makeText(SearchActivity.this,text,Toast.LENGTH_SHORT).show();
+			}
+		});
 	}
 
 	@Override
@@ -155,6 +182,11 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
 
 	@Override
 	public void onSearchResultLoad(List<Album> result) {
+		mFlowTextLayout.setVisibility(View.GONE);
+		mResultListView.setVisibility(View.VISIBLE);
+		//隐藏键盘
+		InputMethodManager inputMethodManager = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
+		inputMethodManager.hideSoftInputFromWindow(mInputBox.getWindowToken(),inputMethodManager.HIDE_NOT_ALWAYS);
 		if (result != null) {
 			if (result.size() == 0) {
 				//数据为空
@@ -171,6 +203,11 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
 
 	@Override
 	public void onHotWordLoad(List<HotWord> hotWordList) {
+		mFlowTextLayout.setVisibility(View.VISIBLE);
+		mResultListView.setVisibility(View.GONE);
+		if (mUILoader != null) {
+			mUILoader.updateStatus(UILoader.UIStatus.SUCCESS);
+		}
 		LogUtils.d(TAG,"hotWord size -- > " + hotWordList.size());
 		List<String> hotWords = new ArrayList<>();
 		hotWords.clear();
@@ -180,7 +217,7 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
 		}
 		Collections.sort(hotWords);
 		//更新UI
-//		mFlowTextLayout.setTextContents(hotWords);
+		mFlowTextLayout.setTextContents(hotWords);
 	}
 
 	@Override
