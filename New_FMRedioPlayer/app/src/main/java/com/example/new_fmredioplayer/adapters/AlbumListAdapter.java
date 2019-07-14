@@ -12,13 +12,12 @@ import com.example.new_fmredioplayer.R;
 import com.example.new_fmredioplayer.utils.LogUtils;
 import com.squareup.picasso.Picasso;
 import com.ximalaya.ting.android.opensdk.model.album.Album;
-import com.ximalaya.ting.android.opensdk.model.album.AlbumList;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class AlbumListAdapter extends RecyclerView.Adapter<RecommendListAdapter.InnerHolder> {
+public class AlbumListAdapter extends RecyclerView.Adapter<AlbumListAdapter.InnerHolder> {
 
 	private List<Album> mData = new ArrayList<>();
 	private final static String TAG = "RecommendListAdapter";

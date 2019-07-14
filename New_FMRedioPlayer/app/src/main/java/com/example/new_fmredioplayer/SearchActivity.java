@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,6 +46,7 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
 	private RecyclerView mResultListView;
 	private AlbumListAdapter mAlbumListAdapter;
 	private FlowTextLayout mFlowTextLayout;
+	private InputMethodManager mInputMethodManager;
 	//	private FlowTextLayout mFlowTextLayout;
 
 	@Override
@@ -57,6 +59,8 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
 	}
 
 	private void initPresent() {
+		mInputMethodManager = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
+
 		//注册UI更新的接口
 		mSearchPresenter = SearchPresenter.getSearchPresenter();
 		mSearchPresenter.registerViewCallback(this);
@@ -67,6 +71,13 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
 	private void initView() {
 		mBackBtn = this.findViewById(R.id.search_back);
 		mInputBox = this.findViewById(R.id.search_input);
+		mInputBox.postDelayed(new Runnable() {
+			@Override
+			public void run() {
+				mInputBox.requestFocus();
+				mInputMethodManager.showSoftInput(mInputBox,InputMethodManager.SHOW_IMPLICIT);
+			}
+		},500);
 		mSearchBtn = this.findViewById(R.id.search_btn);
 		mResultContainer = this.findViewById(R.id.search_container);
 //		mFlowTextLayout = this.findViewById(R.id.flow_text_layout);
@@ -140,11 +151,9 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
 
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				LogUtils.d(TAG,"content -- > " + s);
-				LogUtils.d(TAG,"start -- > " + start);
-				LogUtils.d(TAG,"before -- > " + before);
-				LogUtils.d(TAG,"count -- > " + count);
-
+				if (TextUtils.isEmpty(s)) {
+					mSearchPresenter.getHotWord();
+				}
 			}
 
 			@Override
@@ -166,7 +175,18 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
 		mFlowTextLayout.setClickListener(new FlowTextLayout.ItemClickListener() {
 			@Override
 			public void onItemClick(String text) {
-				Toast.makeText(SearchActivity.this,text,Toast.LENGTH_SHORT).show();
+				//把热词放入输入框
+				mInputBox.setText(text);
+				//把输入光标移到最后
+				mInputBox.setSelection(text.length());
+				//进行搜索
+				if (mSearchPresenter != null) {
+					mSearchPresenter.doSearch(text);
+				}
+				//改变状态
+				if (mUILoader != null) {
+					mUILoader.updateStatus(UILoader.UIStatus.LOADING);
+				}
 			}
 		});
 	}
@@ -185,8 +205,7 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
 		mFlowTextLayout.setVisibility(View.GONE);
 		mResultListView.setVisibility(View.VISIBLE);
 		//隐藏键盘
-		InputMethodManager inputMethodManager = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
-		inputMethodManager.hideSoftInputFromWindow(mInputBox.getWindowToken(),inputMethodManager.HIDE_NOT_ALWAYS);
+		mInputMethodManager.hideSoftInputFromWindow(mInputBox.getWindowToken(), mInputMethodManager.HIDE_NOT_ALWAYS);
 		if (result != null) {
 			if (result.size() == 0) {
 				//数据为空
