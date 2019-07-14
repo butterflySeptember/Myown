@@ -93,7 +93,6 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
 			public void onClick(View v) {
 				if (mPlayPresenter != null) {
 					//判断播放器是否有播放列表
-					//todo:
 					boolean hasPlayList = mPlayPresenter.hasPlayList();
 					if (hasPlayList) {
 						handlePlayControl();

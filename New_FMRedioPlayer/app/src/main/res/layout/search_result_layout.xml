@@ -12,6 +12,13 @@
         android:id="@+id/result_list_view"
         android:layout_height="match_parent"/>
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/search_recommend_list"
+        android:layout_width="match_parent"
+        android:overScrollMode="never"
+        android:visibility="gone"
+        android:layout_height="match_parent"/>
+
     <com.example.new_fmredioplayer.views.FlowTextLayout
         android:layout_width="match_parent"
         android:visibility="visible"

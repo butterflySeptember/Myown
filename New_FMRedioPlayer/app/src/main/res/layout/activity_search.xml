@@ -20,16 +20,30 @@
             android:src="@drawable/select_search_left_bg"
             android:layout_height="30dp" />
 
-        <EditText
-            android:hint="请输入专辑关键字"
-            android:id="@+id/search_input"
-            android:textCursorDrawable="@drawable/shape_edit_text_cursor"
-            android:background="@drawable/shape_edit_text_bg"
-            android:paddingRight="5dp"
-            android:textColor="@color/main_color"
-            android:singleLine="true"
+        <RelativeLayout
             android:layout_height="30dp"
-            android:layout_width="320dp"/>
+            android:layout_width="320dp">
+
+            <EditText
+                android:hint="请输入专辑关键字"
+                android:id="@+id/search_input"
+                android:textCursorDrawable="@drawable/shape_edit_text_cursor"
+                android:background="@drawable/shape_edit_text_bg"
+                android:paddingRight="5dp"
+                android:textColor="@color/main_color"
+                android:singleLine="true"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"/>
+
+            <ImageView
+                android:id="@+id/search_input_delect_icon"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@mipmap/input_delect_icon"
+                android:layout_marginRight="10dp"
+                android:layout_alignParentRight="true" />
+        </RelativeLayout>
+
 
         <TextView
             android:layout_marginRight="5dp"

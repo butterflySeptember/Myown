@@ -43,4 +43,5 @@ public interface ISearchCallback extends BasePresenter {
 	 * @param errorMsg
 	 */
 	void onError(int errorCode,String errorMsg);
+
 }
