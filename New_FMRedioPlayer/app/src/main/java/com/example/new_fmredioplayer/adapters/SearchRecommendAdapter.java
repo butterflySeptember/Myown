@@ -19,6 +19,7 @@ public class SearchRecommendAdapter extends RecyclerView.Adapter<SearchRecommend
 
 	private List<QueryResult> mData = new ArrayList<>();
 	private TextView mText;
+	private itemClickListener mItemClickListener = null;
 
 	@NonNull
 	@Override
@@ -30,8 +31,17 @@ public class SearchRecommendAdapter extends RecyclerView.Adapter<SearchRecommend
 	@Override
 	public void onBindViewHolder(@NonNull SearchRecommendAdapter.InnerHolder holder, int position) {
 		mText = holder.itemView.findViewById(R.id.search_recommend_item);
-		QueryResult queryResult = mData.get(position);
+		final QueryResult queryResult = mData.get(position);
 		mText.setText(queryResult.getKeyword());
+		//设置点击事件
+		holder.itemView.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if (mItemClickListener != null) {
+					mItemClickListener.onItemClick(queryResult.getKeyword());
+				}
+			}
+		});
 	}
 
 	@Override
@@ -53,5 +63,13 @@ public class SearchRecommendAdapter extends RecyclerView.Adapter<SearchRecommend
 		public InnerHolder(@NonNull View itemView) {
 			super(itemView);
 		}
+	}
+
+	public void setItemClickListener(itemClickListener listener){
+		this.mItemClickListener = listener;
+	}
+
+	public interface itemClickListener{
+		void onItemClick(String keyword);
 	}
 }

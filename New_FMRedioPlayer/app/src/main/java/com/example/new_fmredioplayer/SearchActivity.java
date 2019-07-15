@@ -132,6 +132,15 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
 		//设置布局管理器
 		LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
 		mSearchRecommendList.setLayoutManager(linearLayoutManager);
+		mSearchRecommendList.addItemDecoration(new RecyclerView.ItemDecoration() {
+			@Override
+			public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
+				//使用工具类 dp和px相互转换
+				outRect.left = UIUtil.dip2px(view.getContext(),2);
+				outRect.top = UIUtil.dip2px(view.getContext(),2);
+				outRect.bottom = UIUtil.dip2px(view.getContext(),5);
+			}
+		});
 		//设置适配器
 		mRecommendAdapter = new SearchRecommendAdapter();
 		mSearchRecommendList.setAdapter(mRecommendAdapter);
@@ -139,6 +148,15 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
 	}
 
 	private void initEvent() {
+
+		if (mRecommendAdapter != null) {
+			mRecommendAdapter.setItemClickListener(new SearchRecommendAdapter.itemClickListener() {
+				@Override
+				public void onItemClick(String keyword) {
+					switchSearch(keyword);
+				}
+			});
+		}
 
 		mDelBtn.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -204,20 +222,24 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
 		mFlowTextLayout.setClickListener(new FlowTextLayout.ItemClickListener() {
 			@Override
 			public void onItemClick(String text) {
-				//把热词放入输入框
-				mInputBox.setText(text);
-				//把输入光标移到最后
-				mInputBox.setSelection(text.length());
-				//进行搜索
-				if (mSearchPresenter != null) {
-					mSearchPresenter.doSearch(text);
-				}
-				//改变状态
-				if (mUILoader != null) {
-					mUILoader.updateStatus(UILoader.UIStatus.LOADING);
-				}
+				switchSearch(text);
 			}
 		});
+	}
+
+	private void switchSearch(String text) {
+		//把热词放入输入框
+		mInputBox.setText(text);
+		//把输入光标移到最后
+		mInputBox.setSelection(text.length());
+		//进行搜索
+		if (mSearchPresenter != null) {
+			mSearchPresenter.doSearch(text);
+		}
+		//改变状态
+		if (mUILoader != null) {
+			mUILoader.updateStatus(UILoader.UIStatus.LOADING);
+		}
 	}
 
 	/**

@@ -2,6 +2,7 @@ package com.example.new_fmredioplayer.adapters;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -89,7 +90,13 @@ public class AlbumListAdapter extends RecyclerView.Adapter<AlbumListAdapter.Inne
 			desrcDesrcTv.setText(album.getAlbumIntro());
 			albumPlayCountTv.setText(album.getPlayCount() + " ");
 			albumContentCountTv.setText(album.getIncludeTrackCount() +" ");
-			Picasso.with(itemView.getContext()).load(album.getCoverUrlLarge()).into(albumcover);
+
+			String coverUrlLarge = album.getCoverUrlLarge();
+			if ( ! TextUtils.isEmpty(coverUrlLarge)) {
+				Picasso.with(itemView.getContext()).load(coverUrlLarge).into(albumcover);
+			}else{
+				albumcover.setImageResource(R.mipmap.logo);
+			}
 		}
 	}
 	public void setOnRecommendItemClickListener(onRecommendItemClickListener listener){
