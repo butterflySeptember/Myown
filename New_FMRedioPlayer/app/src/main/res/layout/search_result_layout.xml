@@ -3,14 +3,18 @@
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
-
-    <android.support.v7.widget.RecyclerView
-        android:overScrollMode="never"
-        android:visibility="gone"
+    <com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
+        android:id="@+id/search_result_refresh_layout"
         android:layout_width="match_parent"
-        android:id="@+id/result_list_view"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:overScrollMode="never"
+            android:layout_width="match_parent"
+            android:id="@+id/result_list_view"
+            android:layout_height="match_parent"/>
+
+    </com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/search_recommend_list"

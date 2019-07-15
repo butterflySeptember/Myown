@@ -13,10 +13,10 @@ import com.example.new_fmredioplayer.R;
 import com.example.new_fmredioplayer.utils.LogUtils;
 import com.squareup.picasso.Picasso;
 import com.ximalaya.ting.android.opensdk.model.album.Album;
+import com.ximalaya.ting.android.opensdk.model.album.AlbumList;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class AlbumListAdapter extends RecyclerView.Adapter<AlbumListAdapter.InnerHolder> {
 
@@ -67,6 +67,10 @@ public class AlbumListAdapter extends RecyclerView.Adapter<AlbumListAdapter.Inne
 		}
 		//更新UI
 		notifyDataSetChanged();
+	}
+
+	public int getDataSize() {
+		return mData.size();
 	}
 
 	public static class InnerHolder extends RecyclerView.ViewHolder{

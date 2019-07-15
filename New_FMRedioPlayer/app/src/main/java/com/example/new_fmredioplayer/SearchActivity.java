@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 
 import com.example.new_fmredioplayer.adapters.AlbumListAdapter;
@@ -22,9 +23,12 @@ import com.example.new_fmredioplayer.adapters.SearchRecommendAdapter;
 import com.example.new_fmredioplayer.base.BaseActivity;
 import com.example.new_fmredioplayer.interfaces.ISearchCallback;
 import com.example.new_fmredioplayer.presenters.SearchPresenter;
+import com.example.new_fmredioplayer.utils.Constants;
 import com.example.new_fmredioplayer.utils.LogUtils;
 import com.example.new_fmredioplayer.views.FlowTextLayout;
 import com.example.new_fmredioplayer.views.UILoader;
+import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
+import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
 import com.ximalaya.ting.android.opensdk.model.album.Album;
 import com.ximalaya.ting.android.opensdk.model.word.HotWord;
 import com.ximalaya.ting.android.opensdk.model.word.QueryResult;
@@ -52,6 +56,7 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
 	public final static int TIME_SHOW_IMM = 500;
 	private RecyclerView mSearchRecommendList;
 	private SearchRecommendAdapter mRecommendAdapter;
+	private TwinklingRefreshLayout mRefreshLayout;
 	//	private FlowTextLayout mFlowTextLayout;
 
 	@Override
@@ -108,6 +113,9 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
 	 */
 	private View createSuccessView() {
 		View resultView = LayoutInflater.from(this).inflate(R.layout.search_result_layout, null);
+		//刷新控件
+		mRefreshLayout = resultView.findViewById(R.id.search_result_refresh_layout);
+		mRefreshLayout.setOverScrollBottomShow(true);
 		//热词显示
 		mFlowTextLayout = resultView.findViewById(R.id.recommend_hot_word_list);
 
@@ -148,6 +156,17 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
 	}
 
 	private void initEvent() {
+
+		mRefreshLayout.setOnRefreshListener(new RefreshListenerAdapter() {
+			@Override
+			public void onLoadMore(TwinklingRefreshLayout refreshLayout) {
+				LogUtils.d(TAG,"Load more ...");
+				//加载更多内容
+					 if (mSearchPresenter != null) {
+						 mSearchPresenter.loaderMore();
+				 }
+			}
+		});
 
 		if (mRecommendAdapter != null) {
 			mRecommendAdapter.setItemClickListener(new SearchRecommendAdapter.itemClickListener() {
@@ -263,10 +282,15 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
 
 	@Override
 	public void onSearchResultLoad(List<Album> result) {
-		hideSuccessView();
-		mResultListView.setVisibility(View.VISIBLE);
+		handleSearchResult(result);
 		//隐藏键盘
 		mInputMethodManager.hideSoftInputFromWindow(mInputBox.getWindowToken(), mInputMethodManager.HIDE_NOT_ALWAYS);
+	}
+
+	private void handleSearchResult(List<Album> result) {
+		hideSuccessView();
+		mRefreshLayout.setVisibility(View.VISIBLE);
+
 		if (result != null) {
 			if (result.size() == 0) {
 				//数据为空
@@ -302,7 +326,15 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
 
 	@Override
 	public void onLoadMoreResult(List<Album> result, boolean isOkay) {
-
+		//处理加载更多的结果
+		if (mRefreshLayout != null) {
+			mRefreshLayout.finishLoadmore();
+		}
+		if ( ! isOkay) {
+			Toast.makeText(SearchActivity.this,"没有更多内容",Toast.LENGTH_SHORT).show();
+		}else {
+			handleSearchResult(result);
+		}
 	}
 
 	@Override
@@ -318,13 +350,13 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
 		}
 		//控制显示和隐藏
 		hideSuccessView();
-		mResultListView.setVisibility(View.VISIBLE);
+		mRefreshLayout.setVisibility(View.VISIBLE);
 	}
 
 	private void hideSuccessView(){
+		mRefreshLayout.setVisibility(View.GONE);
 		mSearchRecommendList.setVisibility(View.GONE);
 		mFlowTextLayout.setVisibility(View.GONE);
-		mResultListView.setVisibility(View.GONE);
 	}
 
 	@Override
