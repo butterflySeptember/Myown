@@ -1,6 +1,7 @@
 package com.example.new_fmredioplayer;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -22,6 +23,7 @@ import com.example.new_fmredioplayer.adapters.AlbumListAdapter;
 import com.example.new_fmredioplayer.adapters.SearchRecommendAdapter;
 import com.example.new_fmredioplayer.base.BaseActivity;
 import com.example.new_fmredioplayer.interfaces.ISearchCallback;
+import com.example.new_fmredioplayer.presenters.AlbumDetialPresenter;
 import com.example.new_fmredioplayer.presenters.SearchPresenter;
 import com.example.new_fmredioplayer.utils.Constants;
 import com.example.new_fmredioplayer.utils.LogUtils;
@@ -39,7 +41,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class SearchActivity extends BaseActivity implements ISearchCallback {
+public class SearchActivity extends BaseActivity implements ISearchCallback, AlbumListAdapter.onRecommendItemClickListener {
 
 	private final static String TAG = "SearchActivity";
 	private View mBackBtn;
@@ -116,6 +118,7 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
 		//刷新控件
 		mRefreshLayout = resultView.findViewById(R.id.search_result_refresh_layout);
 		mRefreshLayout.setOverScrollBottomShow(true);
+		mRefreshLayout.setEnableRefresh(false);
 		//热词显示
 		mFlowTextLayout = resultView.findViewById(R.id.recommend_hot_word_list);
 
@@ -156,6 +159,8 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
 	}
 
 	private void initEvent() {
+
+		mAlbumListAdapter.setOnRecommendItemClickListener(this);
 
 		mRefreshLayout.setOnRefreshListener(new RefreshListenerAdapter() {
 			@Override
@@ -374,5 +379,14 @@ public class SearchActivity extends BaseActivity implements ISearchCallback {
 	@Override
 	public void unRegisterViewCallback(Object iCallback) {
 
+	}
+
+	@Override
+	public void onItemClick(int position, Album album) {
+		//获取被点击的位置
+		AlbumDetialPresenter.getInstance().setTargetAlbum(album);
+		//item被点击,跳转到详情界面
+		Intent intent = new Intent(this, DetailActivity.class);
+		startActivity(intent);
 	}
 }

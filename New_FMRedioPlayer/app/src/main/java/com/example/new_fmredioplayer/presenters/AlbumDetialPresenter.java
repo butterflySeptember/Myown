@@ -15,11 +15,7 @@ import com.ximalaya.ting.android.opensdk.model.track.Track;
 import com.ximalaya.ting.android.opensdk.model.track.TrackList;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import javax.security.auth.callback.Callback;
 
 public class AlbumDetialPresenter implements IAlbumDetialPresenter {
 
