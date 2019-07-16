@@ -60,6 +60,7 @@ public class SearchActivity extends BaseActivity implements ISearchCallback, Alb
 	private SearchRecommendAdapter mRecommendAdapter;
 	private TwinklingRefreshLayout mRefreshLayout;
 	//	private FlowTextLayout mFlowTextLayout;
+	private boolean mNeedSuggest = false;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -160,7 +161,9 @@ public class SearchActivity extends BaseActivity implements ISearchCallback, Alb
 
 	private void initEvent() {
 
-		mAlbumListAdapter.setOnRecommendItemClickListener(this);
+		if (mAlbumListAdapter != null) {
+			mAlbumListAdapter.setOnRecommendItemClickListener(this);
+		}
 
 		mRefreshLayout.setOnRefreshListener(new RefreshListenerAdapter() {
 			@Override
@@ -177,6 +180,8 @@ public class SearchActivity extends BaseActivity implements ISearchCallback, Alb
 			mRecommendAdapter.setItemClickListener(new SearchRecommendAdapter.itemClickListener() {
 				@Override
 				public void onItemClick(String keyword) {
+					//不需要相关的联想词
+					mNeedSuggest = false;
 					switchSearch(keyword);
 				}
 			});
@@ -202,6 +207,10 @@ public class SearchActivity extends BaseActivity implements ISearchCallback, Alb
 				//执行搜索操作
 				String keyword = mInputBox.getText().toString().trim();
 				if (mSearchPresenter != null) {
+					if (TextUtils.isEmpty(keyword)) {
+						Toast.makeText(SearchActivity.this,"请输入搜索内容",Toast.LENGTH_LONG).show();
+						return;
+					}
 					mSearchPresenter.doSearch(keyword);
 					mUILoader.updateStatus(UILoader.UIStatus.LOADING);
 				}
@@ -222,8 +231,13 @@ public class SearchActivity extends BaseActivity implements ISearchCallback, Alb
 
 				}else{
 					mDelBtn.setVisibility(View.VISIBLE);
-					//触发联想查询
-					getSuggestWord(s.toString());
+					if (mNeedSuggest) {
+						//触发联想查询
+						getSuggestWord(s.toString());
+					}else {
+						mNeedSuggest = true;
+					}
+
 				}
 			}
 
@@ -246,23 +260,31 @@ public class SearchActivity extends BaseActivity implements ISearchCallback, Alb
 		mFlowTextLayout.setClickListener(new FlowTextLayout.ItemClickListener() {
 			@Override
 			public void onItemClick(String text) {
+				//不需要相关的联想词
+				mNeedSuggest = false;
 				switchSearch(text);
 			}
 		});
 	}
 
-	private void switchSearch(String text) {
-		//把热词放入输入框
-		mInputBox.setText(text);
-		//把输入光标移到最后
-		mInputBox.setSelection(text.length());
-		//进行搜索
-		if (mSearchPresenter != null) {
-			mSearchPresenter.doSearch(text);
-		}
-		//改变状态
-		if (mUILoader != null) {
-			mUILoader.updateStatus(UILoader.UIStatus.LOADING);
+	private void switchSearch(String text ) {
+		//当搜索内容为空时，弹出提示框
+		if (TextUtils.isEmpty(text)) {
+			Toast.makeText(this,"请输入搜索内容",Toast.LENGTH_LONG).show();
+			return;
+		}else{
+			//把热词放入输入框
+			mInputBox.setText(text);
+			//把输入光标移到最后
+			mInputBox.setSelection(text.length());
+			//进行搜索
+			if (mSearchPresenter != null) {
+				mSearchPresenter.doSearch(text);
+			}
+			//改变状态
+			if (mUILoader != null) {
+				mUILoader.updateStatus(UILoader.UIStatus.LOADING);
+			}
 		}
 	}
 
