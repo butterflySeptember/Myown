@@ -24,7 +24,7 @@ public class XimalayaDBHelper extends SQLiteOpenHelper {
 		//创建数据表
 		//订阅的相关字段
 		String subTbSql = "create table " + Constants.SUB_TB_NAME + "(" +
-				Constants.SUB_TB_ID + " integer,"+
+				Constants.SUB_TB_ID + " integer primary key autoincrement,"+
 				Constants.SUB_TB_COVER_URL + " varchar," +
 				Constants.SUB_TB_TITLE + " varchar," +
 				Constants.SUB_TB_DESCRIPTION + " varchar," +
