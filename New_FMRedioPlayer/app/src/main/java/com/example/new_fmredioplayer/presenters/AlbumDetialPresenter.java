@@ -2,7 +2,7 @@ package com.example.new_fmredioplayer.presenters;
 
 import android.support.annotation.Nullable;
 
-import com.example.new_fmredioplayer.api.XimalayaFMApi;
+import com.example.new_fmredioplayer.data.XimalayaFMApi;
 import com.example.new_fmredioplayer.interfaces.IAlbumDetailViewCallBack;
 import com.example.new_fmredioplayer.interfaces.IAlbumDetialPresenter;
 import com.example.new_fmredioplayer.utils.Constants;

@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
 import android.widget.Toast;
 
-import com.example.new_fmredioplayer.api.XimalayaFMApi;
+import com.example.new_fmredioplayer.data.XimalayaFMApi;
 import com.example.new_fmredioplayer.base.baseApplication;
 import com.example.new_fmredioplayer.interfaces.IPlayerCallback;
 import com.example.new_fmredioplayer.interfaces.IPlayerPresenter;
