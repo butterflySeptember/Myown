@@ -16,6 +16,7 @@ public class SubscriptionData implements ISubDao {
 
 	private static final SubscriptionData ourInstance = new SubscriptionData();
 	private final XimalayaDBHelper mXimalayaDBHelper;
+	private ISubDaoCallback mCallback = null;
 
 	public static SubscriptionData getInstance() {
 		return ourInstance;
@@ -24,6 +25,11 @@ public class SubscriptionData implements ISubDao {
 	private SubscriptionData() {
 		mXimalayaDBHelper = new XimalayaDBHelper(baseApplication.getAppContext());
 
+	}
+
+	@Override
+	public void setCallback(ISubDaoCallback callback) {
+		this.mCallback = callback;
 	}
 
 	@Override
@@ -44,8 +50,14 @@ public class SubscriptionData implements ISubDao {
 			//插入数据
 			db.insert(Constants.SUB_TB_NAME,null,contentValues);
 			db.setTransactionSuccessful();
+			if (mCallback != null) {
+				mCallback.onAddResult(true);
+			}
 		}catch (Exception e){
 			e.printStackTrace();
+			if (mCallback != null) {
+				mCallback.onAddResult(false);
+			}
 		}finally {
 			if (db != null) {
 				db.endTransaction();
@@ -63,8 +75,14 @@ public class SubscriptionData implements ISubDao {
 			db.beginTransaction();
 			int delete =  db.delete(Constants.SUB_TB_NAME, Constants.SUB_TB_ID + "=?", new String[]{album.getId() + ""});
 			db.setTransactionSuccessful();
+			if (mCallback != null) {
+				mCallback.onDelResult(true);
+			}
 		}catch (Exception e){
 			e.printStackTrace();
+			if (mCallback != null) {
+				mCallback.onDelResult(false);
+			}
 		}finally {
 			if (db != null) {
 				db.endTransaction();
@@ -107,9 +125,12 @@ public class SubscriptionData implements ISubDao {
 				album.setId(albumId);
 				result.add(album);
 			}
-			//todo：把数据返回给ui
 			query.close();
 			db.setTransactionSuccessful();
+			//把数据返回给ui
+			if (mCallback != null) {
+				mCallback.onSubListLoaded(result);
+			}
 		}catch (Exception e){
 			e.printStackTrace();
 		}finally {
