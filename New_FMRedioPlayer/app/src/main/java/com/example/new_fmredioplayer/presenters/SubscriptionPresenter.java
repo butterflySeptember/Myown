@@ -26,7 +26,6 @@ public class SubscriptionPresenter implements ISubscriptionPresenter, ISubDaoCal
 	private SubscriptionPresenter(){
 		mInstance = SubscriptionData.getInstance();
 		mInstance.setCallback(this);
-		listSubscriptions();
 	}
 
 	private static SubscriptionPresenter sInstance = null;
@@ -127,6 +126,7 @@ public class SubscriptionPresenter implements ISubscriptionPresenter, ISubDaoCal
 
 	@Override
 	public void onSubListLoaded(final List<Album> albumList) {
+		mData.clear();
 		for (Album album : albumList) {
 			mData.put(album.getId(),album);
 		}

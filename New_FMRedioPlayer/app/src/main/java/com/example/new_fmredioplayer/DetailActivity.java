@@ -103,6 +103,7 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
 		mPlayPresenter.registerViewCallback(this);
 		//订阅相关的Presenter
 		mSubscriptionPresenter = SubscriptionPresenter.getInstance();
+		mSubscriptionPresenter.getSubscriptionList();
 		mSubscriptionPresenter.registerViewCallback(this);
 	}
 
@@ -489,5 +490,8 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
 	@Override
 	public void onSubscriptionLoaded(List<Album> albumList) {
 		//在这个界面无需进行处理
+		for (Album album : albumList) {
+			LogUtils.d(TAG,"album name -- > " + album.getAlbumTitle());
+		}
 	}
 }
