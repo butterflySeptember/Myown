@@ -85,7 +85,8 @@ public class SubscriptionPresenter implements ISubscriptionPresenter, ISubDaoCal
 	@Override
 	public boolean isSub(Album album) {
 		Album result = mData.get(album.getId());
-		return result == null;
+		//结果不为空表示订阅
+		return result != null;
 	}
 
 	@Override

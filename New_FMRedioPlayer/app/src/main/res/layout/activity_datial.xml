@@ -19,6 +19,7 @@
             android:layout_width="65dp"
             android:layout_height="40dp"
             android:text="订阅"
+            android:id="@+id/detail_sub_btn"
             android:textColor="@color/white"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
