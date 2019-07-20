@@ -7,17 +7,20 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.new_fmredioplayer.R;
 import com.example.new_fmredioplayer.adapters.AlbumListAdapter;
 import com.example.new_fmredioplayer.base.BaseFragment;
 import com.example.new_fmredioplayer.interfaces.ISubscriptionCallback;
 import com.example.new_fmredioplayer.presenters.SubscriptionPresenter;
+import com.example.new_fmredioplayer.utils.Constants;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
 import com.ximalaya.ting.android.opensdk.model.album.Album;
 
 import net.lucode.hackware.magicindicator.buildins.UIUtil;
 
+import java.util.Collections;
 import java.util.List;
 
 public class SubscriptionFragment extends BaseFragment implements ISubscriptionCallback {
@@ -61,9 +64,12 @@ public class SubscriptionFragment extends BaseFragment implements ISubscriptionC
 	}
 
 	@Override
-	public void onDestroy() {
-		super.onDestroy();
-		mSubscriptionPresenter.unRegisterViewCallback(this);
+	public void onDestroyView() {
+		super.onDestroyView();
+		//取消接口注册
+		if (mSubscriptionPresenter != null) {
+			mSubscriptionPresenter.unRegisterViewCallback(this);
+		}
 	}
 
 	@Override
@@ -80,7 +86,14 @@ public class SubscriptionFragment extends BaseFragment implements ISubscriptionC
 	public void onSubscriptionLoaded(List<Album> albumList) {
 		//更新UI
 		if (mAlbumListAdapter != null) {
+			//将列表反向
+			Collections.reverse(albumList);
 			mAlbumListAdapter.setData(albumList);
 		}
+	}
+
+	@Override
+	public void onSubFull() {
+		Toast.makeText(getActivity(),"订阅数量不能超过" + Constants.MAX_SUB_COUNT,Toast.LENGTH_SHORT).show();
 	}
 }

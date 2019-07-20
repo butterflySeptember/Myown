@@ -5,6 +5,7 @@ import com.example.new_fmredioplayer.data.ISubDaoCallback;
 import com.example.new_fmredioplayer.data.SubscriptionData;
 import com.example.new_fmredioplayer.interfaces.ISubscriptionCallback;
 import com.example.new_fmredioplayer.interfaces.ISubscriptionPresenter;
+import com.example.new_fmredioplayer.utils.Constants;
 import com.ximalaya.ting.android.opensdk.model.album.Album;
 
 import java.util.ArrayList;
@@ -54,6 +55,14 @@ public class SubscriptionPresenter implements ISubscriptionPresenter, ISubDaoCal
 	}
 	@Override
 	public void addSubscription(final Album album) {
+		//判断当前的订阅数量，不能超过限定数额
+		if (mData.size() >= Constants.MAX_SUB_COUNT) {
+			//弹出提示框
+			for (ISubscriptionCallback callback : mCallbacks) {
+				callback.onSubFull();
+			}
+			return;
+		}
 		Observable.create(new ObservableOnSubscribe<Object>() {
 			@Override
 			public void subscribe(ObservableEmitter<Object> emitter) throws Exception {

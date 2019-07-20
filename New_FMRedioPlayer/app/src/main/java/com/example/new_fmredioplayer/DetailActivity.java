@@ -494,4 +494,9 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
 			LogUtils.d(TAG,"album name -- > " + album.getAlbumTitle());
 		}
 	}
+
+	@Override
+	public void onSubFull() {
+		Toast.makeText(this,"订阅数量不能超过100",Toast.LENGTH_SHORT).show();
+	}
 }

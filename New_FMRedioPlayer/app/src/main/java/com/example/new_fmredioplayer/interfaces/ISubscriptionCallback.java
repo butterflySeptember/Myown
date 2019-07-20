@@ -26,4 +26,9 @@ public interface ISubscriptionCallback {
 	 * @param albumList
 	 */
 	void onSubscriptionLoaded(List<Album> albumList);
+
+	/**
+	 * 数据库已满，无法再添加专辑
+	 */
+	void onSubFull();
 }
