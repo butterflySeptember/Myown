@@ -3,30 +3,25 @@ package com.example.new_fmredioplayer.fragments;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.example.new_fmredioplayer.DetailActivity;
 import com.example.new_fmredioplayer.R;
 import com.example.new_fmredioplayer.adapters.AlbumListAdapter;
 import com.example.new_fmredioplayer.base.BaseFragment;
+import com.example.new_fmredioplayer.base.baseApplication;
 import com.example.new_fmredioplayer.interfaces.IRecommendViewCallback;
 import com.example.new_fmredioplayer.presenters.AlbumDetialPresenter;
 import com.example.new_fmredioplayer.presenters.RecommendPresenter;
-import com.example.new_fmredioplayer.utils.Constants;
 import com.example.new_fmredioplayer.utils.LogUtils;
 import com.example.new_fmredioplayer.views.UILoader;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
-import com.ximalaya.ting.android.opensdk.constants.DTransferConstants;
-import com.ximalaya.ting.android.opensdk.datatrasfer.CommonRequest;
-import com.ximalaya.ting.android.opensdk.datatrasfer.IDataCallBack;
 import com.ximalaya.ting.android.opensdk.model.album.Album;
-import com.ximalaya.ting.android.opensdk.model.album.GussLikeAlbumList;
 
 import net.lucode.hackware.magicindicator.buildins.UIUtil;
 
@@ -34,7 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class RecommendFragment extends BaseFragment implements IRecommendViewCallback, UILoader.OnRetryClickListener, AlbumListAdapter.onRecommendItemClickListener {
+public class RecommendFragment extends BaseFragment implements IRecommendViewCallback, UILoader.OnRetryClickListener, AlbumListAdapter.onRecommendItemClickListener, AlbumListAdapter.onAlbumItemLongClickListener {
 
 	private final static String TAG = "RecommendFragment";
 	private View mRootView;
@@ -94,7 +89,8 @@ public class RecommendFragment extends BaseFragment implements IRecommendViewCal
 		//3，设置适配器
 		mRecommendListAdapter = new AlbumListAdapter ();
 		mRecommendBy.setAdapter(mRecommendListAdapter);
-		mRecommendListAdapter.setOnRecommendItemClickListener(this);
+		mRecommendListAdapter.setAlbumItemClickListener(this);
+		mRecommendListAdapter.setOnAlbumItemLongClick(this);
 		return mRootView;
 	}
 
@@ -160,5 +156,11 @@ public class RecommendFragment extends BaseFragment implements IRecommendViewCal
 	@Override
 	public void unRegisterViewCallback(Object o) {
 
+	}
+
+	@Override
+	public void onAlbumItemLongClick(Album album) {
+		//处理订阅界面item长按事件
+		Toast .makeText(baseApplication.getAppContext(),"长按订阅item",Toast.LENGTH_SHORT).show();
 	}
 }

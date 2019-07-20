@@ -1,5 +1,6 @@
 package com.example.new_fmredioplayer.fragments;
 
+import android.content.Intent;
 import android.graphics.Rect;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,12 +10,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.new_fmredioplayer.DetailActivity;
 import com.example.new_fmredioplayer.R;
 import com.example.new_fmredioplayer.adapters.AlbumListAdapter;
 import com.example.new_fmredioplayer.base.BaseFragment;
 import com.example.new_fmredioplayer.interfaces.ISubscriptionCallback;
+import com.example.new_fmredioplayer.presenters.AlbumDetialPresenter;
 import com.example.new_fmredioplayer.presenters.SubscriptionPresenter;
 import com.example.new_fmredioplayer.utils.Constants;
+import com.example.new_fmredioplayer.views.ConfirmDialog;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
 import com.ximalaya.ting.android.opensdk.model.album.Album;
 
@@ -23,7 +27,7 @@ import net.lucode.hackware.magicindicator.buildins.UIUtil;
 import java.util.Collections;
 import java.util.List;
 
-public class SubscriptionFragment extends BaseFragment implements ISubscriptionCallback {
+public class SubscriptionFragment extends BaseFragment implements ISubscriptionCallback, AlbumListAdapter.onRecommendItemClickListener, AlbumListAdapter.onAlbumItemLongClickListener, ConfirmDialog.onDialogActionClickListener {
 
 	private SubscriptionPresenter mSubscriptionPresenter;
 	private RecyclerView mSubListView;
@@ -41,6 +45,8 @@ public class SubscriptionFragment extends BaseFragment implements ISubscriptionC
 		initEvent();
 		//设置适配器
 		mAlbumListAdapter = new AlbumListAdapter();
+		mAlbumListAdapter.setAlbumItemClickListener(this);
+		mAlbumListAdapter.setOnAlbumItemLongClick(this);
 		mSubListView.setAdapter(mAlbumListAdapter);
 		//创建Presenter
 		mSubscriptionPresenter = SubscriptionPresenter.getInstance();
@@ -70,6 +76,8 @@ public class SubscriptionFragment extends BaseFragment implements ISubscriptionC
 		if (mSubscriptionPresenter != null) {
 			mSubscriptionPresenter.unRegisterViewCallback(this);
 		}
+		//取消注册
+		mAlbumListAdapter.setAlbumItemClickListener(null);
 	}
 
 	@Override
@@ -95,5 +103,32 @@ public class SubscriptionFragment extends BaseFragment implements ISubscriptionC
 	@Override
 	public void onSubFull() {
 		Toast.makeText(getActivity(),"订阅数量不能超过" + Constants.MAX_SUB_COUNT,Toast.LENGTH_SHORT).show();
+	}
+
+	@Override
+	public void onItemClick(int position, Album album) {
+		AlbumDetialPresenter.getInstance().setTargetAlbum(album);
+		//跳转到详情界面
+		Intent intent = new Intent(getContext(), DetailActivity.class);
+		startActivity(intent);
+	}
+
+	@Override
+	public void onAlbumItemLongClick(Album album) {
+		//长按item，弹出提示框
+		ConfirmDialog confirmDialog = new ConfirmDialog(getActivity());
+		//设置弹出框的点击事件
+		confirmDialog.setOnDialogActionClickListener(this);
+		confirmDialog.show();
+	}
+
+	@Override
+	public void onCancelSubClick() {
+		//点击删除按钮，取消订阅
+	}
+
+	@Override
+	public void onGiveUpClick() {
+		//点击放弃按钮
 	}
 }

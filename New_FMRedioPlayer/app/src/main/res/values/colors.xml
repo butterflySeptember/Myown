@@ -8,4 +8,5 @@
     <color name="sub_text_title">#979797</color>
     <color name="sub_text_sub_line">#66979797</color>
     <color name="play_list_text_color">#7d828c</color>
+    <color name="dialog_view_color">#f0f4f4f4</color>
 </resources>

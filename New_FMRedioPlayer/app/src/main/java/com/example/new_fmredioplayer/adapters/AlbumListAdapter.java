@@ -13,7 +13,6 @@ import com.example.new_fmredioplayer.R;
 import com.example.new_fmredioplayer.utils.LogUtils;
 import com.squareup.picasso.Picasso;
 import com.ximalaya.ting.android.opensdk.model.album.Album;
-import com.ximalaya.ting.android.opensdk.model.album.AlbumList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +22,7 @@ public class AlbumListAdapter extends RecyclerView.Adapter<AlbumListAdapter.Inne
 	private List<Album> mData = new ArrayList<>();
 	private final static String TAG = "RecommendListAdapter";
 	private onRecommendItemClickListener mItemClickListener = null;
+	private onAlbumItemLongClickListener mLongClickListener = null;
 
 	@NonNull
 	@Override
@@ -49,6 +49,18 @@ public class AlbumListAdapter extends RecyclerView.Adapter<AlbumListAdapter.Inne
 			}
 		});
 		holder.setData(mData.get(position));
+
+		holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+			@Override
+			public boolean onLongClick(View v) {
+				if (mLongClickListener != null) {
+					int clickPosition =(int) v.getTag();
+					mLongClickListener.onAlbumItemLongClick(mData.get(clickPosition));
+				}
+				//true表示消费掉该事件
+				return false;
+			}
+		});
 	}
 
 	@Override
@@ -103,11 +115,22 @@ public class AlbumListAdapter extends RecyclerView.Adapter<AlbumListAdapter.Inne
 			}
 		}
 	}
-	public void setOnRecommendItemClickListener(onRecommendItemClickListener listener){
+	public void setAlbumItemClickListener(onRecommendItemClickListener listener){
 		this.mItemClickListener = listener;
 	}
 
 	public interface onRecommendItemClickListener{
 		void onItemClick(int position, Album album);
+	}
+
+	/**
+	 * item长按的接口
+	 */
+	public interface onAlbumItemLongClickListener {
+		void onAlbumItemLongClick(Album album);
+	}
+
+	public void setOnAlbumItemLongClick(onAlbumItemLongClickListener listener){
+		this.mLongClickListener = listener;
 	}
 }
