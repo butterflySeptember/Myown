@@ -7,8 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import com.example.new_fmredioplayer.R;
+import com.example.new_fmredioplayer.base.BaseApplication;
 import com.example.new_fmredioplayer.base.BaseFragment;
-import com.example.new_fmredioplayer.base.baseApplication;
+import com.example.new_fmredioplayer.base.BaseApplication;
 
 public abstract class UILoader extends FrameLayout {
 
@@ -41,7 +42,7 @@ public abstract class UILoader extends FrameLayout {
 	public void updateStatus(UIStatus status){
 		mCurrentStatus = status;
 		//更新UI一定要在主线程中
-		baseApplication.getHandler().post(new Runnable() {
+		BaseApplication.getHandler().post(new Runnable() {
 			@Override
 			public void run() {
 				switchUIByCurrentStatus();
@@ -88,7 +89,8 @@ public abstract class UILoader extends FrameLayout {
 	}
 
 	protected View getEmptyView(){
-		return LayoutInflater.from(getContext()).inflate(R.layout.fragment_empty_view,this,false);
+		View emptyView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_empty_view, this, false);
+		return emptyView;
 	}
 
 	protected View getNetworkErrorView(){

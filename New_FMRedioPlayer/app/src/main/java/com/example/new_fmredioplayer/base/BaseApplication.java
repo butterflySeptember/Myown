@@ -10,7 +10,7 @@ import com.ximalaya.ting.android.opensdk.datatrasfer.CommonRequest;
 import com.ximalaya.ting.android.opensdk.player.XmPlayerManager;
 
 
-public class baseApplication extends Application {
+public class BaseApplication extends Application {
 
 	private static Handler sHandler = null;
 

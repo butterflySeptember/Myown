@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -102,6 +103,15 @@ public class SearchActivity extends BaseActivity implements ISearchCallback, Alb
 				protected View getSuccessView(ViewGroup container) {
 					return createSuccessView();
 				}
+
+				//覆写返回内容为空的方法
+				@Override
+				protected View getEmptyView() {
+					View emptyView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_empty_view, this,false);
+					TextView tipsView = emptyView.findViewById(R.id.empty_tips_tv);
+					tipsView.setText(R.string.search_no_content_tip_text);
+					return emptyView;
+				}
 			};
 			if (mUILoader.getParent() instanceof ViewGroup) {
 				((ViewGroup) mUILoader.getParent()).removeView(mUILoader);
@@ -162,7 +172,7 @@ public class SearchActivity extends BaseActivity implements ISearchCallback, Alb
 	private void initEvent() {
 
 		if (mAlbumListAdapter != null) {
-			mAlbumListAdapter.setOnRecommendItemClickListener(this);
+			mAlbumListAdapter.setAlbumItemClickListener(this);
 		}
 
 		mRefreshLayout.setOnRefreshListener(new RefreshListenerAdapter() {

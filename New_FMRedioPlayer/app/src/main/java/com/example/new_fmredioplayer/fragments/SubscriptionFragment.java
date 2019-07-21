@@ -8,17 +8,21 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.new_fmredioplayer.DetailActivity;
 import com.example.new_fmredioplayer.R;
 import com.example.new_fmredioplayer.adapters.AlbumListAdapter;
+import com.example.new_fmredioplayer.base.BaseApplication;
 import com.example.new_fmredioplayer.base.BaseFragment;
 import com.example.new_fmredioplayer.interfaces.ISubscriptionCallback;
 import com.example.new_fmredioplayer.presenters.AlbumDetialPresenter;
 import com.example.new_fmredioplayer.presenters.SubscriptionPresenter;
 import com.example.new_fmredioplayer.utils.Constants;
 import com.example.new_fmredioplayer.views.ConfirmDialog;
+import com.example.new_fmredioplayer.views.UILoader;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
 import com.ximalaya.ting.android.opensdk.model.album.Album;
 
@@ -33,14 +37,47 @@ public class SubscriptionFragment extends BaseFragment implements ISubscriptionC
 	private RecyclerView mSubListView;
 	private AlbumListAdapter mAlbumListAdapter;
 	private TwinklingRefreshLayout mRefreshLayout;
-	private View mRootView;
+	private FrameLayout mRootView;
+	private Album mCurrentAlbum;
+	private UILoader mUiLoader;
 
-	public View onSubViewLoaded(LayoutInflater layoutInflater, ViewGroup container){
-		mRootView = layoutInflater.inflate(R.layout.fragment_subscription,container,false);
+	public View onSubViewLoaded(final LayoutInflater layoutInflater, ViewGroup container){
+		mRootView = (FrameLayout) layoutInflater.inflate(R.layout.fragment_subscription,container,false);
+
+		if (mUiLoader == null) {
+			mUiLoader = new UILoader(container.getContext()) {
+				@Override
+				protected View getSuccessView(ViewGroup container) {
+					return createSuccessView();
+				}
+
+				//覆写返回内容为空的方法
+				@Override
+				protected View getEmptyView() {
+					View emptyView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_empty_view, this,false);
+					TextView tipsView = emptyView.findViewById(R.id.empty_tips_tv);
+					tipsView.setText(R.string.no_sub_content_tips_text);
+					return emptyView;
+				}
+			};
+			if (mUiLoader.getParent() instanceof ViewGroup) {
+				((ViewGroup) mUiLoader.getParent()).removeView(mUiLoader);
+			}
+			mRootView.addView(mUiLoader);
+		}
+
+
+		return mRootView;
+	}
+
+	private View createSuccessView() {
+		View itemView = LayoutInflater.from(BaseApplication.getAppContext()).inflate(R.layout.item_subscription,null);
 		//初始化控件
-		mRefreshLayout = mRootView.findViewById(R.id.over_scroll_view);
-		mSubListView = mRootView.findViewById(R.id.sub_list);
-		mSubListView.setLayoutManager(new LinearLayoutManager(container.getContext()));
+		mRefreshLayout = itemView.findViewById(R.id.over_scroll_view);
+		mRefreshLayout.setEnableRefresh(false);
+		mRefreshLayout.setEnableLoadmore(false);
+		mSubListView = itemView.findViewById(R.id.sub_list);
+		mSubListView.setLayoutManager(new LinearLayoutManager(itemView.getContext()));
 
 		initEvent();
 		//设置适配器
@@ -52,7 +89,10 @@ public class SubscriptionFragment extends BaseFragment implements ISubscriptionC
 		mSubscriptionPresenter = SubscriptionPresenter.getInstance();
 		mSubscriptionPresenter.registerViewCallback(this);
 		mSubscriptionPresenter.getSubscriptionList();
-		return mRootView;
+		if (mUiLoader != null) {
+			mUiLoader.updateStatus(UILoader.UIStatus.LOADING);
+		}
+		return itemView;
 	}
 
 	private void initEvent() {
@@ -92,6 +132,15 @@ public class SubscriptionFragment extends BaseFragment implements ISubscriptionC
 
 	@Override
 	public void onSubscriptionLoaded(List<Album> albumList) {
+		if (albumList.size() == 0) {
+			if (mUiLoader != null) {
+				mUiLoader.updateStatus(UILoader.UIStatus.EMPTY);
+			}
+		}else {
+			if (mUiLoader != null) {
+				mUiLoader.updateStatus(UILoader.UIStatus.SUCCESS);
+			}
+		}
 		//更新UI
 		if (mAlbumListAdapter != null) {
 			//将列表反向
@@ -115,6 +164,7 @@ public class SubscriptionFragment extends BaseFragment implements ISubscriptionC
 
 	@Override
 	public void onAlbumItemLongClick(Album album) {
+		mCurrentAlbum = album;
 		//长按item，弹出提示框
 		ConfirmDialog confirmDialog = new ConfirmDialog(getActivity());
 		//设置弹出框的点击事件
@@ -125,6 +175,9 @@ public class SubscriptionFragment extends BaseFragment implements ISubscriptionC
 	@Override
 	public void onCancelSubClick() {
 		//点击删除按钮，取消订阅
+		if (mSubscriptionPresenter != null) {
+			mSubscriptionPresenter.deleteSubscription(mCurrentAlbum);
+		}
 	}
 
 	@Override

@@ -14,6 +14,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/empty_tips_tv"
             android:text="没有内容..."
             android:layout_marginTop="9dp"
             />
