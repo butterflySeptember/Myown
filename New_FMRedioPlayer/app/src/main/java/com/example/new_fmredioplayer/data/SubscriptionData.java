@@ -4,7 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.example.new_fmredioplayer.base.baseApplication;
+import com.example.new_fmredioplayer.base.BaseApplication;
 import com.example.new_fmredioplayer.utils.Constants;
 import com.ximalaya.ting.android.opensdk.model.album.Album;
 import com.ximalaya.ting.android.opensdk.model.album.Announcer;
@@ -23,7 +23,7 @@ public class SubscriptionData implements ISubDao {
 	}
 
 	private SubscriptionData() {
-		mXimalayaDBHelper = new XimalayaDBHelper(baseApplication.getAppContext());
+		mXimalayaDBHelper = new XimalayaDBHelper(BaseApplication.getAppContext());
 
 	}
 
@@ -98,7 +98,7 @@ public class SubscriptionData implements ISubDao {
 		try{
 			db = mXimalayaDBHelper.getReadableDatabase();
 			db.beginTransaction();
-			Cursor query = db.query(Constants.DB_NAME, null, null, null, null, null, null);
+			Cursor query = db.query(Constants.DB_NAME, null, null, null, null, null, "_id");
 			//封装数据
 			while (query.moveToNext()) {
 				Album album = new Album();
