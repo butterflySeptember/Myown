@@ -1,6 +1,6 @@
 package com.example.new_fmredioplayer.presenters;
 
-import com.example.new_fmredioplayer.base.baseApplication;
+import com.example.new_fmredioplayer.base.BaseApplication;
 import com.example.new_fmredioplayer.data.ISubDaoCallback;
 import com.example.new_fmredioplayer.data.SubscriptionData;
 import com.example.new_fmredioplayer.interfaces.ISubscriptionCallback;
@@ -111,7 +111,7 @@ public class SubscriptionPresenter implements ISubscriptionPresenter, ISubDaoCal
 
 	@Override
 	public void onAddResult(final boolean isOkay) {
-		baseApplication.getHandler().post(new Runnable() {
+		BaseApplication.getHandler().post(new Runnable() {
 			@Override
 			public void run() {
 				for (ISubscriptionCallback callback : mCallbacks) {
@@ -123,7 +123,7 @@ public class SubscriptionPresenter implements ISubscriptionPresenter, ISubDaoCal
 
 	@Override
 	public void onDelResult(final boolean isOkay) {
-		baseApplication.getHandler().post(new Runnable() {
+		BaseApplication.getHandler().post(new Runnable() {
 			@Override
 			public void run() {
 				for (ISubscriptionCallback callback : mCallbacks) {
@@ -140,7 +140,7 @@ public class SubscriptionPresenter implements ISubscriptionPresenter, ISubDaoCal
 			mData.put(album.getId(),album);
 		}
 		//通知ui更新
-		baseApplication.getHandler().post(new Runnable() {
+		BaseApplication.getHandler().post(new Runnable() {
 			@Override
 			public void run() {
 				for (ISubscriptionCallback callback : mCallbacks) {
