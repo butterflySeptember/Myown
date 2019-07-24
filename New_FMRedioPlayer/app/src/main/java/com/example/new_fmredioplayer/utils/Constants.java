@@ -37,5 +37,7 @@ public class Constants {
 	public final static String HISTORY_DURATION = "historyDuration";
 	public final static String HISTORY_UPDATE_TIME = "historyUpdateTime";
 	public final static String HISTORY_COVER = "historyCover";
+	//设置历史纪录数据上限
+	public final static int MAX_HISTORY_COUNT = 100;
 
 }

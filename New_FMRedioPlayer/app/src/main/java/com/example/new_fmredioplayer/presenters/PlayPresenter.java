@@ -5,8 +5,8 @@ import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
 import android.widget.Toast;
 
+import com.example.new_fmredioplayer.base.BaseApplication;
 import com.example.new_fmredioplayer.data.XimalayaFMApi;
-import com.example.new_fmredioplayer.base.baseApplication;
 import com.example.new_fmredioplayer.interfaces.IPlayerCallback;
 import com.example.new_fmredioplayer.interfaces.IPlayerPresenter;
 import com.example.new_fmredioplayer.utils.LogUtils;
@@ -61,13 +61,13 @@ public class PlayPresenter implements IPlayerPresenter, IXmAdsStatusListener, IX
 
 
 	private  PlayPresenter(){
-		mPlayerManager = XmPlayerManager.getInstance(baseApplication.getAppContext());
+		mPlayerManager = XmPlayerManager.getInstance(BaseApplication.getAppContext());
 		//广告相关的物料接口注册
 		mPlayerManager.addAdsStatusListener(this);
 		//播放器状态相关的接口注册
 		mPlayerManager.addPlayerStatusListener(this);
 		//记录当前的播放模式
-		mPlayModeSp = baseApplication.getAppContext().getSharedPreferences(PLAY_MODE_SP_NAME, Context.MODE_PRIVATE);
+		mPlayModeSp = BaseApplication.getAppContext().getSharedPreferences(PLAY_MODE_SP_NAME, Context.MODE_PRIVATE);
 	}
 
 	private static PlayPresenter sPlayPresenter;
@@ -253,7 +253,7 @@ public class PlayPresenter implements IPlayerPresenter, IXmAdsStatusListener, IX
 			@Override
 			public void onError(int errorCode, String errorMsg) {
 				LogUtils.d(TAG,"playByAlbumId fail : errorCode -- > " + errorCode + "errorMsg -- > " + errorMsg);
-				Toast.makeText(baseApplication.getAppContext(),"播放列表获取失败",Toast.LENGTH_SHORT).show();
+				Toast.makeText(BaseApplication.getAppContext(),"播放列表获取失败",Toast.LENGTH_SHORT).show();
 			}
 		},(int) id,mCurrentIndex);
 		//设置给播放器
@@ -369,13 +369,20 @@ public class PlayPresenter implements IPlayerPresenter, IXmAdsStatusListener, IX
 	@Override
 	public void onSoundSwitch(PlayableModel lastMode, PlayableModel curMode) {
 		LogUtils.d(TAG,"onSoundSwitch ...");
-		LogUtils.d(TAG,"lastMode -- > " + lastMode.getKind());
+		if (lastMode != null) {
+			LogUtils.d(TAG,"lastMode -- > " + lastMode.getKind());
+		}
 		mCurrentIndex = mPlayerManager.getCurrentIndex();
 		//curMode为当前播放的内容
 		//通过getKind（）方法获得为track类型
 		if (curMode instanceof Track) {
 			Track currentTrack = (Track) curMode ;
 			mCurrentTrack = currentTrack;
+
+			//保存播放记录
+			HistoryPresenter historyPresenter =  HistoryPresenter.getHistoryPresenter();
+			historyPresenter.addHistory(currentTrack);
+
 			//LogUtils.d(TAG,"title -- > " + ((Track) curMode).getTrackTitle());
 			for (IPlayerCallback iPlayerCallback : mIPlayerCallbacks) {
 				iPlayerCallback.onTrackUpdate(mCurrentTrack , mCurrentIndex);
