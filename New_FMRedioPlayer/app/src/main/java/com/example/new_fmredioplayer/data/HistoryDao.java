@@ -15,6 +15,7 @@ public class HistoryDao implements IHistoryDao{
 
 	private final XimalayaDBHelper mHelper;
 	private IHistoryDaoCallback mCallback = null;
+	private Object mLock = new Object();
 
 	public HistoryDao(){
 		mHelper = new XimalayaDBHelper(BaseApplication.getAppContext());
@@ -27,84 +28,90 @@ public class HistoryDao implements IHistoryDao{
 
 	@Override
 	public void addHistory(Track track) {
-		SQLiteDatabase db = null;
-		boolean isSuccess = false;
-		try {
-			db = mHelper.getWritableDatabase();
-			db.beginTransaction();
-			ContentValues values = new ContentValues();
+		synchronized (mLock) {
+			SQLiteDatabase db = null;
+			boolean isSuccess = false;
+			try {
+				db = mHelper.getWritableDatabase();
+				db.beginTransaction();
+				ContentValues values = new ContentValues();
 
-			//封装数据
-			values.put(Constants.HISTORY_TRACK_ID,track.getDataId());
-			values.put(Constants.HISTORY_TITLE,track.getTrackTitle());
-			values.put(Constants.HISTORY_PLAY_COUNT ,track.getPlayCount());
-			values.put(Constants.HISTORY_DURATION ,track.getDuration());
-			values.put(Constants.HISTORY_UPDATE_TIME,track.getUpdatedAt());
-			values.put(Constants.HISTORY_COVER,track.getCoverUrlLarge());
+				//封装数据
+				values.put(Constants.HISTORY_TRACK_ID, track.getDataId());
+				values.put(Constants.HISTORY_TITLE, track.getTrackTitle());
+				values.put(Constants.HISTORY_PLAY_COUNT, track.getPlayCount());
+				values.put(Constants.HISTORY_DURATION, track.getDuration());
+				values.put(Constants.HISTORY_UPDATE_TIME, track.getUpdatedAt());
+				values.put(Constants.HISTORY_COVER, track.getCoverUrlLarge());
 
-			//插入数据
-			db.insert(Constants.HISTORY_TB_NAME,null,values);
-			db.setTransactionSuccessful();
-			isSuccess = true;
-		}catch (Exception e){
-			e.printStackTrace();
-			isSuccess = false;
-		}finally {
-			if (db != null) {
-				db.endTransaction();
-				db.close();
-			}
-			if (mCallback != null) {
-				mCallback.onHistoryAdd(isSuccess);
+				//插入数据
+				db.insert(Constants.HISTORY_TB_NAME, null, values);
+				db.setTransactionSuccessful();
+				isSuccess = true;
+			} catch (Exception e) {
+				e.printStackTrace();
+				isSuccess = false;
+			} finally {
+				if (db != null) {
+					db.endTransaction();
+					db.close();
+				}
+				if (mCallback != null) {
+					mCallback.onHistoryAdd(isSuccess);
+				}
 			}
 		}
 	}
 
 	@Override
 	public void detailHistory(Track track) {
-		SQLiteDatabase db = null;
-		boolean isSuccess = false;
-		try{
-			db = mHelper.getWritableDatabase();
-			db.beginTransaction();
-			//删除数据
-			int delete =  db.delete(Constants.HISTORY_TB_NAME, Constants.HISTORY_ID + "=?", new String[]{track.getDataId() + ""});
-			db.setTransactionSuccessful();
-			isSuccess = true;
-		}catch (Exception e){
-			e.printStackTrace();
-			isSuccess = false;
-		}finally {
-			if (db != null) {
-				db.endTransaction();
-				db.close();
-			}
-			if (mCallback != null) {
-				mCallback.onHistoryDel(isSuccess);
+		synchronized (mLock) {
+			SQLiteDatabase db = null;
+			boolean isSuccess = false;
+			try {
+				db = mHelper.getWritableDatabase();
+				db.beginTransaction();
+				//删除数据
+				int delete = db.delete(Constants.HISTORY_TB_NAME, Constants.HISTORY_ID + "=?", new String[]{track.getDataId() + ""});
+				db.setTransactionSuccessful();
+				isSuccess = true;
+			} catch (Exception e) {
+				e.printStackTrace();
+				isSuccess = false;
+			} finally {
+				if (db != null) {
+					db.endTransaction();
+					db.close();
+				}
+				if (mCallback != null) {
+					mCallback.onHistoryDel(isSuccess);
+				}
 			}
 		}
 	}
 
 	@Override
 	public void clearDistory() {
-		SQLiteDatabase db = null;
-		boolean isSuccess = false;
-		try{
-			db = mHelper.getWritableDatabase();
-			db.beginTransaction();
-			db.delete(Constants.HISTORY_TB_NAME,null,null);
-			db.setTransactionSuccessful();
-			isSuccess = true;
-		}catch (Exception e){
-			e.printStackTrace();
-			isSuccess = false;
-		}finally {
-			if (db != null) {
-				db.endTransaction();
-				db.close();
-			}
-			if (mCallback != null) {
-				mCallback.onHistoryClear(isSuccess);
+		synchronized (mLock) {
+			SQLiteDatabase db = null;
+			boolean isSuccess = false;
+			try {
+				db = mHelper.getWritableDatabase();
+				db.beginTransaction();
+				db.delete(Constants.HISTORY_TB_NAME, null, null);
+				db.setTransactionSuccessful();
+				isSuccess = true;
+			} catch (Exception e) {
+				e.printStackTrace();
+				isSuccess = false;
+			} finally {
+				if (db != null) {
+					db.endTransaction();
+					db.close();
+				}
+				if (mCallback != null) {
+					mCallback.onHistoryClear(isSuccess);
+				}
 			}
 		}
 	}

@@ -20,7 +20,7 @@ import android.widget.Toast;
 
 import com.example.new_fmredioplayer.adapters.DetailListAdpater;
 import com.example.new_fmredioplayer.base.BaseActivity;
-import com.example.new_fmredioplayer.base.baseApplication;
+import com.example.new_fmredioplayer.base.BaseApplication;
 import com.example.new_fmredioplayer.interfaces.IAlbumDetailViewCallBack;
 import com.example.new_fmredioplayer.interfaces.IPlayerCallback;
 import com.example.new_fmredioplayer.interfaces.ISubscriptionCallback;
@@ -236,7 +236,7 @@ public class DetailActivity extends BaseActivity implements IAlbumDetailViewCall
 			public void onRefresh(TwinklingRefreshLayout refreshLayout) {
 				super.onRefresh(refreshLayout);
 
-				baseApplication.getHandler().postDelayed(new Runnable() {
+				BaseApplication.getHandler().postDelayed(new Runnable() {
 					@Override
 					public void run() {
 						Toast.makeText(DetailActivity.this,"下拉刷新成功 ...",Toast.LENGTH_SHORT).show();

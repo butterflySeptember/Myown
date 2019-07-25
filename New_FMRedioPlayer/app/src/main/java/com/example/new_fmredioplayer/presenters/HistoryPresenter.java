@@ -1,5 +1,7 @@
 package com.example.new_fmredioplayer.presenters;
 
+import android.nfc.Tag;
+
 import com.example.new_fmredioplayer.base.BaseApplication;
 import com.example.new_fmredioplayer.data.HistoryDao;
 import com.example.new_fmredioplayer.data.IHistoryDao;
@@ -7,6 +9,7 @@ import com.example.new_fmredioplayer.data.IHistoryDaoCallback;
 import com.example.new_fmredioplayer.interfaces.IHistoryCallback;
 import com.example.new_fmredioplayer.interfaces.IHistoryPresenter;
 import com.example.new_fmredioplayer.utils.Constants;
+import com.example.new_fmredioplayer.utils.LogUtils;
 import com.ximalaya.ting.android.opensdk.model.track.Track;
 
 import java.util.ArrayList;
@@ -19,6 +22,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class HistoryPresenter implements IHistoryPresenter, IHistoryDaoCallback {
 
+	private static final String TAG = "HistoryPresenter";
 	private List<IHistoryCallback> mCallback = new ArrayList<IHistoryCallback>();
 	private final IHistoryDao mHistoryDao;
 	private List<Track> mCurrentHistories = null;
@@ -141,6 +145,7 @@ public class HistoryPresenter implements IHistoryPresenter, IHistoryDaoCallback 
 	@Override
 	public void onHistoryLoaded(final List<Track> trackList) {
 		this.mCurrentHistories = trackList;
+		LogUtils.d(TAG,"trackList size -- >" + mCurrentHistories.size());
 		BaseApplication.getHandler().post(new Runnable() {
 			@Override
 			public void run() {
