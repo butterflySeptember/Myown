@@ -1,5 +1,6 @@
 package com.example.new_fmredioplayer.fragments;
 
+import android.content.Intent;
 import android.graphics.Rect;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,12 +10,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import com.example.new_fmredioplayer.PlayerActivity;
 import com.example.new_fmredioplayer.R;
 import com.example.new_fmredioplayer.adapters.DetailListAdpater;
 import com.example.new_fmredioplayer.base.BaseApplication;
 import com.example.new_fmredioplayer.base.BaseFragment;
 import com.example.new_fmredioplayer.interfaces.IHistoryCallback;
 import com.example.new_fmredioplayer.presenters.HistoryPresenter;
+import com.example.new_fmredioplayer.presenters.PlayPresenter;
 import com.example.new_fmredioplayer.views.UILoader;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
 import com.ximalaya.ting.android.opensdk.model.track.Track;
@@ -23,7 +26,7 @@ import net.lucode.hackware.magicindicator.buildins.UIUtil;
 
 import java.util.List;
 
-public class HistoryFragment extends BaseFragment implements IHistoryCallback {
+public class HistoryFragment extends BaseFragment implements IHistoryCallback, DetailListAdpater.ItemClickListener {
 
 	private UILoader mUiLoader;
 	private DetailListAdpater mDetailListAdpater;
@@ -73,6 +76,7 @@ public class HistoryFragment extends BaseFragment implements IHistoryCallback {
 		});
 		//设置适配器
 		mDetailListAdpater = new DetailListAdpater();
+		mDetailListAdpater.setItemClickListener(this);
 		historyList.setAdapter(mDetailListAdpater);
 		return successView;
 	}
@@ -92,5 +96,15 @@ public class HistoryFragment extends BaseFragment implements IHistoryCallback {
 			mDetailListAdpater.setData(tracks);
 		}
 		mUiLoader.updateStatus(UILoader.UIStatus.SUCCESS);
+	}
+
+	@Override
+	public void onItemClick(List<Track> detailData, int position) {
+		//设置播放器的数据
+		PlayPresenter playPresenter = PlayPresenter.getPlayPresenter();
+		playPresenter.setPlayList(detailData,position);
+		//跳转到播放器界面
+		Intent intent = new Intent(getActivity(), PlayerActivity.class);
+		startActivity(intent);
 	}
 }

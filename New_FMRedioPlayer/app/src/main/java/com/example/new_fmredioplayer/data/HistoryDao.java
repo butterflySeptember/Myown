@@ -3,9 +3,11 @@ package com.example.new_fmredioplayer.data;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.nfc.tech.IsoDep;
 
 import com.example.new_fmredioplayer.base.BaseApplication;
 import com.example.new_fmredioplayer.utils.Constants;
+import com.example.new_fmredioplayer.utils.LogUtils;
 import com.ximalaya.ting.android.opensdk.model.track.Track;
 
 import java.util.ArrayList;
@@ -13,6 +15,7 @@ import java.util.List;
 
 public class HistoryDao implements IHistoryDao{
 
+	private static final String TAG = "HistoryDao";
 	private final XimalayaDBHelper mHelper;
 	private IHistoryDaoCallback mCallback = null;
 	private Object mLock = new Object();
@@ -33,6 +36,10 @@ public class HistoryDao implements IHistoryDao{
 			boolean isSuccess = false;
 			try {
 				db = mHelper.getWritableDatabase();
+				//先删除重复数据
+				int idDelete = db.delete(Constants.HISTORY_TB_NAME, Constants.HISTORY_TRACK_ID + "=?", new String[]{track.getDataId() + ""});
+				LogUtils.d(TAG,"delete result -- > " + idDelete);
+				//添加数据
 				db.beginTransaction();
 				ContentValues values = new ContentValues();
 
@@ -72,7 +79,7 @@ public class HistoryDao implements IHistoryDao{
 				db = mHelper.getWritableDatabase();
 				db.beginTransaction();
 				//删除数据
-				int delete = db.delete(Constants.HISTORY_TB_NAME, Constants.HISTORY_ID + "=?", new String[]{track.getDataId() + ""});
+				int delete = db.delete(Constants.HISTORY_TB_NAME, Constants.HISTORY_TRACK_ID + "=?", new String[]{track.getDataId() + ""});
 				db.setTransactionSuccessful();
 				isSuccess = true;
 			} catch (Exception e) {
