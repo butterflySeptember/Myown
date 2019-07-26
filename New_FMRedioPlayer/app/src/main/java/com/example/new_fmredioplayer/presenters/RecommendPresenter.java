@@ -31,6 +31,7 @@ public class RecommendPresenter implements IRecommendPresenter {
 
 	private static RecommendPresenter sInstance = null;
 	private List<Album> mCurrentRecommend = null;
+	private List<Album> mAlbumList;
 
 	/**
 	 *获取当前推荐专辑
@@ -62,6 +63,11 @@ public class RecommendPresenter implements IRecommendPresenter {
 		//获取推荐内容
 		//封装参数
 		//显示加载界面
+		if (mAlbumList != null && mAlbumList.size() >0) {
+			LogUtils.d(TAG,"getRecommendList -- > from list");
+			handlerRecommendResult(mAlbumList);
+			return;
+		}
 		updateLoading();
 		XimalayaFMApi ximalayaFMApi = XimalayaFMApi.getXimalayaFMApi();
 
@@ -71,13 +77,14 @@ public class RecommendPresenter implements IRecommendPresenter {
 				LogUtils.d(TAG,"thread name -->" + Thread.currentThread().getName());
 				//数据获取成功
 				if (gussLikeAlbumList != null) {
-					List<Album> albumList = gussLikeAlbumList.getAlbumList();
-					if (albumList != null) {
-						LogUtils.d(TAG,"size -->" + albumList.size());
+					mAlbumList = gussLikeAlbumList.getAlbumList();
+					if (mAlbumList != null) {
+						LogUtils.d(TAG,"size -->" + mAlbumList.size());
 					}
 					//更新UI
 					//upRecommendUI(albumList);
-					handlerRecommendResult(albumList);
+					LogUtils.d(TAG."getRecommendList -- > from network ...");
+					handlerRecommendResult(mAlbumList);
 				}
 	}
 

@@ -13,8 +13,8 @@ import android.widget.Toast;
 import com.example.new_fmredioplayer.DetailActivity;
 import com.example.new_fmredioplayer.R;
 import com.example.new_fmredioplayer.adapters.AlbumListAdapter;
+import com.example.new_fmredioplayer.base.BaseApplication;
 import com.example.new_fmredioplayer.base.BaseFragment;
-import com.example.new_fmredioplayer.base.baseApplication;
 import com.example.new_fmredioplayer.interfaces.IRecommendViewCallback;
 import com.example.new_fmredioplayer.presenters.AlbumDetialPresenter;
 import com.example.new_fmredioplayer.presenters.RecommendPresenter;
@@ -161,6 +161,6 @@ public class RecommendFragment extends BaseFragment implements IRecommendViewCal
 	@Override
 	public void onAlbumItemLongClick(Album album) {
 		//处理订阅界面item长按事件
-		Toast .makeText(baseApplication.getAppContext(),"长按订阅item",Toast.LENGTH_SHORT).show();
+		Toast .makeText(BaseApplication.getAppContext(),"长按订阅item",Toast.LENGTH_SHORT).show();
 	}
 }

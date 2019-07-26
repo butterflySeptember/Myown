@@ -12,8 +12,6 @@ import com.example.new_fmredioplayer.R;
 
 import com.ximalaya.ting.android.opensdk.model.track.Track;
 
-import org.w3c.dom.Text;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +22,7 @@ public class DetailListAdpater extends RecyclerView.Adapter<DetailListAdpater.In
 	//格式化时间
 	private SimpleDateFormat mSimpleDateFormat = new SimpleDateFormat("yyyy_MM_dd");
 	private ItemClickListener mItemClickListener = null;
+	private ItemLongClickListener mItemLongClickListener = null;
 
 	@NonNull
 	@Override
@@ -48,7 +47,7 @@ public class DetailListAdpater extends RecyclerView.Adapter<DetailListAdpater.In
 		TextView updateDateTv = itemView.findViewById(R.id.detail_item_update_time);
 
 		//设置数据
-		Track track = mDetailData.get(position);
+		final Track track = mDetailData.get(position);
 		orderTv.setText((position + 1) +"");
 		titleTv.setText(track.getTrackTitle());
 		playCountTv.setText(track.getPlayCount()+ "");
@@ -65,6 +64,16 @@ public class DetailListAdpater extends RecyclerView.Adapter<DetailListAdpater.In
 					//添加参数：列表位置
 					mItemClickListener.onItemClick(mDetailData,position);
 				}
+			}
+		});
+
+		itemView.setOnLongClickListener(new View.OnLongClickListener() {
+			@Override
+			public boolean onLongClick(View v) {
+				if (mItemLongClickListener != null) {
+					mItemLongClickListener.onItemLongClickListener(track);
+				}
+				return true;
 			}
 		});
 	}
@@ -95,5 +104,13 @@ public class DetailListAdpater extends RecyclerView.Adapter<DetailListAdpater.In
 
 	public interface ItemClickListener{
 		void onItemClick(List<Track> detailData, int position);
+	}
+
+	public void setItemLongClickListener(ItemLongClickListener listener){
+		this.mItemLongClickListener = listener;
+	}
+
+	public interface ItemLongClickListener{
+		void onItemLongClickListener(Track track);
 	}
 }

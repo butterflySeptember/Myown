@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import com.example.new_fmredioplayer.PlayerActivity;
 import com.example.new_fmredioplayer.R;
@@ -18,6 +19,7 @@ import com.example.new_fmredioplayer.base.BaseFragment;
 import com.example.new_fmredioplayer.interfaces.IHistoryCallback;
 import com.example.new_fmredioplayer.presenters.HistoryPresenter;
 import com.example.new_fmredioplayer.presenters.PlayPresenter;
+import com.example.new_fmredioplayer.views.ConfirmCheckBoxDialog;
 import com.example.new_fmredioplayer.views.UILoader;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
 import com.ximalaya.ting.android.opensdk.model.track.Track;
@@ -26,19 +28,28 @@ import net.lucode.hackware.magicindicator.buildins.UIUtil;
 
 import java.util.List;
 
-public class HistoryFragment extends BaseFragment implements IHistoryCallback, DetailListAdpater.ItemClickListener {
+public class HistoryFragment extends BaseFragment implements IHistoryCallback, DetailListAdpater.ItemClickListener, DetailListAdpater.ItemLongClickListener, ConfirmCheckBoxDialog.onDialogActionClickListener {
 
 	private UILoader mUiLoader;
 	private DetailListAdpater mDetailListAdpater;
 	private HistoryPresenter mHistoryPresenter;
+	private Track mCurrentHistory = null;
 
-	public View onSubViewLoaded(LayoutInflater layoutInflater, ViewGroup container){
+	public View onSubViewLoaded(final LayoutInflater layoutInflater, ViewGroup container){
 		FrameLayout rootView = (FrameLayout) layoutInflater.inflate(R.layout.fragment_history, container, false);
-		if (mUiLoader != null) {
+		if (mUiLoader == null) {
 			mUiLoader = new UILoader(BaseApplication.getAppContext()) {
 				@Override
 				protected View getSuccessView(ViewGroup container) {
 					return createSuccessView(container);
+				}
+
+				@Override
+				protected View getEmptyView() {
+					View emptyView = layoutInflater.from(getContext()).inflate(R.layout.fragment_empty_view, this, false);
+					TextView emptyTipsTv = emptyView.findViewById(R.id.empty_tips_tv);
+					emptyTipsTv.setText("没有历史内容");
+					return emptyView;
 				}
 			};
 		}else {
@@ -77,6 +88,7 @@ public class HistoryFragment extends BaseFragment implements IHistoryCallback, D
 		//设置适配器
 		mDetailListAdpater = new DetailListAdpater();
 		mDetailListAdpater.setItemClickListener(this);
+		mDetailListAdpater.setItemLongClickListener(this);
 		historyList.setAdapter(mDetailListAdpater);
 		return successView;
 	}
@@ -91,11 +103,15 @@ public class HistoryFragment extends BaseFragment implements IHistoryCallback, D
 
 	@Override
 	public void onHistoriesLoaded(List<Track> tracks) {
-		//更新数据
-		if (mDetailListAdpater != null) {
-			mDetailListAdpater.setData(tracks);
+		if (tracks == null && tracks.size() == 0) {
+			mUiLoader.updateStatus(UILoader.UIStatus.EMPTY);
+		}else {
+			//更新数据
+			if (mDetailListAdpater != null) {
+				mDetailListAdpater.setData(tracks);
+			}
+			mUiLoader.updateStatus(UILoader.UIStatus.SUCCESS);
 		}
-		mUiLoader.updateStatus(UILoader.UIStatus.SUCCESS);
 	}
 
 	@Override
@@ -107,4 +123,37 @@ public class HistoryFragment extends BaseFragment implements IHistoryCallback, D
 		Intent intent = new Intent(getActivity(), PlayerActivity.class);
 		startActivity(intent);
 	}
+
+	@Override
+	public void onItemLongClickListener(Track track) {
+		this.mCurrentHistory = track;
+		//长按删除历史
+		ConfirmCheckBoxDialog dialog = new ConfirmCheckBoxDialog(getActivity());
+		//设置弹出框点击事件
+		dialog.setOnDialogActionClickListener(this);
+		dialog.show();
+	}
+
+	@Override
+	public void onCancelSubClick() {
+		//取消
+	}
+
+	@Override
+	public void onConfirmClick(boolean checked) {
+		//确定
+		if (checked) {
+			//删除全部历史
+			if (mHistoryPresenter != null) {
+				mHistoryPresenter.cleanHistories();
+			}
+		}else {
+			//删除选中该专辑
+			if (mHistoryPresenter != null && mCurrentHistory != null) {
+				mHistoryPresenter.delHistory(mCurrentHistory);
+			}
+		}
+	}
+
+
 }
