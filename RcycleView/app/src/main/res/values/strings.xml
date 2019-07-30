@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">RcycleView</string>
+    <string name="recycle_view_demo">RecycleView效果展示</string>
+</resources>
