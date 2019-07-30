@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.example.new_fmredioplayer.R;
 import com.example.new_fmredioplayer.adapters.PlayListAdpater;
-import com.example.new_fmredioplayer.base.baseApplication;
+import com.example.new_fmredioplayer.base.BaseApplication;
 import com.ximalaya.ting.android.opensdk.model.track.Track;
 import com.ximalaya.ting.android.opensdk.player.service.XmPlayListControl;
 
@@ -43,7 +43,7 @@ public class SubPopWindow extends PopupWindow {
 		setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 		setOutsideTouchable(true);
 		//载入View
-		mPopView = LayoutInflater.from(baseApplication.getAppContext()).inflate(R.layout.player_pop_window, null);
+		mPopView = LayoutInflater.from(BaseApplication.getAppContext()).inflate(R.layout.player_pop_window, null);
 		//设置内容
 		setContentView(mPopView);
 		//设置窗口动画
@@ -85,7 +85,7 @@ public class SubPopWindow extends PopupWindow {
 		mCloseBtn = mPopView.findViewById(R.id.close_list_btn);
 		mTrackList = mPopView.findViewById(R.id.play_list_rv);
 		//设置布局管理器
-		LinearLayoutManager layoutManager = new LinearLayoutManager(baseApplication.getAppContext());
+		LinearLayoutManager layoutManager = new LinearLayoutManager(BaseApplication.getAppContext());
 		mTrackList.setLayoutManager(layoutManager);
 		//设置适配器
 		mPlayListAdpater = new PlayListAdpater();

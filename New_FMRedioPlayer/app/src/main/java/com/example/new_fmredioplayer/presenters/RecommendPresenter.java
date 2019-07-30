@@ -3,17 +3,11 @@ package com.example.new_fmredioplayer.presenters;
 import android.support.annotation.Nullable;
 
 import com.example.new_fmredioplayer.data.XimalayaFMApi;
-import com.example.new_fmredioplayer.fragments.RecommendFragment;
 import com.example.new_fmredioplayer.interfaces.IRecommendPresenter;
 import com.example.new_fmredioplayer.interfaces.IRecommendViewCallback;
-import com.example.new_fmredioplayer.interfaces.ISearchCallback;
-import com.example.new_fmredioplayer.utils.Constants;
 import com.example.new_fmredioplayer.utils.LogUtils;
-import com.ximalaya.ting.android.opensdk.constants.DTransferConstants;
-import com.ximalaya.ting.android.opensdk.datatrasfer.CommonRequest;
 import com.ximalaya.ting.android.opensdk.datatrasfer.IDataCallBack;
 import com.ximalaya.ting.android.opensdk.model.album.Album;
-import com.ximalaya.ting.android.opensdk.model.album.AlbumList;
 import com.ximalaya.ting.android.opensdk.model.album.GussLikeAlbumList;
 
 import java.util.ArrayList;
@@ -83,7 +77,7 @@ public class RecommendPresenter implements IRecommendPresenter {
 					}
 					//更新UI
 					//upRecommendUI(albumList);
-					LogUtils.d(TAG."getRecommendList -- > from network ...");
+					LogUtils.d(TAG,"getRecommendList -- > from network ...");
 					handlerRecommendResult(mAlbumList);
 				}
 	}
