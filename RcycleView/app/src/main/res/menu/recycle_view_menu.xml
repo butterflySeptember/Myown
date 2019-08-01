@@ -8,8 +8,14 @@
                 android:id="@+id/list_view_vertical_stander"
                 android:title="垂直标准" />
             <item
+                android:id="@+id/list_view_vertical_reverse"
+                android:title="垂直反向" />
+            <item
                 android:id="@+id/list_view_horizontal_stander"
                 android:title="水平标准" />
+            <item
+                android:id="@+id/list_view_horizontal_reverse"
+                android:title="水平反向" />
         </menu>
     </item>
 
@@ -21,8 +27,14 @@
                 android:id="@+id/gird_view_vertical_stander"
                 android:title="垂直标准" />
             <item
+                android:id="@+id/gird_view_vertical_reverse"
+                android:title="垂直反向" />
+            <item
                 android:id="@+id/gird_view_horizontal_stander"
                 android:title="水平标准" />
+            <item
+                android:id="@+id/gird_view_horizontal_reverse"
+                android:title="水平反向" />
         </menu>
     </item>
 
@@ -34,8 +46,14 @@
                 android:id="@+id/stagger_view_vertical_stander"
                 android:title="垂直标准" />
             <item
+                android:id="@+id/stagger_view_vertical_reverse"
+                android:title="垂直反向" />
+            <item
                 android:id="@+id/stagger_view_horizontal_stander"
                 android:title="水平标准" />
+            <item
+                android:id="@+id/stagger_view_horizontal_reverse"
+                android:title="水平反向" />
         </menu>
     </item>
 
