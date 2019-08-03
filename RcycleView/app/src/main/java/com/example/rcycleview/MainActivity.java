@@ -4,12 +4,13 @@ import android.content.ClipData;
 import android.graphics.Canvas;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
+import com.example.rcycleview.adapter.GridViewAdapter;
 import com.example.rcycleview.adapter.ListViewAdapter;
 import com.example.rcycleview.beans.Datas;
 import com.example.rcycleview.beans.ItemBean;
@@ -44,7 +45,8 @@ public class MainActivity extends AppCompatActivity {
 			//创建数据对象
 			ItemBean data = new ItemBean();
 			data.icon = Datas.icons[i];
-			data.title = "我是第" + i+1  + "个条目";
+			int j = i+1;
+			data.title = "我是第" + j  + "个条目";
 			//添加到集合
 			mData.add(data);
 		}
@@ -81,12 +83,16 @@ public class MainActivity extends AppCompatActivity {
 
 			//girdView效果
 			case R.id.gird_view_vertical_stander:
+				showGrid(true,false);
 				break;
 			case R.id.gird_view_vertical_reverse:
+				showGrid(true,true);
 				break;
 			case R.id.gird_view_horizontal_stander:
+				showGrid(false,false);
 				break;
 			case R.id.gird_view_horizontal_reverse:
+				showGrid(false,true);
 				break;
 
 			//瀑布流效果
@@ -105,15 +111,31 @@ public class MainActivity extends AppCompatActivity {
 	}
 
 	/**
+	 * 这个方法用于实现GridView效果
+	 */
+	private void showGrid(boolean isVertical,boolean isReverse) {
+		//设置布局管理器
+		GridLayoutManager gridLayoutManager = new GridLayoutManager(this,2);
+		//设置布局管理器属性
+		gridLayoutManager.setOrientation(isVertical ? GridLayoutManager.VERTICAL : GridLayoutManager.HORIZONTAL);
+		gridLayoutManager.setReverseLayout(isReverse);
+		mListView.setLayoutManager(gridLayoutManager);
+		//设置适配器
+		GridViewAdapter gridViewAdapter = new GridViewAdapter(mData);
+		mListView.setAdapter(gridViewAdapter);
+	}
+
+	/**
 	 * 这个方法用于实现listView效果
 	 */
 	private void showList(boolean isVertical,boolean isReverse) {
 		//设置布局管理器
 		LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-		mListView.setLayoutManager(linearLayoutManager);
 		//设置布局管理器的属性，控制显示方式
 		linearLayoutManager.setOrientation(isVertical ? LinearLayoutManager.VERTICAL : LinearLayoutManager.HORIZONTAL );
 		linearLayoutManager.setReverseLayout(isReverse);
+
+		mListView.setLayoutManager(linearLayoutManager);
 		//设置适配器
 		ListViewAdapter listViewAdapter = new ListViewAdapter(mData);
 		mListView.setAdapter(listViewAdapter);
