@@ -1,6 +1,7 @@
 package com.example.rcycleview;
 
 import android.content.ClipData;
+import android.graphics.Canvas;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -28,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
 		mListView = this.findViewById(R.id.recycle_view);
 		//模拟数据
 		initData();
+		//默认显示为ListView效果
+		showList(true,false);
 	}
 
 	/**
@@ -41,16 +44,11 @@ public class MainActivity extends AppCompatActivity {
 			//创建数据对象
 			ItemBean data = new ItemBean();
 			data.icon = Datas.icons[i];
-			data.title = "我是第" + i + "个条目";
+			data.title = "我是第" + i+1  + "个条目";
 			//添加到集合
 			mData.add(data);
 		}
-		//设置布局管理器
-		LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-		mListView.setLayoutManager(linearLayoutManager);
-		//设置适配器
-		ListViewAdapter listViewAdapter = new ListViewAdapter(mData);
-		mListView.setAdapter(listViewAdapter);
+
 	}
 
 	@Override
@@ -69,12 +67,16 @@ public class MainActivity extends AppCompatActivity {
 
 			//listView效果
 			case R.id.list_view_vertical_stander:
+				showList(true,false);
 				break;
 			case R.id.list_view_vertical_reverse:
+				showList(true,true);
 				break;
 			case R.id.list_view_horizontal_stander:
+				showList(false,false);
 				break;
 			case R.id.list_view_horizontal_reverse:
+				showList(false,true);
 				break;
 
 			//girdView效果
@@ -100,5 +102,20 @@ public class MainActivity extends AppCompatActivity {
 		}
 
 		return super.onOptionsItemSelected(item);
+	}
+
+	/**
+	 * 这个方法用于实现listView效果
+	 */
+	private void showList(boolean isVertical,boolean isReverse) {
+		//设置布局管理器
+		LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+		mListView.setLayoutManager(linearLayoutManager);
+		//设置布局管理器的属性，控制显示方式
+		linearLayoutManager.setOrientation(isVertical ? LinearLayoutManager.VERTICAL : LinearLayoutManager.HORIZONTAL );
+		linearLayoutManager.setReverseLayout(isReverse);
+		//设置适配器
+		ListViewAdapter listViewAdapter = new ListViewAdapter(mData);
+		mListView.setAdapter(listViewAdapter);
 	}
 }
