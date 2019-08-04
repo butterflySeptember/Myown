@@ -7,11 +7,13 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.rcycleview.adapter.GridViewAdapter;
 import com.example.rcycleview.adapter.ListViewAdapter;
+import com.example.rcycleview.adapter.StaggerAapter;
 import com.example.rcycleview.beans.Datas;
 import com.example.rcycleview.beans.ItemBean;
 
@@ -97,17 +99,36 @@ public class MainActivity extends AppCompatActivity {
 
 			//瀑布流效果
 			case R.id.stagger_view_vertical_stander:
+				showStagger(true,false);
 				break;
 			case R.id.stagger_view_vertical_reverse:
+				showStagger(true,true);
 				break;
 			case R.id.stagger_view_horizontal_stander:
+				showStagger(false,false);
 				break;
 			case R.id.stagger_view_horizontal_reverse:
+				showStagger(false,true);
 				break;
 
 		}
 
 		return super.onOptionsItemSelected(item);
+	}
+
+	/**
+	 * 此方法用于实现瀑布流效果
+	 */
+	private void showStagger(boolean isVertical,boolean isReverse) {
+		//准备布局管理器
+		StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, isVertical ? StaggeredGridLayoutManager.VERTICAL :
+				StaggeredGridLayoutManager.HORIZONTAL);
+		//设置布局管理器方向
+		staggeredGridLayoutManager.setReverseLayout(isReverse);
+		mListView.setLayoutManager(staggeredGridLayoutManager);
+		//设置适配器
+		StaggerAapter staggerAapter = new StaggerAapter(mData);
+		mListView.setAdapter(staggerAapter);
 	}
 
 	/**
