@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/item_three_image_layout"
+        android:layout_width="match_parent"
+        android:layout_height="170dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/item_three_image_icon_first"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="10dp"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/pic_01" />
+
+        <ImageView
+            android:id="@+id/item_three_image_icon_second"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="10dp"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/pic_02" />
+
+        <ImageView
+            android:id="@+id/item_three_image_icon_third"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="10dp"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/pic_03" />
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/item_three_image_layout"
+        android:layout_centerHorizontal="true"
+        android:maxLines="1"
+        android:text="我是标题"
+        android:textSize="20sp" />
+</RelativeLayout>

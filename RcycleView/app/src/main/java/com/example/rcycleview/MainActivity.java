@@ -1,6 +1,7 @@
 package com.example.rcycleview;
 
 import android.content.ClipData;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -122,6 +123,13 @@ public class MainActivity extends AppCompatActivity {
 				break;
 			case R.id.stagger_view_horizontal_reverse:
 				showStagger(false,true);
+				break;
+
+				//多种条目类型
+			case R.id.mot_type:
+				//打开新的Activity
+				Intent intent = new Intent(this,MoreTypeActivity.class);
+				startActivity(intent);
 				break;
 
 		}
