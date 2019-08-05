@@ -15,6 +15,7 @@ import java.util.List;
 public abstract class RecycleViewBaseAdapter extends RecyclerView.Adapter<RecycleViewBaseAdapter.InnerHolder> {
 
 	private final List<ItemBean> mData;
+	private OnItemClickListener mOnItemClickListener;
 
 	public RecycleViewBaseAdapter(List<ItemBean> data){
 		this.mData = data;
@@ -38,7 +39,7 @@ public abstract class RecycleViewBaseAdapter extends RecyclerView.Adapter<Recycl
 	 */
 	public void onBindViewHolder(ListViewAdapter.InnerHolder innerHolder, int position) {
 		//设置数据
-		innerHolder.setData(mData.get(position));
+		innerHolder.setData(mData.get(position),position);
 	}
 
 	/**
@@ -53,19 +54,40 @@ public abstract class RecycleViewBaseAdapter extends RecyclerView.Adapter<Recycl
 		return 0;
 	}
 
+	//设置点击事件
+	public void setOnItemClickListener(OnItemClickListener listener){
+		//设置监听
+		this.mOnItemClickListener = listener;
+	}
+
+	public interface OnItemClickListener{
+
+		void OnItemClick(int position);
+	}
+
 	public class InnerHolder extends RecyclerView.ViewHolder {
 		private final ImageView mIcon;
 		private final TextView mTitle;
+		private int mPosition;
 
 		public InnerHolder(@NonNull View itemView) {
 			super(itemView);
 			//初始化控件
 			mIcon = itemView.findViewById(R.id.view_icon);
 			mTitle = itemView.findViewById(R.id.view_title);
+			itemView.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					if (mOnItemClickListener != null) {
+						mOnItemClickListener.OnItemClick(mPosition);
+					}
+				}
+			});
 		}
 
 		//设置数据
-		public void setData(ItemBean itemBean) {
+		public void setData(ItemBean itemBean,int position) {
+			this.mPosition = position;
 			mIcon.setImageResource(itemBean.icon);
 			mTitle.setText(itemBean.title);
 		}

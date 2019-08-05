@@ -10,9 +10,11 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.rcycleview.adapter.GridViewAdapter;
 import com.example.rcycleview.adapter.ListViewAdapter;
+import com.example.rcycleview.adapter.RecycleViewBaseAdapter;
 import com.example.rcycleview.adapter.StaggerAapter;
 import com.example.rcycleview.beans.Datas;
 import com.example.rcycleview.beans.ItemBean;
@@ -24,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
 	private List<ItemBean> mData;
 	private RecyclerView mListView;
+	private RecycleViewBaseAdapter mAdapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +37,16 @@ public class MainActivity extends AppCompatActivity {
 		initData();
 		//默认显示为ListView效果
 		showList(true,false);
+
+	}
+
+	private void initEvent() {
+		mAdapter.setOnItemClickListener(new RecycleViewBaseAdapter.OnItemClickListener() {
+			@Override
+			public void OnItemClick(int position) {
+				Toast.makeText(MainActivity.this,"你点击了第" + position +"个条目", Toast.LENGTH_SHORT).show();
+			}
+		});
 	}
 
 	/**
@@ -127,8 +140,10 @@ public class MainActivity extends AppCompatActivity {
 		staggeredGridLayoutManager.setReverseLayout(isReverse);
 		mListView.setLayoutManager(staggeredGridLayoutManager);
 		//设置适配器
-		StaggerAapter staggerAapter = new StaggerAapter(mData);
-		mListView.setAdapter(staggerAapter);
+		mAdapter = new StaggerAapter(mData);
+		mListView.setAdapter(mAdapter);
+		//设置点击事件
+		initEvent();
 	}
 
 	/**
@@ -142,8 +157,10 @@ public class MainActivity extends AppCompatActivity {
 		gridLayoutManager.setReverseLayout(isReverse);
 		mListView.setLayoutManager(gridLayoutManager);
 		//设置适配器
-		GridViewAdapter gridViewAdapter = new GridViewAdapter(mData);
-		mListView.setAdapter(gridViewAdapter);
+		mAdapter = new GridViewAdapter(mData);
+		mListView.setAdapter(mAdapter);
+		//设置点击事件
+		initEvent();
 	}
 
 	/**
@@ -158,7 +175,9 @@ public class MainActivity extends AppCompatActivity {
 
 		mListView.setLayoutManager(linearLayoutManager);
 		//设置适配器
-		ListViewAdapter listViewAdapter = new ListViewAdapter(mData);
-		mListView.setAdapter(listViewAdapter);
+		mAdapter = new ListViewAdapter(mData);
+		mListView.setAdapter(mAdapter);
+		//设置点击事件
+		initEvent();
 	}
 }
