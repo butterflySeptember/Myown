@@ -12,7 +12,7 @@ import com.example.rcycleview.beans.ItemBean;
 
 import java.util.List;
 
-public abstract class RecycleViewBaseAdapter extends RecyclerView.Adapter<RecycleViewBaseAdapter.InnerHolder> {
+public abstract class RecycleViewBaseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 	private final List<ItemBean> mData;
 	private OnItemClickListener mOnItemClickListener;
@@ -23,7 +23,7 @@ public abstract class RecycleViewBaseAdapter extends RecyclerView.Adapter<Recycl
 
 	@NonNull
 	@Override
-	public InnerHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+	public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
 
 		View view = getSubView(viewGroup,i);
 
@@ -37,9 +37,9 @@ public abstract class RecycleViewBaseAdapter extends RecyclerView.Adapter<Recycl
 	 * @param innerHolder
 	 * @param position
 	 */
-	public void onBindViewHolder(ListViewAdapter.InnerHolder innerHolder, int position) {
+	public void onBindViewHolder(RecyclerView.ViewHolder innerHolder, int position) {
 		//设置数据
-		innerHolder.setData(mData.get(position),position);
+		((InnerHolder)innerHolder).setData(mData.get(position),position);
 	}
 
 	/**

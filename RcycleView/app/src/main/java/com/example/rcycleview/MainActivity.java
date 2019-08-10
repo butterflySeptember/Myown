@@ -3,6 +3,8 @@ package com.example.rcycleview;
 import android.content.ClipData;
 import android.content.Intent;
 import android.graphics.Canvas;
+import android.os.Handler;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -28,17 +30,45 @@ public class MainActivity extends AppCompatActivity {
 	private List<ItemBean> mData;
 	private RecyclerView mListView;
 	private RecycleViewBaseAdapter mAdapter;
+	private SwipeRefreshLayout mSwipeRefreshLayout;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		mListView = this.findViewById(R.id.recycle_view);
+		mSwipeRefreshLayout = this.findViewById(R.id.refresh_layout);
 		//模拟数据
 		initData();
 		//默认显示为ListView效果
 		showList(true,false);
 
+		//处理下拉刷新
+		handlerDownPullUpdate();
+
+	}
+
+	private void handlerDownPullUpdate() {
+		//设置开始刷新
+		mSwipeRefreshLayout.setEnabled(true);
+		mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+			@Override
+			public void onRefresh() {
+				//添加刷新数据
+				ItemBean itemBean = new ItemBean();
+				itemBean.title = "我是新添加的数据";
+				itemBean.icon = R.mipmap.pic_09;
+				//确定数据添加的位置和添加的数据
+				mData.add(0,itemBean);
+				new Handler().postDelayed(new Runnable() {
+					@Override
+					public void run() {
+						mAdapter.notifyDataSetChanged();
+						mSwipeRefreshLayout.setEnabled(false);
+					}
+				},2000);
+			}
+		});
 	}
 
 	private void initEvent() {
