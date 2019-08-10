@@ -14,7 +14,7 @@ import java.util.List;
 
 public abstract class RecycleViewBaseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-	private final List<ItemBean> mData;
+	protected final List<ItemBean> mData;
 	private OnItemClickListener mOnItemClickListener;
 
 	public RecycleViewBaseAdapter(List<ItemBean> data){

@@ -1,8 +1,6 @@
 package com.example.rcycleview;
 
-import android.content.ClipData;
 import android.content.Intent;
-import android.graphics.Canvas;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -71,14 +69,49 @@ public class MainActivity extends AppCompatActivity {
 		});
 	}
 
+	/**
+	 *
+	 * 下拉加载更多数据
+	 * @param loaderMoreHolder
+	 */
+	private void handlerUpPullRefresh(final ListViewAdapter.LoaderMoreHolder loaderMoreHolder) {
+		//添加刷新数据
+		ItemBean itemBean = new ItemBean();
+		itemBean.title = "我是新添加的数据";
+		itemBean.icon = R.mipmap.pic_10;
+		//确定数据添加的位置和添加的数据
+		mData.add(itemBean);
+		new Handler().postDelayed(new Runnable() {
+			@Override
+			public void run() {
+				mAdapter.notifyDataSetChanged();
+				loaderMoreHolder.update(ListViewAdapter.LoaderMoreHolder.LOADER_STATUS_NORMAL);
+			}
+		},2000);
+	}
+
 	private void initEvent() {
+
 		mAdapter.setOnItemClickListener(new RecycleViewBaseAdapter.OnItemClickListener() {
 			@Override
 			public void OnItemClick(int position) {
 				Toast.makeText(MainActivity.this,"你点击了第" + position +"个条目", Toast.LENGTH_SHORT).show();
 			}
 		});
+
+		if (mAdapter instanceof ListViewAdapter){
+			((ListViewAdapter)mAdapter).setOnRefreshListener(new ListViewAdapter.OnRefreshListener() {
+				@Override
+				public void onUpPullRefresh(ListViewAdapter.LoaderMoreHolder loaderMoreHolder) {
+					handlerUpPullRefresh(loaderMoreHolder);
+				}
+			});
+
+		}
+
 	}
+
+
 
 	/**
 	 * 这个方法用于模拟数据
