@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">MyApplicationSQL</string>
+    <string name="login_text_id">用户名</string>
+    <string name="login_text_password">密码</string>
+</resources>
