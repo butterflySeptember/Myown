@@ -21,8 +21,13 @@ public class UserDatabaseHelper extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase db) {
 		Log.d(TAG,"SQLiteDatabase onCreate ...");
 		//创建数据库
-		String createSql = "create table user(_id integer primary key autoincrement,userName varchar(30),/" +
-				"password varchar(30),sex varchar(5),age integer";
+		String createSql = "create table "+
+				Contants.LABLE_NAME+
+				"("+Contants.LABLE_ID+" integer primary key autoincrement,"+
+				Contants.LABLE_USER_NAME+" varchar(30)," +
+				Contants.LABLE_PSAAWORD+" varchar(30),"+
+				Contants.LABLE_SEX+" varchar(5),"+
+				Contants.LABLE_AGE+" integer)";
 		db.execSQL(createSql);
 	}
 
