@@ -1,5 +1,7 @@
 package com.example.myapplicationsql.pojo;
 
+import android.text.Editable;
+
 public class User {
 	private int _id;
 
@@ -39,7 +41,7 @@ public class User {
 		return sex;
 	}
 
-	public void setSex(String sex) {
+	public void setSex(Editable sex) {
 		this.sex = sex;
 	}
 
@@ -47,7 +49,7 @@ public class User {
 		return age;
 	}
 
-	public void setAge(int age) {
+	public void setAge(Editable age) {
 		this.age = age;
 	}
 

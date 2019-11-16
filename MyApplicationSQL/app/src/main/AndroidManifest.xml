@@ -19,6 +19,7 @@
             </intent-filter>
         </activity>
         <provider
+            android:exported = "true"
             android:name="provider.UserProvider"
             android:authorities="com.example.myapplicationsql" />
     </application>

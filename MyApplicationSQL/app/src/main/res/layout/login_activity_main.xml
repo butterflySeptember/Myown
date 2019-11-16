@@ -15,6 +15,7 @@
             android:id="@+id/main_login_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/colorText"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="150dp"
             android:padding="10dp"
@@ -32,6 +33,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/colorText"
                 android:text="@string/login_text_id"
                 android:textSize="30sp" />
 
@@ -56,6 +58,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="10dp"
+                android:textColor="@color/colorText"
                 android:text="@string/login_text_password"
                 android:textSize="30sp" />
 
@@ -76,10 +79,20 @@
             android:layout_height="20dp">
 
             <CheckedTextView
+                android:id="@+id/checkbox_new_view"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:textColor="@color/colorText"
+                android:text="新建账户？"
+                android:textSize="15sp" />
+
+            <CheckedTextView
                 android:id="@+id/checkbox_forget_view"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
+                android:textColor="@color/colorText"
                 android:text="忘记密码？"
                 android:textSize="15sp" />
         </RelativeLayout>
