@@ -21,7 +21,7 @@ public class UserProvider extends ContentProvider {
 	private static UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
 	static {
-		sUriMatcher.addURI("com.example.myapplicationsql",null,USER_MATCH_CODE);
+		sUriMatcher.addURI("com.example.myapplicationsql","user",USER_MATCH_CODE);
 	}
 
 	@Override
@@ -43,8 +43,13 @@ public class UserProvider extends ContentProvider {
 			db.close();
 			return cursor;
 		}else {
-			return null;
+			try {
+				throw new IllegalAccessException("参数错误");
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			}
 		}
+		return null;
 	}
 
 	@Nullable
@@ -56,6 +61,22 @@ public class UserProvider extends ContentProvider {
 	@Nullable
 	@Override
 	public Uri insert(@NonNull Uri uri, @Nullable ContentValues values) {
+		int result = sUriMatcher.match(uri);
+		if (result == USER_MATCH_CODE){
+			SQLiteDatabase db = mUserDatabaseHelper.getWritableDatabase();
+			long id = db.insert(Contants.DB_NAME, null, values);
+			Uri resultUri = Uri.parse("content://com.example.myapplicationsql/user/id"+id);
+			//插入数据成功，数据已经变化，通知其他位置（监听
+			getContext().getContentResolver().notifyChange(resultUri,null);
+			return resultUri;
+		}else{
+			//规则不匹配
+			try {
+				throw new IllegalAccessException("参数错误");
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			}
+		}
 		return null;
 	}
 
