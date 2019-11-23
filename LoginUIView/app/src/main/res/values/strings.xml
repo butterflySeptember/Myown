@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">LoginUIView</string>
+
+    <string name="please_input_verify_code_text">请输入密码</string>
+    <string name="phone_number_input_hint_text">请输入用户名</string>
+    <string name="get_verify_code_text">点击获取验证码</string>
+    <string name="user_tbox_text">同意用户协定</string>
+    <string name="account_login_text">用户登录界面</string>
+    <string name="commit_text">登录</string>
+
+    <string name="text_1">1</string>
+    <string name="text_2">2</string>
+    <string name="text_3">3</string>
+    <string name="text_4">4</string>
+    <string name="text_5">5</string>
+    <string name="text_6">6</string>
+    <string name="text_7">7</string>
+    <string name="text_8">8</string>
+    <string name="text_9">9</string>
+    <string name="text_0">0</string>
+
+</resources>

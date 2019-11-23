@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <LinearLayout
+        android:id="@+id/login_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="42px"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="50px"
+            android:layout_height="50px"
+            android:src="@mipmap/ic_launcher"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="26px"
+            android:gravity="center_vertical"
+            android:text="@string/account_login_text"
+            android:textColor="#FD7541"
+            android:textSize="32px"/>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/login_title"
+        android:layout_marginTop="19dp"
+        android:orientation="horizontal"
+        android:paddingLeft="40px">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/phone_number_input_box"
+                android:layout_width="430px"
+                android:layout_height="60px"
+                android:background="@drawable/shape_login_input_bg"
+                android:drawableLeft="@mipmap/login_zhanghu"
+                android:drawablePadding="14px"
+                android:hint="@string/phone_number_input_hint_text"
+                android:maxLength="11"
+                android:paddingLeft="34px"
+                android:textColor="@color/white"
+                android:textSize="22px" />
+
+
+            <RelativeLayout
+                android:layout_width="430px"
+                android:layout_height="60px"
+                android:layout_marginTop="16px">
+
+                <EditText
+                    android:id="@+id/verify_code_input_box"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/shape_login_input_bg"
+                    android:drawableLeft="@mipmap/login_mima"
+                    android:drawablePadding="14px"
+                    android:hint="@string/please_input_verify_code_text"
+                    android:maxLength="8"
+                    android:paddingLeft="34px"
+                    android:textColor="@color/white"
+                    android:textSize="22px" />
+
+                <TextView
+                    android:id="@+id/get_verify_code_btn"
+                    android:layout_width="110px"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="34px"
+                    android:enabled="false"
+                    android:gravity="center"
+                    android:text="@string/get_verify_code_text"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="22px" />
+
+
+                <View
+                    android:layout_width="1px"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="9px"
+                    android:layout_marginBottom="10px"
+                    android:layout_toLeftOf="@id/get_verify_code_btn"
+                    android:background="@drawable/line_bg" />
+
+            </RelativeLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="44px"
+                android:gravity="center_vertical">
+
+                <CheckBox
+                    android:id="@+id/agree_check_box"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="22px"
+                    android:button="@drawable/selector_checkbox_button"
+                    android:checked="true"
+                    android:padding="2px" />
+
+                <TextView
+                    android:id="@+id/use_tips_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10px"
+                    android:text="@string/user_tbox_text"
+                    android:textColor="#FD7541"
+                    android:textSize="20px" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/commit_button"
+                android:layout_width="match_parent"
+                android:layout_height="60px"
+                android:layout_marginTop="18px"
+                android:background="@drawable/selector_commit_button_bg"
+                android:enabled="false"
+                android:gravity="center"
+                android:text="@string/commit_text"
+                android:textColor="@color/black"
+                android:textSize="24px" />
+        </LinearLayout>
+
+        <cn.com.sunofbeaches.loginkeypaddemo.LoginKeyboard
+            android:id="@+id/input_keypad_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="42px" />
+
+    </LinearLayout>
+
+
+</RelativeLayout>
