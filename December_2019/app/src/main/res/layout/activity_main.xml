@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <fragment
+        android:id="@+id/fragment"
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        tools:ignore="MissingConstraints" />
+
+    <fragment
+        android:id="@+id/fragment_two"
+        android:layout_width="match_parent"
+        android:layout_height="308dp"
+        app:layout_constraintTop_toBottomOf="@+id/fragment"
+        tools:ignore="MissingConstraints" />
+
+    <LinearLayout
+        android:id="@+id/linear_first"
+        android:layout_width="match_parent"
+        android:background="#264977"
+        android:layout_height="75dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_two">
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="75dp"
+            android:padding="15dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
+            android:src="@mipmap/play_mode_loop_one_normal" />
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="75dp"
+            android:padding="15dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
+            android:src="@mipmap/play_mode_loop_press" />
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="75dp"
+            android:padding="5dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1.5"
+            android:src="@mipmap/play_icon" />
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="75dp"
+            android:padding="15dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
+            android:src="@mipmap/play_mode_random_normal" />
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="75dp"
+            android:padding="15dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
+            android:src="@mipmap/sort_descending_press" />
+
+    </LinearLayout>
+
+
+</android.support.constraint.ConstraintLayout>
