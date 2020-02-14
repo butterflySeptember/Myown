@@ -7,15 +7,36 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:onClick="getRequest"
         android:text="getRequest"
-        android:textAllCaps="false"
-        android:onClick="getRequest" />
+        android:textAllCaps="false" />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:onClick="postComment"
         android:text="postComment"
-        android:textAllCaps="false"
-        android:onClick="postComment" />
+        android:textAllCaps="false" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="postFile"
+        android:text="postFile"
+        android:textAllCaps="false" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="postFiles"
+        android:text="postFiles"
+        android:textAllCaps="false" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="downloadFile"
+        android:text="downloadFile"
+        android:textAllCaps="false" />
 
 </LinearLayout>
