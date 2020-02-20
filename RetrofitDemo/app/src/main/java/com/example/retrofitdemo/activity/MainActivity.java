@@ -23,6 +23,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -53,29 +54,22 @@ public class MainActivity extends AppCompatActivity {
 	public void getRequest(View view){
 		Retrofit retrofit = new Retrofit.Builder()
 				.baseUrl(BASE_URL)
+				.addConverterFactory(GsonConverterFactory.create())
 				.build();
 		API api = retrofit.create(API.class);
-		Call<ResponseBody> task = api.getJson();
-		task.enqueue(new Callback<ResponseBody>() {
+		Call<JsonResult> task = api.getJson();
+		task.enqueue(new Callback<JsonResult>() {
 			@Override
-			public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+			public void onResponse(Call<JsonResult> call, Response<JsonResult> response) {
 				Log.d(TAG,"Response code -- >" + response.code());
 				if (response.code() == HttpURLConnection.HTTP_OK) {
-					ResponseBody body = response.body();
-					String result = body.toString();
-					try {
-						Log.d(TAG,"Response body -- > " + body.string());
-						Gson gson = new Gson();
-						JsonResult jsonResult = gson.fromJson(result, JsonResult.class);
-						updateList(jsonResult);
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
+					JsonResult body = response.body();
+					updateList(body);
 				}
 			}
 
 			@Override
-			public void onFailure(Call<ResponseBody> call, Throwable t) {
+			public void onFailure(Call<JsonResult> call, Throwable t) {
 				Log.d(TAG,"onFailure -- > " + t.toString());
 			}
 		});
