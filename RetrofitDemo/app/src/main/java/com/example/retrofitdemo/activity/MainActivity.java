@@ -1,4 +1,4 @@
-package com.example.retrofitdemo;
+package com.example.retrofitdemo.activity;
 
 import android.graphics.Canvas;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.retrofitdemo.API;
+import com.example.retrofitdemo.R;
 import com.example.retrofitdemo.adapters.itemAdapter;
 import com.example.retrofitdemo.domain.JsonResult;
 import com.google.gson.Gson;

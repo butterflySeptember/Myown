@@ -1,6 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout>
+    
+    <!--<data>
+        <variable
+            name="User"
+            type="java.com.example.december_2019.bean.UserFragment" />
+    </data>-->
 <android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="380dp">
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:textSize="30sp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:text="ID" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:textSize="30sp"
+                android:layout_weight="3"
+                android:text="@{userId}" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:textSize="30sp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:text="用户名" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:textSize="30sp"
+                android:layout_weight="3"
+                android:text="@{userName}" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:textSize="30sp"
+                android:layout_weight="1"
+                android:text="地址" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:textSize="30sp"
+                android:layout_weight="3"
+                android:text="@{userLocation}" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+
 
 </android.support.constraint.ConstraintLayout>
+</layout>
