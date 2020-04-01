@@ -21,6 +21,9 @@ public class HomePresenterImpl implements IHomePresenter {
 
 	@Override
 	public void getCategories() {
+		if (mCallback != null) {
+			mCallback.onLoading();
+		}
 		Retrofit retrofit = RetrofitManager.getInstance().getRetrofit();
 		Api api = retrofit.create(Api.class);
 		Call<Catgories> task = api.getCatgories();
@@ -31,8 +34,18 @@ public class HomePresenterImpl implements IHomePresenter {
 				int code = response.code();
 				Catgories catgories = response.body();
 				if (code == HttpURLConnection.HTTP_OK) {
+					if (mCallback != null) {
+						if (catgories == null || catgories.getData().size() == 0){
+							mCallback.onEmpty();
+						}else {
+							mCallback.onCategoriesLoad(catgories);
+						}
+					}
 					LogUtils.d(HomePresenterImpl.class,"response.body -- > " + response.toString());
 				}else {
+					if (mCallback != null) {
+						mCallback.onNetworkError();
+					}
 					LogUtils.i(HomePresenterImpl.class,"response code -- > " + code);
 				}
 				if (mCallback != null) {
@@ -42,6 +55,9 @@ public class HomePresenterImpl implements IHomePresenter {
 
 			@Override
 			public void onFailure(Call<Catgories> call, Throwable t) {
+				if (mCallback != null) {
+					mCallback.onNetworkError();
+				}
 				LogUtils.i(HomePresenterImpl.class,"onFailure -- > " + t.toString());
 			}
 		});
