@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import com.example.taobaounion.R;
 
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 
 public abstract class baseFragment extends Fragment {
@@ -30,10 +31,22 @@ public abstract class baseFragment extends Fragment {
 	private Unbinder mBind;
 	private FrameLayout mBaseContainer;
 
+	@OnClick(R.id.network_error_text)
+	public void retry(){
+		onRetryClick();
+	}
+
+	/**
+	 * 子类实现网络错误覆盖
+	 */
+	protected void onRetryClick(){
+
+	}
+
 	@Nullable
 	@Override
 	public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-		View rootView = inflater.inflate(R.layout.base_fragment_layout, container, false);
+		View rootView = loadRootView(inflater,container);
 		mBaseContainer = rootView.findViewById(R.id.base_container);
 		loadStatusView(inflater, container);
 		mBind = ButterKnife.bind(this, rootView);
@@ -41,6 +54,10 @@ public abstract class baseFragment extends Fragment {
 		initPresenter();
 		loadData();
 		return rootView;
+	}
+
+	protected View loadRootView(LayoutInflater inflater, ViewGroup container){
+		return  inflater.inflate(R.layout.base_fragment_layout, container, false);
 	}
 
 	/**

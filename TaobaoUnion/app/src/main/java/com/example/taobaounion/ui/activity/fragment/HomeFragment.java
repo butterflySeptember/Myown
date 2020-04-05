@@ -1,6 +1,8 @@
 package com.example.taobaounion.ui.activity.fragment;
 
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import androidx.viewpager.widget.ViewPager;
@@ -61,6 +63,11 @@ public class HomeFragment extends baseFragment implements IHomeCallback {
 	}
 
 	@Override
+	protected View loadRootView(LayoutInflater inflater, ViewGroup container) {
+		return inflater.inflate(R.layout.base_home_fragment_layout,container,false);
+	}
+
+	@Override
 	public void onNetworkError() {
 		setUpStatus(Status.ERROR);
 	}
@@ -81,5 +88,14 @@ public class HomeFragment extends baseFragment implements IHomeCallback {
 		if (mHomePresenter != null) {
 			mHomePresenter.unregisterViewCallback(this);
 		}
+	}
+
+	@Override
+	protected void onRetryClick() {
+		//网络错误点击，重新加载信息
+		if (mHomePresenter != null) {
+			mHomePresenter.getCategories();
+		}
+		super.onRetryClick();
 	}
 }
